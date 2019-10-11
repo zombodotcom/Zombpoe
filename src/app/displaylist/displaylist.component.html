@@ -1,0 +1,11 @@
+<p style="padding: 13px;">
+  An Angular 8 example application that demonstrates how to use HttpClient to
+  consume REST APIs
+</p>
+<div *ngIf="poeninjaData">
+  <ul>
+    <li *ngFor="let pokemon of poeninjaData.pokemons">
+      <span>{{ pokemon.name }}</span>
+    </li>
+  </ul>
+</div>
