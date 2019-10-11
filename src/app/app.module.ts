@@ -25,7 +25,8 @@ import {
   MatIconModule,
   MatCardModule,
   MatButtonModule,
-  MatProgressSpinnerModule
+  MatProgressSpinnerModule,
+  MatTableModule
 } from "@angular/material";
 
 // AoT requires an exported function for factories
@@ -50,6 +51,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     BrowserAnimationsModule,
     MatToolbarModule,
     MatIconModule,
+    MatTableModule,
     MatButtonModule,
     MatCardModule,
     MatProgressSpinnerModule,
