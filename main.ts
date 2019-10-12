@@ -1,4 +1,4 @@
-import { app, BrowserWindow, screen } from "electron";
+import { BrowserWindow, screen } from "electron";
 import * as path from "path";
 import * as url from "url";
 
@@ -59,7 +59,13 @@ try {
   // This method will be called when Electron has finished
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
+  var express = require("express");
+  var cors = require("cors");
+  var app = express();
+
+  app.use(cors());
   app.enableSandbox(); // just add sandbox ?
+
   app.on("ready", createWindow);
 
   // Quit when all windows are closed.
