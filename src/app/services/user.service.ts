@@ -6,6 +6,7 @@ import { User } from "../models/user.model";
 export class UserService {
   private serviceUrl =
     "https://poe.ninja/api/data/ItemOverview?league=Blight&type=Fossil";
+  derp = [];
 
   constructor(private http: HttpClient) {}
 
