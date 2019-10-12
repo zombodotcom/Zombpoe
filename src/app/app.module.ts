@@ -7,6 +7,7 @@ import { FormsModule } from "@angular/forms";
 import { HttpClientModule, HttpClient } from "@angular/common/http";
 import { CoreModule } from "./core/core.module";
 import { SharedModule } from "./shared/shared.module";
+import { Component } from "@angular/core";
 
 import { AppRoutingModule } from "./app-routing.module";
 
@@ -18,6 +19,9 @@ import { HomeModule } from "./home/home.module";
 import { AboutComponent } from "./about/about.component";
 import { DisplaylistComponent } from "./displaylist/displaylist.component";
 
+// poestashservice
+import { UserService } from "./services/user.service";
+
 import { AppComponent } from "./app.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import {
@@ -28,6 +32,7 @@ import {
   MatProgressSpinnerModule,
   MatTableModule
 } from "@angular/material";
+import { UsertableComponent } from "./components/usertable/usertable.component";
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -39,7 +44,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     AppComponent,
     AboutComponent,
     AboutComponent,
-    DisplaylistComponent
+    DisplaylistComponent,
+    UsertableComponent
   ],
   imports: [
     BrowserModule,
@@ -66,7 +72,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     }),
     BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

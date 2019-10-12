@@ -1,0 +1,25 @@
+<div>
+  <div *ngIf="poeninjaData" class="example-container"></div>
+  <mat-table [dataSource]="dataSource">
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+      <mat-cell *matCellDef="let user"> {{ user.name }} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="chaosValue">
+      <mat-header-cell *matHeaderCellDef>Chaos Value </mat-header-cell>
+      <mat-cell *matCellDef="let user"> {{ user.chaosValue }} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="exaltedValue">
+      <mat-header-cell *matHeaderCellDef> Exalted Value </mat-header-cell>
+      <mat-cell *matCellDef="let user"> {{ user.exaltedValue }} </mat-cell>
+    </ng-container>
+    <!-- <ng-container matColumnDef="explicitModifiers">
+      <mat-header-cell *matHeaderCellDef> Details </mat-header-cell>
+      <mat-cell *matCellDef="let user">
+        {{ user.explicitModifiers.text }}
+      </mat-cell>
+    </ng-container> -->
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
+</div>

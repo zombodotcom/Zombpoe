@@ -33,18 +33,30 @@
     <!-- chaosValue Column -->
     <ng-container matColumnDef="chaosValue">
       <th mat-header-cell *matHeaderCellDef>Chaos Value</th>
-      <td mat-cell *matCellDef="let element">{{ element.chaosValue }}</td>
+      <td mat-cell *matCellDef="let element">{{ element.chaosValue }} c</td>
     </ng-container>
     <!-- exaltedValue Column -->
     <ng-container matColumnDef="exaltedValue">
       <th mat-header-cell *matHeaderCellDef>exaltedValue</th>
-      <td mat-cell *matCellDef="let element">{{ element.exaltedValue }}</td>
+      <td mat-cell *matCellDef="let element">{{ element.exaltedValue }} ex</td>
     </ng-container>
 
     <!-- Icon Column -->
     <ng-container matColumnDef="icon">
       <th mat-header-cell *matHeaderCellDef>Icon</th>
       <td mat-cell *matCellDef="let element"><img [src]="element.icon" /></td>
+    </ng-container>
+    <!-- exaltedValue Column -->
+    <ng-container matColumnDef="explicitModifiers">
+      <th mat-header-cell *matHeaderCellDef>Details</th>
+
+      <!-- <td mat-cell *matCellDef="let element">
+        {{ element.explicitModifiers | json }}
+      </td> -->
+      <td mat-cell *matCellDef="let element; let i = index">
+        <!-- {{ i }} {{ element.explicitModifiers[0].text }} -->
+        {{ element.explicitModifiers[0].text }}
+      </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>

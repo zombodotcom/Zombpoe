@@ -27,6 +27,15 @@ export class PoeninjaapiService {
     "UniqueFlask",
     "UniqueJewel"
   ];
+  // poeapiSetup=[
+  //   "https://www.pathofexile.com/character-window/get-account-name="
+
+  //   "https://www.pathofexile.com/character-window/get-characters="
+
+  //   "https://www.pathofexile.com/character-window/get-stash-items?league=[League] &tabs=1&tabIndex= [Stashnumber] &accountName= [AccountName]
+
+  //  " http://www.pathofexile.com/character-window/get-items?character= [Charname] &accountName= [AccountName]
+  // ]
 
   private privateurl =
     "https://bypasscors.herokuapp.com/api/?url=" +
@@ -35,12 +44,18 @@ export class PoeninjaapiService {
     );
   constructor(private http: HttpClient) {}
   private url =
-    "https://cors-anywhere.herokuapp.com/https://poe.ninja/api/data/ItemOverview?league=Blight&type=Fossil";
+    "https://poe.ninja/api/data/ItemOverview?league=Blight&type=Fossil";
+  // private poeUrl =
+  //   "https://cors-anywhere.herokuapp.com/https://poe.ninja/api/data/ItemOverview?league=Blight&type=Fossil";
+  // private poeCharactersUrl="https://www.pathofexile.com/character-window/get-account-name=";
+  // private poeCharactersUrl = ""https://www.pathofexile.com/character-window/get-characters="";
+  // private poeCharactersUrl = "https://www.pathofexile.com/character-window/get-account-name=";
 
   getPoeNinjaData(): Observable<any> {
     console.log("Fetching Data");
     // httpProvider.defaults.useXDomain = true;
     let getfromNinja = this.http.get<any>(this.url);
+    // let getOurStash = this.http.get<any>("");
     return getfromNinja;
   }
 
