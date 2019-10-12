@@ -3,6 +3,7 @@ import { Routes, RouterModule } from "@angular/router";
 import { PageNotFoundComponent } from "./shared/components";
 import { AboutComponent } from "./about/about.component";
 import { DisplaylistComponent } from "./displaylist/displaylist.component";
+import { UsertableComponent } from "./components/usertable/usertable.component";
 
 const routes: Routes = [
   {
@@ -13,6 +14,10 @@ const routes: Routes = [
   {
     path: "display",
     component: DisplaylistComponent
+  },
+  {
+    path: "userlist",
+    component: UsertableComponent
   },
   { path: "about", component: AboutComponent },
   {
