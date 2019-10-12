@@ -2,8 +2,10 @@ import { Component, OnInit } from "@angular/core";
 import { PoeninjaapiService } from "../poeninjaapi.service";
 import { DataSource } from "@angular/cdk/table";
 import { Sort } from "@angular/material/sort";
-import { HttpClient } from "@angular/common/http";
-import { Cookies } from "electron";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { Observable } from "rxjs";
+// import { Cookies } from "electron";
+// import { PythonShell } from "python-shell";
 
 export interface PoeNinjaItemData {
   name: string;
@@ -30,9 +32,31 @@ export class DisplaylistComponent implements OnInit {
     "icon",
     "explicitModifiers"
   ];
-
+  httpOptions = {
+    withCredentials: true,
+    headers: new HttpHeaders({
+      "Content-Type": "application/json",
+      POESESID: "INSERT HERE"
+    })
+  };
   constructor(private svc: PoeninjaapiService, private http: HttpClient) {}
   ngOnInit() {
+    // PythonShell.run("../services/pythonservice/getstash.py", null, function(
+    //   err
+    // ) {
+    //   if (err) throw err;
+    //   console.log("finished");
+    // });
+    // let path = require("path");
+    // var rq = require("request-promise");
+
+    // var subpy = require("child_process").spawn("python", ["getstash.py"]);
+
+    // PythonShell.run("getstash.py", null, function(err, result) {
+    //   if (err) throw err;
+    //   console.log("finished");
+    //   console.log(result);
+    // });
     // var rp = require("request-promise");
     // this.http.get('/api/people/1').subscribe(character => {
     //   this.http.get(character.homeworld).subscribe(homeworld => {
@@ -76,10 +100,13 @@ export class DisplaylistComponent implements OnInit {
     //   .catch(function(err) {
     //     // API call failed...
     //   });
+    let devurl =
+      "https://cors-anywhere.herokuapp.com/https://poe.ninja/api/data/ItemOverview?league=Blight&type=Fossil";
+    this.http.get(devurl).subscribe(json => console.log(json));
 
-    this.http
-      .get("https://poe.ninja/api/data/ItemOverview?league=Blight&type=Fossil")
-      .subscribe(json => console.log(json));
+    let stashurl =
+      "https://cors-anywhere.herokuapp.com/https://www.pathofexile.com/character-window/get-items?accountName=qqazraelz&character=ZomboTD";
+    this.http.get(stashurl).subscribe(json => console.log(json));
     this.svc.getPoeNinjaData().subscribe(data => {
       this.poeninjaData = data;
       this.sortedData = this.poeninjaData;
@@ -114,6 +141,14 @@ export class DisplaylistComponent implements OnInit {
       // })();
       // add console output here
     });
+
+    console.log("Before");
+    let posturl =
+      "https://www.pathofexile.com/character-window/get-stash-items?league=Blight&tabs=0&tabIndex=1&accountName=qqazraelz";
+    this.http
+      .get(posturl, this.httpOptions)
+      .subscribe(json => console.log(json));
+    console.log("After");
   }
   sortData(sort: Sort) {
     const data = this.poeninjaData.slice();

@@ -43,10 +43,10 @@ export class PoeninjaapiService {
       "https://poe.ninja/api/data/ItemOverview?league=Blight&type=Fossil"
     );
   constructor(private http: HttpClient) {}
-  private url =
-    "https://poe.ninja/api/data/ItemOverview?league=Blight&type=Fossil";
-  // private poeUrl =
-  //   "https://cors-anywhere.herokuapp.com/https://poe.ninja/api/data/ItemOverview?league=Blight&type=Fossil";
+  // private url =
+  //   "https://poe.ninja/api/data/ItemOverview?league=Blight&type=Fossil";
+  private devurl =
+    "https://cors-anywhere.herokuapp.com/https://poe.ninja/api/data/ItemOverview?league=Blight&type=Fossil";
   // private poeCharactersUrl="https://www.pathofexile.com/character-window/get-account-name=";
   // private poeCharactersUrl = ""https://www.pathofexile.com/character-window/get-characters="";
   // private poeCharactersUrl = "https://www.pathofexile.com/character-window/get-account-name=";
@@ -54,7 +54,7 @@ export class PoeninjaapiService {
   getPoeNinjaData(): Observable<any> {
     console.log("Fetching Data");
     // httpProvider.defaults.useXDomain = true;
-    let getfromNinja = this.http.get<any>(this.url);
+    let getfromNinja = this.http.get<any>(this.devurl);
     // let getOurStash = this.http.get<any>("");
     return getfromNinja;
   }
