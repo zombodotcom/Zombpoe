@@ -8,7 +8,8 @@ import { HttpClientModule, HttpClient } from "@angular/common/http";
 import { CoreModule } from "./core/core.module";
 import { SharedModule } from "./shared/shared.module";
 import { Component } from "@angular/core";
-
+import { CookieService } from "ngx-cookie-service";
+import { map } from "rxjs/operators";
 import { AppRoutingModule } from "./app-routing.module";
 
 // NG Translate
@@ -72,7 +73,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     }),
     BrowserAnimationsModule
   ],
-  providers: [UserService],
+  providers: [UserService, CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
