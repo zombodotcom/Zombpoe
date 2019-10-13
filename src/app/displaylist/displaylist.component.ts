@@ -137,6 +137,7 @@ export class DisplaylistComponent implements OnInit {
       this.poeninjaData = data;
       this.sortedData = this.poeninjaData;
       // add console output here and add to main data
+      console.log(this.poeninjaData);
 
       // time to add python shellk
       // (async () => {

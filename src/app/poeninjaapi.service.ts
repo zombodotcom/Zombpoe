@@ -5,6 +5,7 @@ import { HttpHeaders, HttpParams } from "@angular/common/http";
 import { map } from "rxjs/operators";
 
 import { from } from "rxjs";
+import { get } from "http";
 export interface Character {
   table: string;
   name: string;
@@ -78,7 +79,7 @@ export class PoeninjaapiService {
 
     //change here for build
     // let getfromNinja = this.http.get<any>(this.devurl);
-    console.log(getfromNinja);
+    // console.log(JSON.stringify(getfromNinja.lines));
     console.log("end data fetch");
     // let getOurStash = this.http.get<any>("");
     return getfromNinja;
