@@ -47,7 +47,7 @@ export class DisplaylistComponent implements OnInit {
     withCredentials: true,
     headers: new HttpHeaders({
       "Content-Type": "application/json",
-      POESESSID: "56c1c517bfada4457566d52ea4fd0cd0"
+      POESESSID: "insert here"
     })
   };
   constructor(
@@ -57,7 +57,7 @@ export class DisplaylistComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.cookieService.set("POESESSID", "56c1c517bfada4457566d52ea4fd0cd0");
+    this.cookieService.set("POESESSID", "insert here");
     this.cookieValue = this.cookieService.get("POESESSID");
     console.log(this.cookieValue);
 
@@ -70,7 +70,7 @@ export class DisplaylistComponent implements OnInit {
     let options = {
       headers: {
         //withCredentials: true,
-        Cookie: "POESESSID=56c1c517bfada4457566d52ea4fd0cd0"
+        Cookie: "POESESSID=insert here"
       }
     };
 
