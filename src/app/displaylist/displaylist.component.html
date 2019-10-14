@@ -1,83 +1,126 @@
-<p style="padding: 13px;">
-  An Angular 8 example application that demonstrates how to use HttpClient to
-  consume REST APIs
-</p>
-<!-- <div *ngIf="poeninjaData">
-  <ul>
-    <li *ngFor="let element of poeninjaData.lines; let i = index">
-      {{ i }}. {{ element.name }}, {{ element.chaosValue }}
-    </li>
-  </ul>
-</div> -->
-<!-- <div *ngIf="poeninjaData">
-  <table mat-table [dataSource]="poeninjaData">
-    <ng-container matColumnDef="itemname">
-      <th mat-header-cell *matHeaderCellDef>Item Name</th>
-      <td mat-cell *matCellDef="let itemname">{{ itemname.itemname }}</td>
-      <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-      <tr mat-row *matRowDef="let myRowData; columns: columnsToDisplay"></tr>
-    </ng-container>
-  </table>
-</div> -->
-<div *ngIf="poeninjaData" class="example-container">
-  <table mat-table [dataSource]="poeninjaData.lines" class=" mat-elevation-z8">
-    <!--- Note that these columns can be defined in any order.
+<!-- <table mat-table [dataSource]="dataSource2" class="mat-elevation-z8" matSort>
+  <ng-container matColumnDef="items">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+    <td mat-cell *matCellDef="let element">
+      {{ element.name }}
+    </td>
+  </ng-container>
+ 
+  <ng-container matColumnDef="icon">
+    <th mat-header-cell *matHeaderCellDef>Icon</th>
+    <td mat-cell *matCellDef="let element">
+      {{ element }}}<img [src]="element.icon" />
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumnsUser2"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumnsUser2"></tr>
+</table> -->
+<div class="mat-elevation-z8">
+  <div *ngIf="poeninjaData" class="example-container">
+    <table
+      mat-table
+      [dataSource]="poeninjaData.lines"
+      class=" mat-elevation-z8"
+    >
+      <!--- Note that these columns can be defined in any order.
         The actual rendered columns are set as a property on the row definition" -->
 
-    <!-- Position Column -->
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef>Item Name</th>
-      <td mat-cell *matCellDef="let element">{{ element.name }}</td>
-    </ng-container>
+      <!-- Position Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Item Name</th>
+        <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+      </ng-container>
 
-    <!-- chaosValue Column -->
-    <ng-container matColumnDef="chaosValue">
-      <th mat-header-cell *matHeaderCellDef>Chaos Value</th>
-      <td mat-cell *matCellDef="let element">{{ element.chaosValue }} c</td>
-    </ng-container>
-    <!-- exaltedValue Column -->
-    <ng-container matColumnDef="exaltedValue">
-      <th mat-header-cell *matHeaderCellDef>exaltedValue</th>
-      <td mat-cell *matCellDef="let element">{{ element.exaltedValue }} ex</td>
-    </ng-container>
+      <!-- chaosValue Column -->
+      <ng-container matColumnDef="chaosValue">
+        <th mat-header-cell *matHeaderCellDef>Chaos Value</th>
+        <td mat-cell *matCellDef="let element">{{ element.chaosValue }} c</td>
+      </ng-container>
+      <!-- exaltedValue Column -->
+      <ng-container matColumnDef="exaltedValue">
+        <th mat-header-cell *matHeaderCellDef>exaltedValue</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.exaltedValue }} ex
+        </td>
+      </ng-container>
 
+      <!-- Icon Column -->
+      <ng-container matColumnDef="icon">
+        <th mat-header-cell *matHeaderCellDef>Icon</th>
+        <td mat-cell *matCellDef="let element"><img [src]="element.icon" /></td>
+      </ng-container>
+      <!-- exaltedValue Column -->
+      <ng-container matColumnDef="explicitModifiers">
+        <th mat-header-cell *matHeaderCellDef>Details</th>
+
+        <!-- <td mat-cell *matCellDef="let element">
+        {{ element.explicitModifiers | json }}
+      </td> -->
+        <td mat-cell *matCellDef="let element; let i = index">
+          <!-- {{ i }} {{ element.explicitModifiers[0].text }} -->
+          {{ element.explicitModifiers[0].text }}
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+</div>
+<!-- <h1>Here's the user Details:</h1>
+<div *ngIf="images">
+  {{ images | json }}
+</div> -->
+<div class="mat-elevation-z8">
+  <table mat-table [dataSource]="itemsdata3">
+    <ng-container matColumnDef="items">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.name }}
+      </td>
+    </ng-container>
     <!-- Icon Column -->
     <ng-container matColumnDef="icon">
       <th mat-header-cell *matHeaderCellDef>Icon</th>
-      <td mat-cell *matCellDef="let element"><img [src]="element.icon" /></td>
+      <td mat-cell *matCellDef="let element">
+        <img [src]="element.icon" />
+      </td>
     </ng-container>
-    <!-- exaltedValue Column -->
-    <ng-container matColumnDef="explicitModifiers">
-      <th mat-header-cell *matHeaderCellDef>Details</th>
-
-      <!-- <td mat-cell *matCellDef="let element">
-        {{ element.explicitModifiers | json }}
-      </td> -->
-      <td mat-cell *matCellDef="let element; let i = index">
-        <!-- {{ i }} {{ element.explicitModifiers[0].text }} -->
-        {{ element.explicitModifiers[0].text }}
+    <!-- Socketed Items -->
+    <ng-container matColumnDef="socketedItems">
+      <th mat-header-cell *matHeaderCellDef>Socketed Items</th>
+      <td mat-cell *matCellDef="let element">
+        <!-- {{ element.socketedItems }} -->
+        <ng-container *ngFor="let item of element.socketedItems">
+          <br />
+          <td *ngIf="item">
+            <!-- {{ element.typeLine }} -->
+            <!-- <div *ngIf="item.name == ''; else elseDiv2">
+            {{ element.typeLine }} No Name, Showing Typeline
+          </div>
+           -->
+            <img [src]="item.icon" />
+            {{ item.typeLine }}
+            <li *ngFor="let properties of item.properties">
+              {{ properties.name }} {{ properties.values }}
+            </li>
+          </td>
+        </ng-container>
+        <!-- <div *ngIf="element.socketedItems; else elseDiv2">
+        {{ element.socketedItems.typeLine }}
+      </div> -->
+      </td>
+    </ng-container>
+    <!-- type Column -->
+    <ng-container matColumnDef="type">
+      <th mat-header-cell *matHeaderCellDef>Icon</th>
+      <td mat-cell *matCellDef="let element">
+        <img [src]="element.icon" />
       </td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    <tr mat-header-row *matHeaderRowDef="displayedColumnsUser2"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumnsUser2"></tr>
   </table>
 </div>
-<!-- 
-<div>
-  <table matSort (matSortChange)="sortData($event)">
-    <tr>
-      <th mat-sort-header="name">Dessert (100g)</th>
-      <th mat-sort-header="chaosValue">Calories</th>
-      <th mat-sort-header="exaltedValue">Fat (g)</th>
-      <th mat-header="icon">Carbs (g)</th>
-    </tr>
-
-    <tr *ngFor="let dessert of sortedData">
-      <td>{{ dessert.name }}</td>
-      <td>{{ dessert.chaosValue }}</td>
-      <td>{{ dessert.exaltedValue }}</td>
-      <td>{{ dessert.icon }}</td>
-    </tr>
-  </table>
-</div> -->
