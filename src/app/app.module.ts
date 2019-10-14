@@ -12,6 +12,7 @@ import { CookieService } from "ngx-cookie-service";
 import { map } from "rxjs/operators";
 import { AppRoutingModule } from "./app-routing.module";
 import { MatPaginatorModule } from "@angular/material";
+import { ReactiveFormsModule } from "@angular/forms";
 
 // NG Translate
 import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
@@ -54,6 +55,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     FormsModule,
     HttpClientModule,
     CoreModule,
+    ReactiveFormsModule,
     SharedModule,
     HomeModule,
     BrowserAnimationsModule,

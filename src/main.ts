@@ -12,14 +12,13 @@ log.transports.console.level = true;
 // let loglist = ["error", "warn", "info", "verbose", "debug", "silly"];
 
 export const isDev = require("electron-is-dev");
+// require("update-electron-app")({
+//   repo: "zombodotcom/Zombpoe",
+//   updateInterval: "5 minutes",
+//   logger: require("electron-log")
+// });
 
 if (isDev) {
-  require("update-electron-app")({
-    repo: "zombodotcom/Zombpoe",
-    updateInterval: "5 minutes",
-    logger: require("electron-log")
-  });
-
   console.log(
     "%c Running In Dev \n Welcome to ZombPoes Dev Branches",
     "background: #222; color: magenta"
@@ -42,13 +41,8 @@ if (isDev) {
     "color: white"
   );
 } else {
-  require("update-electron-app")({
-    repo: "zombodotcom/Zombpoe",
-    updateInterval: "5 minutes",
-    logger: require("electron-log")
-  });
-
   console.log("Running in production");
+  console.log("running update check");
 }
 
 if (AppConfig.production) {

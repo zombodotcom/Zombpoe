@@ -1,7 +1,9 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnChanges, SimpleChanges } from "@angular/core";
 import { PoeninjaapiService, CharacterData } from "../poeninjaapi.service";
 import { DataSource } from "@angular/cdk/table";
 import { Sort } from "@angular/material/sort";
+import { NgForm, FormBuilder } from "@angular/forms";
+import { FormGroup, FormControl, Validators } from "@angular/forms";
 
 import {
   HttpClient,
@@ -33,24 +35,49 @@ export interface ZombpoeData {
   character: {};
   items: {};
 }
+// export class ProfileEditorComponent {
+//   profileForm = new FormGroup({
+//     firstName: new FormControl(""),
+//     lastName: new FormControl("")
+//   });
+// }
 @Component({
   selector: "app-displaylist",
   templateUrl: "./displaylist.component.html",
   styleUrls: ["./displaylist.component.scss"]
 })
 export class DisplaylistComponent implements OnInit {
+  public POESESSID;
+  public accountName;
+  public characterName;
+  public acountNameForString = "qqazraelz";
+  public poessForString = "Null";
+  public characterNameForString = "ZomboTD";
   public restcolumns: string[];
-  cookieValue = "UNKNOWN";
   public poeninjaData: any;
   public stashItems: any;
   public characterItems: any;
   public charactersRequest: any;
+  public images;
   // public itemlist:any;
   sortedData: PoeNinjaItemData[];
   dataSource2;
-  public images;
+  cookieValue = "UNKNOWN";
   users2: CharacterData[];
   tester3: CharacterData;
+  profileForm: FormGroup;
+  usrNameChanges: string;
+  usrNameStatus: string;
+  devurl;
+  characteritemsurl;
+  formattedMessage;
+  userForm = new FormGroup({
+    POESESSID: new FormControl("123123", Validators.maxLength(20)),
+    accountName: new FormControl("qqazraelz", Validators.required),
+    characterName: new FormControl("ZomboTD", Validators.maxLength(20))
+  });
+  accform = new FormControl(20, Validators.required);
+  characterform = new FormControl();
 
   // fetch = require("node-fetch");
 
@@ -93,29 +120,108 @@ export class DisplaylistComponent implements OnInit {
   constructor(
     private svc: PoeninjaapiService,
     private http: HttpClient,
-    private cookieService: CookieService
+    private cookieService: CookieService,
+    private fb: FormBuilder
   ) {}
 
+  // formattedMessage: string;
+  // onChanges(): void {
+  //   this.profileForm.valueChanges.subscribe(val => {
+  //     console.log(val.POESESSID, val.accountName, val.characterName);
+  //   });
+  // }
+
+  onFormSubmit(): void {
+    console.log("POESESSID:" + this.userForm.get("POESESSID").value);
+    console.log("accountName:" + this.userForm.get("accountName").value);
+    console.log("character:" + this.userForm.get("characterName").value);
+    this.acountNameForString = this.userForm.get("accountName").value;
+    this.characterNameForString = this.userForm.get("characterName").value;
+    this.poessForString = this.userForm.get("POESESSID").value;
+
+    this.characteritemsurl =
+      "https://cors-anywhere.herokuapp.com/https://www.pathofexile.com/character-window/get-items?accountName=" +
+      this.userForm.get("accountName").value +
+      "&character=" +
+      this.userForm.get("characterName").value;
+
+    this.http.get<CharacterData>(this.characteritemsurl).subscribe(
+      data => {
+        this.tester3 = data;
+        this.itemsdata3 = data.items;
+        // console.log("Items: " + data.items, "derp", typeof data.items);
+        this.dataSource2 = new MatTableDataSource(data.items);
+        console.log("Items: " + data.items);
+        for (let entry of data.items) {
+          console.log(entry);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        if (err.error instanceof Error) {
+          console.log("Client-side error occured.");
+        } else {
+          console.log("Server-side error occured.");
+        }
+      }
+    );
+  }
+
+  getuserName(): any {
+    return this.userForm.get("name");
+  }
+  setResetName() {
+    this.POESESSID.reset();
+    this.accountName.reset();
+    this.characterform.reset();
+  }
+  changeValue() {
+    console.log(this.POESESSID.value);
+    console.log(this.accountName.value);
+    console.log(this.characterform.value);
+
+    this.POESESSID = new FormControl(!this.POESESSID.value);
+    this.accountName = new FormControl(!this.accountName.value);
+    this.characterform = new FormControl(!this.characterform.value);
+  }
+
+  updateName() {
+    console.log(this.POESESSID.value);
+    console.log(this.accountName.value);
+  }
+
   ngOnInit() {
+    this.userForm = this.fb.group({
+      accountName: "qqazraelz",
+      POESESSID: "123123",
+      characterName: "ZomboTD"
+    });
+
+    // this.onChanges();
+
     this.cookieService.set("POESESSID", "insert here");
     this.cookieValue = this.cookieService.get("POESESSID");
     console.log(this.cookieValue);
     let isDevMode = process.execPath.match(/dist[\\/]electron/i);
-    let devurl;
-    let characteritemsurl;
+
     if (isDevMode) {
       console.log("IS IT DEV MODE?");
-      devurl =
+      this.devurl =
         "https://cors-anywhere.herokuapp.com/https://poe.ninja/api/data/ItemOverview?league=Blight&type=Fossil";
-      characteritemsurl =
-        "https://cors-anywhere.herokuapp.com/https://www.pathofexile.com/character-window/get-items?accountName=qqazraelz&character=ZomboTD";
+      this.characteritemsurl =
+        "https://cors-anywhere.herokuapp.com/https://www.pathofexile.com/character-window/get-items?accountName=" +
+        this.userForm.get("accountName").value +
+        "&character=" +
+        this.userForm.get("characterName").value;
       // let privatetesturl =
       //   "https://poe.ninja/api/data/ItemOverview?league=Blight&type=Fossil";
     } else {
-      devurl =
+      this.devurl =
         "https://poe.ninja/api/data/ItemOverview?league=Blight&type=Fossil";
-      characteritemsurl =
-        "https://www.pathofexile.com/character-window/get-items?accountName=qqazraelz&character=ZomboTD";
+      this.characteritemsurl =
+        "https://www.pathofexile.com/character-window/get-items?accountName=" +
+        this.userForm.get("accountName").value +
+        "&character=" +
+        this.userForm.get("characterName").value;
     }
 
     let options = {
@@ -137,29 +243,7 @@ export class DisplaylistComponent implements OnInit {
 
     let customer: ICustomer[];
 
-    this.svc.getStashData(characteritemsurl).subscribe(result => {
-      console.log(result);
-    });
-
-    // new edit area
-    this.svc
-      .getUsers(characteritemsurl)
-      .subscribe((users2: CharacterData[]) => {
-        this.users2 = users2;
-        console.log(users2, "users2");
-        this.dataSource2 = new MatTableDataSource(users2);
-
-        // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
-
-        // this.generateTableHead("table2", data3);
-        // this.generateTable("table2", this.users2);
-      });
-
-    // this.svc
-    //   .getImages(characteritemsurl)
-    //   .subscribe(images => (this.images = images));
-
-    this.svc.getPoeNinjaData(devurl).subscribe(data => {
+    this.svc.getPoeNinjaData(this.devurl).subscribe(data => {
       this.poeninjaData = data;
       this.sortedData = this.poeninjaData;
       // add console output here and add to main data
@@ -169,18 +253,8 @@ export class DisplaylistComponent implements OnInit {
     console.log("Before");
 
     let derplist;
-    // derplist = this.svc.findAllShows(characteritemsurl).subscribe(data => data);
-    // // console.log(derpite, "derpite");
 
-    // this.svc.sendGetRequest(characteritemsurl).subscribe(data => {
-    //   console.log(data, "sendget");
-    //   this.characterItems = data;
-    // });
-    // this.http
-    //   .get(characteritemsurl)
-    //   .pipe(map(res => (this.charactersRequest = res)));
-
-    this.http.get<CharacterData>(characteritemsurl).subscribe(
+    this.http.get<CharacterData>(this.characteritemsurl).subscribe(
       data => {
         this.tester3 = data;
         this.itemsdata3 = data.items;
@@ -207,21 +281,6 @@ export class DisplaylistComponent implements OnInit {
         // CREATE DYNAMIC TABLE.
         this.restcolumns = col;
         console.log(this.restcolumns, "rest Columns");
-        // CREATE HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
-
-        // for (var i = 0; i < col.length; i++) {
-        //   console.log(col, col[i]);
-        // }
-
-        // // ADD JSON DATA TO THE TABLE AS ROWS.
-        // for (var i = 0; i < temptable.length; i++) {
-        //   for (var j = 0; j < col.length; j++) {
-        //     console.log(temptable[i][col[j]], "hi23434");
-        //   }
-        // }
-
-        // this.dataSource2=
-        // console.log('Items: ' + data.userId);
       },
       (err: HttpErrorResponse) => {
         if (err.error instanceof Error) {
@@ -261,24 +320,4 @@ export class DisplaylistComponent implements OnInit {
       return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
     }
   }
-  // generateTableHead(table, data) {
-  //   let thead = table.createTHead();
-  //   let row = thead.insertRow();
-  //   for (let key of data) {
-  //     let th = document.createElement("th");
-  //     let text = document.createTextNode(key);
-  //     th.appendChild(text);
-  //     row.appendChild(th);
-  //   }
-  // }
-  // generateTable(table, data) {
-  //   for (let element of data) {
-  //     let row = table.insertRow();
-  //     for (let key in element) {
-  //       let cell = row.insertCell();
-  //       let text = document.createTextNode(element[key]);
-  //       cell.appendChild(text);
-  //     }
-  //   }
-  // }
 }
