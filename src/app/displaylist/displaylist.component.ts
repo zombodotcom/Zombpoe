@@ -218,7 +218,10 @@ export class DisplaylistComponent implements OnInit {
       this.devurl =
         "https://poe.ninja/api/data/ItemOverview?league=Blight&type=Fossil";
       this.characteritemsurl =
-        "https://www.pathofexile.com/character-window/get-items?accountName=qqazraelz&character=ZomboTD";
+        "https://www.pathofexile.com/character-window/get-items?accountName=" +
+        this.userForm.get("accountName").value +
+        "&character=" +
+        this.userForm.get("characterName").value;
     }
 
     let options = {
@@ -240,28 +243,6 @@ export class DisplaylistComponent implements OnInit {
 
     let customer: ICustomer[];
 
-    // this.svc.getStashData(this.characteritemsurl).subscribe(result => {
-    //   console.log(result);
-    // });
-
-    // new edit area
-    // this.svc
-    //   .getUsers(this.characteritemsurl)
-    //   .subscribe((users2: CharacterData[]) => {
-    //     this.users2 = users2;
-    //     console.log(users2, "users2");
-    //     this.dataSource2 = new MatTableDataSource(users2);
-
-    //     // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
-
-    //     // this.generateTableHead("table2", data3);
-    //     // this.generateTable("table2", this.users2);
-    //   });
-
-    // this.svc
-    //   .getImages(characteritemsurl)
-    //   .subscribe(images => (this.images = images));
-
     this.svc.getPoeNinjaData(this.devurl).subscribe(data => {
       this.poeninjaData = data;
       this.sortedData = this.poeninjaData;
@@ -272,16 +253,6 @@ export class DisplaylistComponent implements OnInit {
     console.log("Before");
 
     let derplist;
-    // derplist = this.svc.findAllShows(characteritemsurl).subscribe(data => data);
-    // // console.log(derpite, "derpite");
-
-    // this.svc.sendGetRequest(characteritemsurl).subscribe(data => {
-    //   console.log(data, "sendget");
-    //   this.characterItems = data;
-    // });
-    // this.http
-    //   .get(characteritemsurl)
-    //   .pipe(map(res => (this.charactersRequest = res)));
 
     this.http.get<CharacterData>(this.characteritemsurl).subscribe(
       data => {
@@ -310,21 +281,6 @@ export class DisplaylistComponent implements OnInit {
         // CREATE DYNAMIC TABLE.
         this.restcolumns = col;
         console.log(this.restcolumns, "rest Columns");
-        // CREATE HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
-
-        // for (var i = 0; i < col.length; i++) {
-        //   console.log(col, col[i]);
-        // }
-
-        // // ADD JSON DATA TO THE TABLE AS ROWS.
-        // for (var i = 0; i < temptable.length; i++) {
-        //   for (var j = 0; j < col.length; j++) {
-        //     console.log(temptable[i][col[j]], "hi23434");
-        //   }
-        // }
-
-        // this.dataSource2=
-        // console.log('Items: ' + data.userId);
       },
       (err: HttpErrorResponse) => {
         if (err.error instanceof Error) {
@@ -364,24 +320,4 @@ export class DisplaylistComponent implements OnInit {
       return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
     }
   }
-  // generateTableHead(table, data) {
-  //   let thead = table.createTHead();
-  //   let row = thead.insertRow();
-  //   for (let key of data) {
-  //     let th = document.createElement("th");
-  //     let text = document.createTextNode(key);
-  //     th.appendChild(text);
-  //     row.appendChild(th);
-  //   }
-  // }
-  // generateTable(table, data) {
-  //   for (let element of data) {
-  //     let row = table.insertRow();
-  //     for (let key in element) {
-  //       let cell = row.insertCell();
-  //       let text = document.createTextNode(element[key]);
-  //       cell.appendChild(text);
-  //     }
-  //   }
-  // }
 }
