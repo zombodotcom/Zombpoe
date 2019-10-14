@@ -294,7 +294,7 @@ export class DisplaylistComponent implements OnInit {
     ///end of on init
   }
 
-  // start of functions after init
+  // start of functions after initasd
   sortData(sort: Sort) {
     const data = this.poeninjaData.slice();
     if (!sort.active || sort.direction === "") {
