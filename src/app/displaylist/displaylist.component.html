@@ -1,4 +1,4 @@
-<form [formGroup]="userForm" (ngSubmit)="onFormSubmit(userForm)">
+<form [formGroup]="userForm" (ngSubmit)="onFormSubmit()">
   <input formControlName="POESESSID" placeholder="Your POESESSID" />
   <input formControlName="accountName" placeholder="Your Account Name" />
   <input formControlName="characterName" placeholder="Your Character Name" />
@@ -123,18 +123,6 @@
   {{ images | json }}
 </div> -->
 </div>
-
-
-<div style="width: 210px; float: left;">
-  <a href="https://github.com/john-doherty/node-iframe-replacement" target="_blank">
-    <h3 style="color: #222; font-size: 32px; font-weight: bold; margin: 0 0 10px 0;">iframe replacement Node.js module
-      lanuched</h3>
-  </a>
-  <p style="padding: 0; font-size: 14px;line-height: 22px">
-    Open source project not only has the potential to replace iframes, but also brings a whole new meaning to the
-    concept of fake news.
-  </p>
-</div>
-<img src="https://cdn.colorlib.com/wp/wp-content/uploads/sites/2/nodejs-frameworks.png" alt="Node js logo"
-  style="width: 500px; float: right;" />
-</div>
+<!-- <div *ngIf="characteritemsurl; let url">
+  <iframe id="iframe" width="100%" height="600px" src="url"> {{ url }}</iframe>
+</div> -->

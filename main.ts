@@ -21,7 +21,6 @@ function createWindow() {
       nodeIntegration: true
     }
   });
-  win.webContents.openDevTools({ mode: "undocked" });
 
   if (serve) {
     require("electron-reload")(__dirname, {

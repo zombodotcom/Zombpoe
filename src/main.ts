@@ -6,6 +6,8 @@ import { AppModule } from "./app/app.module";
 import { AppConfig } from "./environments/environment";
 const log = require("electron-log");
 log.transports.console.level = true;
+// const { ipcMain } = require("electron");
+
 // log.info("Hello, log");
 // log.warn("Some problem appears");
 
@@ -16,6 +18,23 @@ export const isDev = require("electron-is-dev");
 //   repo: "zombodotcom/Zombpoe",
 //   updateInterval: "5 minutes",
 //   logger: require("electron-log")
+// });
+
+// app.on("ready", () => {
+//   const request = net.request(
+//     "https://cors-anywhere.herokuapp.com/https://poe.ninja/api/data/ItemOverview?league=Blight&type=Fossil"
+//   );
+//   request.on("response", response => {
+//     console.log("STATUS:", response.statusCode);
+//     console.log("HEADERS", JSON.stringify(response.headers));
+//     response.on("data", chunk => {
+//       console.log("BODY:", chunk);
+//     });
+//     response.on("end", () => {
+//       console.log("No more data in response.");
+//     });
+//   });
+//   request.end();
 // });
 
 if (isDev) {
@@ -54,3 +73,20 @@ platformBrowserDynamic()
     preserveWhitespaces: false
   })
   .catch(err => console.error(err));
+
+// const { net } = require("electron");
+// const request = net.request("https://github.com");
+
+// request.on("response", response => {
+//   log.info(response);
+//   console.log("STATUS: ${response.statusCode}");
+//   console.log("HEADERS: ${JSON.stringify(response.headers)}");
+//   response.on("data", chunk => {
+//     log.info(chunk);
+//   });
+//   response.on("end", () => {
+//     log.info("end");
+//     console.log("No more data in response.");
+//   });
+// });
+// request.end();

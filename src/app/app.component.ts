@@ -9,6 +9,8 @@ import { AppConfig } from "../environments/environment";
   styleUrls: ["./app.component.scss"]
 })
 export class AppComponent {
+  fetch = require("node-fetch");
+  // Bluebird = require("bluebird");
   constructor(
     public electronService: ElectronService,
     private translate: TranslateService
@@ -21,6 +23,7 @@ export class AppComponent {
       console.log("Mode electron");
       console.log("Electron ipcRenderer", electronService.ipcRenderer);
       console.log("NodeJS childProcess", electronService.childProcess);
+      // console.log;
     } else {
       console.log("Mode web");
     }

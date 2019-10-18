@@ -4,7 +4,12 @@ import "../polyfills";
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import { HttpClientModule, HttpClient } from "@angular/common/http";
+import {
+  HttpClientModule,
+  HttpClient
+  // HttpClientXsrfModule,
+  // HTTP_INTERCEPTORS
+} from "@angular/common/http";
 import { CoreModule } from "./core/core.module";
 import { SharedModule } from "./shared/shared.module";
 import { Component } from "@angular/core";
@@ -36,6 +41,7 @@ import {
   MatTableModule
 } from "@angular/material";
 import { UsertableComponent } from "./components/usertable/usertable.component";
+// import { HttpRequestInterceptor } from "./HttpRequestInterceptor";
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -67,7 +73,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatCardModule,
     MatProgressSpinnerModule,
     AppRoutingModule,
-
+    HttpClientModule,
+    // HttpClientXsrfModule.withOptions({
+    //   cookieName: "POESESSID"
+    // }),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -77,7 +86,17 @@ export function HttpLoaderFactory(http: HttpClient) {
     }),
     BrowserAnimationsModule
   ],
-  providers: [UserService, CookieService],
+  providers: [
+    // [
+    //   {
+    //     provide: HTTP_INTERCEPTORS,
+    //     useClass: HttpRequestInterceptor,
+    //     multi: true
+    //   }
+    // ],
+    UserService,
+    CookieService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
