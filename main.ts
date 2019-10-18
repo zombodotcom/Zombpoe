@@ -1,6 +1,25 @@
 import { app, BrowserWindow, autoUpdater, screen } from "electron";
 import * as path from "path";
 import * as url from "url";
+import { HttpHeaders, HttpClient, HttpParams } from "@angular/common/http";
+
+const ipcMain = require("electron").ipcMain;
+
+ipcMain.on("ping-async", (event, message) => {
+  console.log("hello");
+  message = "pong";
+  getter();
+  event.sender.send("ping-async", message);
+});
+
+function getter() {
+  console.log("getter");
+}
+///Sync
+ipcMain.on("ping-sync", (event, message) => {
+  message = "pong";
+  event.returnValue = message;
+});
 
 // import { PythonShell } from "python-shell";
 let win, serve;

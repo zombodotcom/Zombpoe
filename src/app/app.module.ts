@@ -6,7 +6,8 @@ import { NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import {
   HttpClientModule,
-  HttpClient
+  HttpClient,
+  HttpXhrBackend
   // HttpClientXsrfModule,
   // HTTP_INTERCEPTORS
 } from "@angular/common/http";
@@ -42,7 +43,7 @@ import {
 } from "@angular/material";
 import { UsertableComponent } from "./components/usertable/usertable.component";
 // import { HttpRequestInterceptor } from "./HttpRequestInterceptor";
-
+import { NgxElectronModule } from "ngx-electron";
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, "./assets/i18n/", ".json");
@@ -71,9 +72,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatTableModule,
     MatButtonModule,
     MatCardModule,
+    NgxElectronModule,
     MatProgressSpinnerModule,
     AppRoutingModule,
-    HttpClientModule,
+    // HttpXhrBackend,
     // HttpClientXsrfModule.withOptions({
     //   cookieName: "POESESSID"
     // }),
@@ -87,6 +89,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     BrowserAnimationsModule
   ],
   providers: [
+    // HttpClient,
+    // HttpXhrBackend,
     // [
     //   {
     //     provide: HTTP_INTERCEPTORS,

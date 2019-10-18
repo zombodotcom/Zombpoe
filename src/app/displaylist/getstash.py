@@ -1,16 +1,21 @@
-from __future__ import print_function
-import time
-from flask import Flask
+import requests
 
-app = Flask(__name__)
+POESESSID = 'insert'
+ACCOUNTNAME = 'qqazraelz'
 
-
-@app.route("/")
-def hello():
-    return "Hello World! This is powered by Python backend."
+url = 'https://www.pathofexile.com/character-window/get-stash-items?league=Standard&tabs=0&tabIndex=1&accountName=' + ACCOUNTNAME
 
 
-if __name__ == "__main__":
-    print('oh hello')
-    # time.sleep(5)
-    app.run(host='127.0.0.1', port=5000)
+def process_tab(data):
+    count = 0
+    for item in data["items"]:
+        count += 1
+    return count
+
+
+response = requests.get(url, headers={'Cookie': 'POESESSID='+POESESSID})
+print(response.status_code)
+if response.status_code == 200:
+    data = response.json()
+    num_items = process_tab(data)
+print('We got {} items in that tab'.format(num_items))

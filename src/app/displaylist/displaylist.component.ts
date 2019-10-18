@@ -6,8 +6,9 @@ import { NgForm, FormBuilder } from "@angular/forms";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { setTimeout } from "timers";
 import axios from "axios";
-const { net } = require("electron");
-const { ipcRenderer, remote } = require("electron");
+// const { net } = require("electron");
+import { ElectronService } from "ngx-electron";
+
 import {
   HttpClient,
   HttpHeaders,
@@ -140,8 +141,16 @@ export class DisplaylistComponent implements OnInit {
     private svc: PoeninjaapiService,
     private http: HttpClient,
     private cookieService: CookieService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private _electronService: ElectronService
   ) {}
+  versions = { node: "", chrome: "", electron: "" };
+  // public playPingPong() {
+  //   if (this._electronService.isElectronApp) {
+  //     let pong: string = this._electronService.ipcRenderer.sendSync("ping");
+  //     console.log(pong);
+  //   }
+  // }
 
   // formattedMessage: string;
   // onChanges(): void {
@@ -151,7 +160,29 @@ export class DisplaylistComponent implements OnInit {
   // }
   isDev = require("electron-is-dev");
   //isDevMode = process.execPath.match(/dist[\\/]electron/i);
+  openModal() {
+    console.log("Play");
+    if (this._electronService.isElectronApp) {
+      // We have access to node process.
+      this.versions.node = this._electronService.process.versions.node;
+      this.versions.chrome = this._electronService.process.versions.chrome;
+      this.versions.electron = this._electronService.process.versions.electron;
+      console.log(this.versions, "versions");
+    }
+    this._electronService.ipcRenderer.on("ping-async", (event, resp) => {
+      // prints "pong"
+      console.log(resp);
+    });
+    this._electronService.ipcRenderer.send("ping-async", "ping");
+  }
+
   onFormSubmit(): void {
+    this.http
+      .post(this.stashurl, {
+        params: new HttpParams().set("id", "56784"),
+        headers: new HttpHeaders().set("Authorization", "some-token")
+      })
+      .subscribe(data => console.log(data, "hi"));
     // fetch.Promise = Bluebird;
 
     // async () => {
@@ -227,6 +258,12 @@ export class DisplaylistComponent implements OnInit {
       this.stashItems =
         "https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=qqazraelz&tabs=1&tabIndex=1";
     }
+    this.http
+      .post(this.stashurl, {
+        params: new HttpParams().set("id", "56784"),
+        headers: new HttpHeaders().set("Authorization", "some-token")
+      })
+      .subscribe(data => console.log(data, "hi"));
 
     this.http.get<CharacterData>(this.characteritemsurl).subscribe(
       data => {
@@ -265,7 +302,6 @@ export class DisplaylistComponent implements OnInit {
     //     withCredentials: true,
     //     headers: new HttpHeaders({
     //       "Content-Type": "application/json",
-    //       POESESSID: "***Replace***",
     //       cookie: "Derp=Hi"
     //     })
     //   })
@@ -323,6 +359,12 @@ export class DisplaylistComponent implements OnInit {
     //   ).then(response => {
     //     console.log(response);
     //   });
+    this.http
+      .post(this.stashurl, {
+        params: new HttpParams().set("id", "56784"),
+        headers: new HttpHeaders().set("Authorization", "some-token")
+      })
+      .subscribe(data => console.log(data, "hi"));
   }
 
   // end of on submit
@@ -351,47 +393,48 @@ export class DisplaylistComponent implements OnInit {
   }
 
   ngOnInit() {
-    var x = new XMLHttpRequest();
-    x.open(
-      "GET",
-      "https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=qqazraelz&tabs=1&tabIndex=1",
-      true
-    );
-    x.withCredentials = true;
-    // I put "XMLHttpRequest" here, but you can use anything you want.
-    x.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-    x.setRequestHeader("POESESSID", "**REPLACE**");
-    x.onload = function() {
-      console.log(x.responseText, "hello");
-      console.log("hello");
-    };
-    x.send();
+    // const isAnElectronApp: boolean = this._electronService.isElectronApp;
+    // this.playPingPong();
+    // console.log("Is electron App?", isAnElectronApp);
+    // var x = new XMLHttpRequest();
+    // x.open(
+    //   "GET",
+    //   "https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=qqazraelz&tabs=1&tabIndex=1",
+    //   true
+    // );
+    // x.withCredentials = true;
+    // // I put "XMLHttpRequest" here, but you can use anything you want.
+    // x.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+    // x.setRequestHeader("POESESSID", "**REPLACE**");
+    // x.onload = function() {
+    //   console.log(x.responseText, "hello");
+    //   console.log("hello");
+    // };
+    // x.send();
 
-    //   var xhr = new XMLHttpRequest();
-    //   xhr.setRequestHeader(
-    //     "Cookie",
-    //     "POESESSID=***Replace***"
-    //   );
-    //   xhr.open(
-    //     "GET",
-    //     "https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=qqazraelz&tabs=1&tabIndex=1",
-    //     true
-    //   );
-    //   xhr.withCredentials = true;
-    //   xhr.onreadystatechange = function() {
-    //     if (xhr.readyState == 4 && xhr.status == 200) {
-    //       alert(xhr.responseText);
-    //       // Get header from php server request if you want for something
-    //       // alert("Cookie: " + cookie);
-    //     }
-    //   };
-    //   xhr.send();
+    // var xhr = new XMLHttpRequest();
+
+    // xhr.open(
+    //   "POST",
+    //   "https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=qqazraelz&tabs=1&tabIndex=1",
+    //   true
+    // );
+    // xhr.setRequestHeader("POESESSID", "Insert");
+    // xhr.withCredentials = true;
+    // xhr.onreadystatechange = function() {
+    //   if (xhr.readyState == 4 && xhr.status == 200) {
+    //     alert(xhr.responseText);
+    //     // Get header from php server request if you want for something
+    //     // alert("Cookie: " + cookie);
+    //   }
+    // };
+    // xhr.send();
     // var session = require("electron").remote.session;
     // var ses = session.fromPartition("persist:name");
     // const cookie = {
     //   url: "http://www.pathofexile.com",
     //   name: "POESESSID",
-    //   value: "b82835daa9c1f8d4ed42af934af45d1b"
+    //   value: "Insert"
     // };
     // ses.cookies.set(cookie).then(
     //   () => {
