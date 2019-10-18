@@ -1,4 +1,4 @@
-<form [formGroup]="userForm" (ngSubmit)="onFormSubmit(userForm)">
+<form [formGroup]="userForm" (ngSubmit)="onFormSubmit()">
   <input formControlName="POESESSID" placeholder="Your POESESSID" />
   <input formControlName="accountName" placeholder="Your Account Name" />
   <input formControlName="characterName" placeholder="Your Character Name" />
@@ -123,3 +123,6 @@
   {{ images | json }}
 </div> -->
 </div>
+<!-- <div *ngIf="characteritemsurl; let url">
+  <iframe id="iframe" width="100%" height="600px" src="url"> {{ url }}</iframe>
+</div> -->
