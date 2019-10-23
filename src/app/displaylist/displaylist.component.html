@@ -1,3 +1,36 @@
+<button
+  type="button"
+  class="btn btn-outline-secondary mr-2"
+  placement="top"
+  ngbTooltip="Tooltip on top"
+>
+  Tooltip on top
+</button>
+<button
+  type="button"
+  class="btn btn-outline-secondary mr-2"
+  placement="right"
+  ngbTooltip="Tooltip on right"
+>
+  Tooltip on right
+</button>
+<button
+  type="button"
+  class="btn btn-outline-secondary mr-2"
+  placement="bottom"
+  ngbTooltip="Tooltip on bottom"
+>
+  Tooltip on bottom
+</button>
+<button
+  type="button"
+  class="btn btn-outline-secondary mr-2"
+  placement="left"
+  ngbTooltip="Tooltip on left"
+>
+  Tooltip on left
+</button>
+
 <form [formGroup]="userForm" (ngSubmit)="onFormSubmit()">
   <input formControlName="POESESSID" placeholder="Your POESESSID" />
   <input formControlName="accountName" placeholder="Your Account Name" />
@@ -12,7 +45,7 @@
   <div class="mat-elevation-z8" style="float: left">
     <table mat-table [dataSource]="itemsdata3">
       <ng-container matColumnDef="items">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+        <th mat-header-cell *matHeaderCellDef>Name</th>
         <td mat-cell *matCellDef="let element">
           {{ element.name }}
         </td>
@@ -64,49 +97,52 @@
 
   <div class="mat-elevation-z8" style="float: left">
     <div *ngIf="poeninjaData" class="example-container">
-      <table
+      <!-- <table
         mat-table
         [dataSource]="poeninjaData.lines"
         class=" mat-elevation-z8"
       >
-        <!--- Note that these columns can be defined in any order.
-        The actual rendered columns are set as a property on the row definition" -->
 
-        <!-- Position Column -->
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef>Item Name</th>
           <td mat-cell *matCellDef="let element">{{ element.name }}</td>
         </ng-container>
 
-        <!-- chaosValue Column -->
+
         <ng-container matColumnDef="chaosValue">
           <th mat-header-cell *matHeaderCellDef>Chaos Value</th>
-          <td mat-cell *matCellDef="let element">{{ element.chaosValue }} c</td>
-        </ng-container>
-        <!-- exaltedValue Column -->
-        <ng-container matColumnDef="exaltedValue">
-          <th mat-header-cell *matHeaderCellDef>exaltedValue</th>
           <td mat-cell *matCellDef="let element">
-            {{ element.exaltedValue }} ex
+            {{ element.chaosValue }}
+            <img
+              src="https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyRerollRare.png?scale=1&w=1&h=1"
+            />
           </td>
         </ng-container>
 
-        <!-- Icon Column -->
+        <ng-container matColumnDef="exaltedValue">
+          <th mat-header-cell *matHeaderCellDef>exaltedValue</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.exaltedValue }}
+            <img
+              src="https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyAddModToRare.png?scale=1&w=1&h=1"
+            />
+          </td>
+        </ng-container>
+
+
         <ng-container matColumnDef="icon">
           <th mat-header-cell *matHeaderCellDef>Icon</th>
           <td mat-cell *matCellDef="let element">
             <img [src]="element.icon" />
           </td>
         </ng-container>
-        <!-- exaltedValue Column -->
+
         <ng-container matColumnDef="explicitModifiers">
           <th mat-header-cell *matHeaderCellDef>Details</th>
 
-          <!-- <td mat-cell *matCellDef="let element">
-        {{ element.explicitModifiers | json }}
-      </td> -->
+
           <td mat-cell *matCellDef="let element; let i = index">
-            <!-- {{ i }} {{ element.explicitModifiers[0].text }} -->
+  
             {{ element.explicitModifiers[0].text }}
           </td>
         </ng-container>
@@ -116,15 +152,239 @@
           *matHeaderRowDef="displayedColumns; sticky: true"
         ></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-      </table>
+      </table> -->
     </div>
   </div>
 
-  <!-- <h1>Here's the user Details:</h1>
-<div *ngIf="images">
-  {{ images | json }}
-</div> -->
-</div>
-<!-- <div *ngIf="characteritemsurl; let url">
+  <!-- <div *ngVar="let variable = stashdatasource">
+    <span>{{ variable | json }}</span>
+  </div> -->
+
+  <ng-container *ngIf="stashItems2">
+    <!-- {{ stashdatasource }} -->
+    <div class="mat-elevation-z8" style="float: left">
+      <table mat-table [dataSource]="stashItems2">
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>items__name</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.name }}
+          </td>
+        </ng-container>
+        <!-- Icon Column -->
+        <ng-container matColumnDef="icon">
+          <th mat-header-cell *matHeaderCellDef>Icon</th>
+          <td mat-cell *matCellDef="let element">
+            <img [src]="element.icon" />
+          </td>
+        </ng-container>
+        <!-- Icon Column -->
+        <ng-container matColumnDef="inventoryId">
+          <th mat-header-cell *matHeaderCellDef>Stash</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.inventoryId }}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="disptest; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: disptest"></tr>
+      </table>
+    </div>
+  </ng-container>
+
+  <!-- <ng-container *ngIf="stashdatasource">
+    {{ stashdatasource }}
+    <div class="mat-elevation-z8" style="float: left">
+      <table mat-table [dataSource]="stashdatasource">
+        <ng-container matColumnDef="items">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>items__name</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.tabs }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="quadLayout">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>items__name</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="numTabs">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>items__name</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="tabs">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>items__name</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element }}
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="derpcolums; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: derpcolums"></tr>
+      </table>
+    </div>
+  </ng-container> -->
+  <!-- </div>
+    <div ng-click="loadData()">
+      <table ng-repeat="t in stashdatasource">
+        <tr ng-repeat="row in t.data.rows">
+          <td ng-repeat="col in row.cols">
+            {{ col.data }}
+          </td>
+        </tr>
+      </table>
+    </div> -->
+
+  <!-- <div *ngIf="characteritemsurl; let url">
   <iframe id="iframe" width="100%" height="600px" src="url"> {{ url }}</iframe>
 </div> -->
+
+  <!-- <ng-container *ngIf="stashItems2"> -->
+  <!-- <div *ngFor="let item of stashItems2.items | keyvalue"> -->
+  <!-- Key: <b>{{ item.key }}</b> and Value: <b>{{ item.value }}</b> -->
+  <!-- {{ item.name }} -->
+  <!-- <ng-container *ngFor="let item of stashItems2.items">
+    <li *ngIf="item.name">{{ item.name }}</li> -->
+
+  <!-- <ng-container> -->
+  <!-- <div *ngFor="let x of item.value | keyvalue">
+      Key: <b>{{ x.key }}</b> and Value: <b>{{ x.value }}</b>
+      <mat-list>
+        <mat-list-item> Name {{ x.name }} </mat-list-item>
+     
+      </mat-list>
+    </div> -->
+  <!-- </div> -->
+  <!-- </ng-container> -->
+</div>
+<div>
+  <ng-container *ngIf="fullPoeNinjaResponse">
+    Hi
+    <table
+      mat-table
+      [dataSource]="fullPoeNinjaResponseTableSourceFossil"
+      matSort
+      class="mat-elevation-z8"
+    >
+      <!-- <ng-container matColumnDef="position">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>No.</th>
+        <td mat-cell *matCellDef="let element">{{ element.position }}</td>
+      </ng-container> -->
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+        <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+      </ng-container>
+      <ng-container matColumnDef="chaosValue">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Chaos</th>
+        <td mat-cell *matCellDef="let element">{{ element.chaosValue }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+        <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="icon">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>icon</th>
+        <td mat-cell *matCellDef="let element"><img [src]="element.icon" /></td>
+      </ng-container>
+
+      <ng-container matColumnDef="exaltedValue">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>exaltedValue</th>
+        <td mat-cell *matCellDef="let element">{{ element.exaltedValue }}</td>
+      </ng-container>
+
+      <!-- 
+      [
+      "artFilename",
+      "baseType",
+      "chaosValue",
+      "corrupted",
+      "count",
+      "detailsId",
+      "exaltedValue",
+      "explicitModifiers",
+      "flavourText",
+      "gemLevel",
+      "gemQuality",
+      "icon",
+      "id",
+      "implicitModifiers",
+      "itemClass",
+      "itemType",
+      "levelRequired",
+      "links",
+      "lowConfidenceSparkline",
+      "mapTier",
+      "name",
+      "prophecyText",
+      "sparkline",
+      "stackSize",
+      "variant"
+      ] -->
+
+      <!-- 
+      <ng-container matColumnDef="weight">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Weight</th>
+        <td mat-cell *matCellDef="let element">{{ element.weight }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="symbol">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Symbol</th>
+        <td mat-cell *matCellDef="let element">{{ element.symbol }}</td>
+      </ng-container> -->
+      <tr mat-header-row *matHeaderRowDef="itemheadersTest; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: itemheadersTest"></tr>
+    </table>
+
+    <!-- Angular 8 pagination -->
+    <!-- <mat-paginator
+      #paginator
+      [pageSizeOptions]="[5, 10, 15]"
+      showFirstLastButtons
+    ></mat-paginator> -->
+  </ng-container>
+</div>
+<!-- <ng-container *ngIf="fullPoeNinjaResponse">
+  hi
+  <div *ngFor="let item of fullPoeNinjaResponse[0].lines | keyvalue">
+    {{ item.key }} - {{ item.value }}
+
+    <div *ngFor="let item2 of item | keyvalue">
+      {{ item2.key }} - {{ item2.value }}
+      {{ item2 }}
+    </div>
+  </div>
+  <div *ngFor="let item of fullPoeNinjaResponse[0]">
+    {{ item.lines }}
+    <img
+      src="https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyRerollRare.png?scale=1&w=1&h=1"
+    />
+  </div>
+</ng-container> -->
+
+<!-- <p>Table is just a mapping of objects to table rows with <code>ngFor</code></p>
+<ng-container *ngIf="fossilsDataResponse">
+  <table mat-table [dataSource]="fullPoeNinjaResponseTableSourceFossil" matSort>
+    <ng-container
+      *ngFor="let column of itemheadersTest2"
+      matColumnDef="{{ column.name }}"
+    >
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        {{ column.label }}
+      </th>
+      <td mat-cell *matCellDef="let element">{{ element[column.name] }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="itemheadersTest2"></tr>
+    <tr mat-row *matRowDef="let row; columns: itemheadersTest2"></tr>
+  </table>
+
+  <mat-paginator
+    [pageSizeOptions]="[5, 10, 20]"
+    showFirstLastButtons
+  ></mat-paginator> -->
+<!-- </ng-container> -->

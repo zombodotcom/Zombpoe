@@ -17,7 +17,32 @@ import { Component } from "@angular/core";
 import { CookieService } from "ngx-cookie-service";
 import { map } from "rxjs/operators";
 import { AppRoutingModule } from "./app-routing.module";
-import { MatPaginatorModule } from "@angular/material";
+import {
+  MatPaginatorModule,
+  MatAutocompleteModule,
+  MatButtonToggleModule,
+  MatCheckboxModule,
+  MatChipsModule,
+  MatStepperModule,
+  MatDatepickerModule,
+  MatDialogModule,
+  MatExpansionModule,
+  MatGridListModule,
+  MatInputModule,
+  MatMenuModule,
+  MatNativeDateModule,
+  MatProgressBarModule,
+  MatRadioModule,
+  MatRippleModule,
+  MatSelectModule,
+  MatSidenavModule,
+  MatSliderModule,
+  MatSlideToggleModule,
+  MatSnackBarModule,
+  MatSortModule,
+  MatTabsModule,
+  MatTooltipModule
+} from "@angular/material";
 import { ReactiveFormsModule } from "@angular/forms";
 
 // NG Translate
@@ -39,11 +64,13 @@ import {
   MatCardModule,
   MatButtonModule,
   MatProgressSpinnerModule,
-  MatTableModule
+  MatTableModule,
+  MatListModule
 } from "@angular/material";
 import { UsertableComponent } from "./components/usertable/usertable.component";
 // import { HttpRequestInterceptor } from "./HttpRequestInterceptor";
 import { NgxElectronModule } from "ngx-electron";
+import { CdkTableModule } from "@angular/cdk/table";
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, "./assets/i18n/", ".json");
@@ -75,6 +102,39 @@ export function HttpLoaderFactory(http: HttpClient) {
     NgxElectronModule,
     MatProgressSpinnerModule,
     AppRoutingModule,
+    MatListModule,
+    CdkTableModule,
+    MatAutocompleteModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatCardModule,
+    MatCheckboxModule,
+    MatChipsModule,
+    MatStepperModule,
+    MatDatepickerModule,
+    MatDialogModule,
+    MatExpansionModule,
+    MatGridListModule,
+    MatIconModule,
+    MatInputModule,
+    MatListModule,
+    MatMenuModule,
+    MatNativeDateModule,
+    MatPaginatorModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule,
+    MatRadioModule,
+    MatRippleModule,
+    MatSelectModule,
+    MatSidenavModule,
+    MatSliderModule,
+    MatSlideToggleModule,
+    MatSnackBarModule,
+    MatSortModule,
+    MatTableModule,
+    MatTabsModule,
+    MatToolbarModule,
+    MatTooltipModule,
     // HttpXhrBackend,
     // HttpClientXsrfModule.withOptions({
     //   cookieName: "POESESSID"

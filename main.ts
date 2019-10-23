@@ -2,22 +2,341 @@ import { app, BrowserWindow, autoUpdater, screen } from "electron";
 import * as path from "path";
 import * as url from "url";
 import { HttpHeaders, HttpClient, HttpParams } from "@angular/common/http";
+import { Observable } from "rxjs";
+interface RootObject {
+  numTabs: number;
+  tabs: Tab[];
+  quadLayout: boolean;
+  items: Item[];
+}
+
+interface Item {
+  verified: boolean;
+  w: number;
+  h: number;
+  ilvl: number;
+  icon: string;
+  league: string;
+  id: string;
+  name: string;
+  typeLine: string;
+  identified: boolean;
+  note?: string;
+  requirements?: Requirement[];
+  implicitMods?: string[];
+  explicitMods?: string[];
+  frameType: number;
+  x: number;
+  y: number;
+  inventoryId: string;
+  elder?: boolean;
+  flavourText?: string[];
+  sockets?: Socket[];
+  socketedItems?: any[];
+  properties?: Property[];
+  descrText?: string;
+  support?: boolean;
+  additionalProperties?: AdditionalProperty[];
+  secDescrText?: string;
+  veiledMods?: string[];
+  veiled?: boolean;
+  abyssJewel?: boolean;
+  corrupted?: boolean;
+  talismanTier?: number;
+  utilityMods?: string[];
+  craftedMods?: string[];
+  shaper?: boolean;
+  hybrid?: Hybrid;
+}
+
+interface Hybrid {
+  isVaalGem: boolean;
+  baseTypeName: string;
+  properties: Requirement[];
+  explicitMods: string[];
+  secDescrText: string;
+}
+
+interface AdditionalProperty {
+  name: string;
+  values: (number | string)[][];
+  displayMode: number;
+  progress: number;
+  type: number;
+}
+
+interface Property {
+  name: string;
+  values: (number | string)[][];
+  displayMode: number;
+  type?: number;
+}
+
+interface Socket {
+  group: number;
+  attr: string;
+  sColour: string;
+}
+
+interface Requirement {
+  name: string;
+  values: (number | string)[][];
+  displayMode: number;
+}
+
+interface Tab {
+  n: string;
+  i: number;
+  id: string;
+  type: string;
+  hidden: boolean;
+  selected: boolean;
+  colour: Colour;
+  srcL: string;
+  srcC: string;
+  srcR: string;
+}
+
+interface Colour {
+  r: number;
+  g: number;
+  b: number;
+}
 
 const ipcMain = require("electron").ipcMain;
-
+const { session } = require("electron");
+let responsedata;
 ipcMain.on("ping-async", (event, message) => {
   console.log("hello");
-  message = "pong";
-  getter();
-  event.sender.send("ping-async", message);
+  const cookie = {
+    url: ".pathofexile.com",
+    name: "POESESSID",
+    value: "b82835daa9c1f8d4ed42af934af45d1b"
+  };
+  // session.defaultSession.cookies.set(cookie, error => {
+  //   if (error) console.error(error);
+  // });
+  // session.defaultSession.cookies.get({}, (error, cookies) => {
+  //   console.log(error, cookies);
+  // });
+  // function getRaceById(id): Observable <RootObject> {
+  //   return this._http.get(`/api/races/${id}`)
+  //     .map(response => response.json());
+  // }
+  let options = {
+    headers: {
+      cookie: "POESESSID=b82835daa9c1f8d4ed42af934af45d1b" //the token is a variable which holds the token
+    }
+  };
+  var numTabs = axios
+    .get(
+      "https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=qqazraelz&tabs=0",
+      options
+    )
+    .catch(e => {
+      console.log("Error: ", e.response.data);
+    })
+    .then(response => console.log(response));
+  // console.log(numTabs);
+  //TODO
+  // get the number of tabs, concat the response data
+  let urls: string[] = [
+    "https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=qqazraelz&tabs=1&tabIndex=1",
+    "https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=qqazraelz&tabs=1&tabIndex=2"
+  ];
+
+  // async function getAllData(URLs) {
+  //   let networkRequestPromises = URLs.map(fetchData);
+  //   return await Promise.all(networkRequestPromises);
+  // }
+
+  // function fetchData(URL) {
+  //   return axios
+  //     .get(URL)
+  //     .then(function(response) {
+  //       return {
+  //         success: true,
+  //         data: response.data
+  //       };
+  //     })
+  //     .catch(function(error) {
+  //       return { success: false };
+  //     });
+  // }
+  // var getItems = () =>
+  //   urls.map(url =>
+  //     axios
+  //       .get(url, {
+  //         headers: {
+  //           cookie: "POESESSID=b82835daa9c1f8d4ed42af934af45d1b" //the token is a variable which holds the token
+  //         }
+  //       })
+  //       .catch(e => {
+  //         console.log("Error: ", e.response.data);
+  //       })
+  //   );
+
+  // console.log(getItems);
+  // https://stackoverflow.com/questions/48324792/passing-axios-get-urls-into-axios-all-based-on-options
+
+  // var getVideos = () => urls.map(url => axios.get(url))
+  // https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=qqazraelz&tabs=0
+  // {"numTabs":39}
+  let baseURL = "https://poe.ninja/api/data/ItemOverview?league=Blight&type=";
+  let urlendings: string[] = [
+    "Currency", // currency has currencyoveriew and Itemoveriew updated
+    "https://poe.ninja/api/data/currencyoverview?league=Blight&type=Fragment", //currency is different url
+    "Oil",
+    "Fossil",
+    "Resonator",
+    "Scarab",
+    "Essence",
+    "DivinationCard",
+    "Prophecy",
+    "UniqueJewel",
+    "UniqueWeapon",
+    "UniqueArmour",
+    "UniqueAccessory",
+    "UniqueFlask",
+    "Essence"
+  ];
+  let poeNinjaResponseArray;
+  let currencyDataResponse;
+  let fragmentsDataResponse;
+  let oilsDataResponse;
+  let fossilsDataResponse;
+  let scarabsDataResponse;
+  let divsDataResponse;
+  let resonatorsDataResponse;
+  let propheciesDataResponse;
+  let uniqueweaponsDataResponse;
+  let uniquearmoursDataResponse;
+  let uniqueaccessoriesDataResponse;
+  let uniquejewelDataResponse;
+  let uniqueflaskDataResponse;
+  let essenceDataResponse;
+
+  axios
+    .all([
+      axios.get(baseURL + urlendings[0]), //Currency
+      axios.get(urlendings[1]), //fragments
+      axios.get(baseURL + urlendings[2]), //oils
+      axios.get(baseURL + urlendings[3]), //fossil
+      axios.get(baseURL + urlendings[4]), //resonator
+      axios.get(baseURL + urlendings[5]), //scarab
+      axios.get(baseURL + urlendings[6]), //divs
+      axios.get(baseURL + urlendings[7]), //prophecies
+      axios.get(baseURL + urlendings[8]), //uniquejewels
+      axios.get(baseURL + urlendings[9]), //uniqueweapons
+      axios.get(baseURL + urlendings[10]), //uniquearmours
+      axios.get(baseURL + urlendings[11]), //uniqueaccessory
+      axios.get(baseURL + urlendings[12]), //UniqueFlask
+      axios.get(baseURL + urlendings[13]) //Essence
+    ])
+    // .catch(e => {
+    //   console.log("Error: ", e.response.data);
+    // })
+    .then(responseArr => {
+      //this will be executed only when all requests are complete
+      console.log("Currency: ", responseArr[0].data);
+      this.currencyDataResponse = responseArr[0].data; // currency
+      this.fragmentsDataResponse = responseArr[1].data; //frag
+      this.oilsDataResponse = responseArr[2].data; //oils
+      this.fossilsDataResponse = responseArr[3].data; //fossil
+      this.resonatorsDataResponse = responseArr[4].data; //reso
+      this.scarabsDataResponse = responseArr[5].data; //scarab
+      this.divsDataResponse = responseArr[6].data; //divs
+      this.propheciesDataResponse = responseArr[7].data; //prop
+      this.uniquejewelDataResponse = responseArr[8].data; //jewels
+      this.uniqueweaponsDataResponse = responseArr[9].data; //wapons
+      this.uniquearmoursDataResponse = responseArr[10].data; //armor
+      this.uniqueaccessoriesDataResponse = responseArr[11].data; //access
+      this.uniqueflaskDataResponse = responseArr[12].data; //flask
+      this.essenceDataResponse = responseArr[13].data; //essence
+      // console.log("Fragments: ", responseArr[1].data);
+      // console.log("Oils: ", responseArr[2].data);
+      // console.log("Fossils: ", responseArr[3].data);
+      // console.log("Resonators: ", responseArr[4].data);
+      // console.log("Scarabs: ", responseArr[5].data);
+      // console.log("Divs: ", responseArr[6].data);
+      // console.log("Prophecies: ", responseArr[7].data);
+      // console.log("Unique Jewels: ", responseArr[8].data);
+      // console.log("Unique Weapons: ", responseArr[9].data);
+      // console.log("Unique Armours: ", responseArr[10].data);
+      // console.log("Unique Accessories: ", responseArr[11].data);
+      // console.log("Unique Flasks: ", responseArr[12].data);
+      // console.log("Unique Jewels: ", responseArr[13].data);
+      // poeNinjaResponseArray = responseArr; //Changedd to .data
+      poeNinjaResponseArray = [
+        responseArr[0].data,
+        responseArr[1].data,
+        responseArr[2].data,
+        responseArr[3].data,
+        responseArr[4].data,
+        responseArr[5].data,
+        responseArr[6].data,
+        responseArr[7].data,
+        responseArr[8].data,
+        responseArr[9].data,
+        responseArr[10].data,
+        responseArr[11].data,
+        responseArr[12].data,
+        responseArr[13].data
+      ]; //Changedd to .data
+    });
+
+  // .then(
+  //   axios.spread(function(resp2, reposResponse) {
+  //     //... but this callback will be executed only when both requests are complete.
+  //     console.log("User", resp2.data);
+  //     // console.log("Repositories", reposResponse.data);
+  //   })
+  // );
+  axios
+    .get(
+      "https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=qqazraelz&tabs=1&tabIndex=1",
+      {
+        headers: {
+          cookie: "POESESSID=b82835daa9c1f8d4ed42af934af45d1b" //the token is a variable which holds the token
+        }
+      }
+    )
+    .then(response => {
+      // var finalObj = finalObj.concat(response); // should concat the data
+      // console.log(response.data);
+      // message = response.data as RootObject;
+      message = response.data;
+      event.sender.send("ping-async", message, poeNinjaResponseArray);
+    })
+    .catch(e => {
+      console.log("Error: ", e.response.data);
+    });
+  // getter();
 });
+const axios = require("axios").default;
 
 function getter() {
-  console.log("getter");
+  // const { net } = require("electron");
+  // const request = net.request(
+  //   "https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=qqazraelz&tabs=1&tabIndex=1"
+  // );
+  // request.setHeader("cookie", "POESESSID=b82835daa9c1f8d4ed42af934af45d1b");
+  // request.on("response", response => {
+  //   console.log(`STATUS: ${response.statusCode}`);
+  //   console.log(`HEADERS: ${JSON.stringify(response.headers)}`);
+  //   response.on("data", chunk => {
+  //     console.log(`BODY: ${chunk}`);
+  //   });
+  //   response.on("end", () => {
+  //     console.log("No more data in response.");
+  //   });
+  // });
+  // request.end();
 }
 ///Sync
 ipcMain.on("ping-sync", (event, message) => {
   message = "pong";
+
   event.returnValue = message;
 });
 
