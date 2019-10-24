@@ -167,8 +167,91 @@ interface Colour {
   styleUrls: ["./displaylist.component.scss"]
 })
 export class DisplaylistComponent implements OnInit {
-  // @ViewChild("paginator", { static: false }) paginator: MatPaginator;
-  // @ViewChild("paginator2", { static: false }) paginator2: MatPaginator;
+  _setDataSource(indexNumber) {
+    setTimeout(() => {
+      switch (indexNumber) {
+        case 0:
+          !this.fullPoeNinjaResponseTableSourceFossil.paginator
+            ? (this.fullPoeNinjaResponseTableSourceFossil.paginator = this.paginator)
+            : null;
+          break;
+        case 1:
+          !this.fullPoeNinjaResponseTableSourceCurrency.paginator
+            ? (this.fullPoeNinjaResponseTableSourceCurrency.paginator = this.paginator2)
+            : null;
+        case 2:
+          !this.uniquearmoursDataResponseTableSource.paginator
+            ? (this.uniquearmoursDataResponseTableSource.paginator = this.paginatorarmour)
+            : null;
+        case 3:
+          !this.uniqueweaponsDataResponseTableSource.paginator
+            ? (this.uniqueweaponsDataResponseTableSource.paginator = this.paginatorweapons)
+            : null;
+        case 4:
+          !this.oilsDataResponseTableSource.paginator
+            ? (this.oilsDataResponseTableSource.paginator = this.paginatoroils)
+            : null;
+        case 6:
+          !this.fragmentsDataResponseTableSource.paginator
+            ? (this.fragmentsDataResponseTableSource.paginator = this.paginatorfrag)
+            : null;
+        case 7:
+          !this.resonatorsDataResponseTableSource.paginator
+            ? (this.resonatorsDataResponseTableSource.paginator = this.paginatorreso)
+            : null;
+        case 8:
+          !this.scarabsDataResponseTableSource.paginator
+            ? (this.scarabsDataResponseTableSource.paginator = this.paginatorscarabs)
+            : null;
+        case 9:
+          !this.divsDataResponseTableSource.paginator
+            ? (this.divsDataResponseTableSource.paginator = this.paginatordivs)
+            : null;
+        case 10:
+          !this.propheciesDataResponseTableSource.paginator
+            ? (this.propheciesDataResponseTableSource.paginator = this.paginatorproph)
+            : null;
+        case 11:
+          !this.uniquejewelDataResponseTableSource.paginator
+            ? (this.uniquejewelDataResponseTableSource.paginator = this.paginatorjewel)
+            : null;
+        case 12:
+          !this.uniqueaccessoriesDataResponseTableSource.paginator
+            ? (this.uniqueaccessoriesDataResponseTableSource.paginator = this.paginatoraccess)
+            : null;
+        case 13:
+          !this.uniqueflaskDataResponseTableSource.paginator
+            ? (this.uniqueflaskDataResponseTableSource.paginator = this.paginatorflask)
+            : null;
+        case 14:
+          !this.essenceDataResponseTableSource.paginator
+            ? (this.essenceDataResponseTableSource.paginator = this.paginatoressence)
+            : null;
+      }
+    }, 100);
+  }
+
+  @ViewChild("paginator", { static: false }) paginator: MatPaginator;
+  @ViewChild("paginator2", { static: false }) paginator2: MatPaginator;
+  @ViewChild("paginatorarmour", { static: false })
+  paginatorarmour: MatPaginator;
+  @ViewChild("paginatorweapons", { static: false })
+  paginatorweapons: MatPaginator;
+  @ViewChild("paginatofossil", { static: false }) paginatorfossil: MatPaginator;
+  @ViewChild("paginatoroils", { static: false }) paginatoroils: MatPaginator;
+  @ViewChild("paginatorfrag", { static: false }) paginatorfrag: MatPaginator;
+  @ViewChild("paginatorreso", { static: false }) paginatorreso: MatPaginator;
+  @ViewChild("paginatorscarabs", { static: false })
+  paginatorscarabs: MatPaginator;
+  @ViewChild("paginatorsaccess", { static: false })
+  paginatoraccess: MatPaginator;
+  @ViewChild("paginatordivs", { static: false }) paginatordivs: MatPaginator;
+  @ViewChild("paginatorproph", { static: false }) paginatorproph: MatPaginator;
+  @ViewChild("paginatorjewel", { static: false }) paginatorjewel: MatPaginator;
+  @ViewChild("paginatorflask", { static: false }) paginatorflask: MatPaginator;
+  @ViewChild("paginatoressence", { static: false })
+  paginatoressence: MatPaginator;
+
   displayedColumnstester: string[];
   currencyDataResponse;
   fragmentsDataResponse;
@@ -201,7 +284,21 @@ export class DisplaylistComponent implements OnInit {
   public stashdatarequest: RootObject[];
   public inter2: poeNinjaFullResponseInterface[];
   fullPoeNinjaResponse = new MatTableDataSource();
-  fullPoeNinjaResponseTableSourceFossil = new MatTableDataSource();
+  fullPoeNinjaResponseTableSourceFossil = new MatTableDataSource(); //fossils
+  fullPoeNinjaResponseTableSourceCurrency = new MatTableDataSource(); //currency
+  fragmentsDataResponseTableSource = new MatTableDataSource(); //frag
+  oilsDataResponseTableSource = new MatTableDataSource(); //oils
+  fossilsDataResponseTableSource = new MatTableDataSource(); //fossil
+  resonatorsDataResponseTableSource = new MatTableDataSource(); //reso
+  scarabsDataResponseTableSource = new MatTableDataSource(); //scarab
+  divsDataResponseTableSource = new MatTableDataSource(); //divs
+  propheciesDataResponseTableSource = new MatTableDataSource(); //prop
+  uniquejewelDataResponseTableSource = new MatTableDataSource(); //jewels
+  uniqueweaponsDataResponseTableSource = new MatTableDataSource(); //wapons
+  uniquearmoursDataResponseTableSource = new MatTableDataSource(); //armor
+  uniqueaccessoriesDataResponseTableSource = new MatTableDataSource(); //access
+  uniqueflaskDataResponseTableSource = new MatTableDataSource(); //flask
+  essenceDataResponseTableSource = new MatTableDataSource(); //essence
   // public itemlist:any;
   sortedData: PoeNinjaItemData[];
   dataSource2;
@@ -230,28 +327,40 @@ export class DisplaylistComponent implements OnInit {
   accform = new FormControl(20, Validators.required);
   characterform = new FormControl();
   ngAfterViewInit() {
-    // this.fullPoeNinjaResponseTableSourceFossil.paginator = this.paginator;
-    // this.fullPoeNinjaResponseTableSource.paginator = this.paginator2;
+    this.fullPoeNinjaResponseTableSourceFossil.paginator = this.paginator;
+    this.fullPoeNinjaResponseTableSourceCurrency.paginator = this.paginator2;
+    // this.uniquearmoursDataResponseTableSource.paginator = this.paginatorar;
+    this.fragmentsDataResponseTableSource.paginator = this.paginatorfrag; //frag
+    this.oilsDataResponseTableSource.paginator = this.paginatoroils; //oils
+    this.fossilsDataResponseTableSource.paginator = this.paginatorfossil; //fossil
+    this.resonatorsDataResponseTableSource.paginator = this.paginatorreso; //reso
+    this.scarabsDataResponseTableSource.paginator = this.paginatorscarabs; //scarab
+    this.divsDataResponseTableSource.paginator = this.paginatordivs; //divs
+    this.propheciesDataResponseTableSource.paginator = this.paginatorproph; //proph
+    this.uniquejewelDataResponseTableSource.paginator = this.paginatorjewel; //jewels
+    this.uniqueweaponsDataResponseTableSource.paginator = this.paginatorweapons; //wapons
+    this.uniquearmoursDataResponseTableSource.paginator = this.paginatorarmour; //armor
+    this.uniqueaccessoriesDataResponseTableSource.paginator = this.paginatoraccess; //access
+    this.uniqueflaskDataResponseTableSource.paginator = this.paginatorflask; //flask
+    this.essenceDataResponseTableSource.paginator = this.paginatoressence; //essence
   }
-  // _setDataSource(indexNumber) {
-  //   setTimeout(() => {
-  //     switch (indexNumber) {
-  //       case 0:
-  //         !this.fullPoeNinjaResponseTableSourceFossil.paginator
-  //           ? (this.fullPoeNinjaResponseTableSourceFossil.paginator = this.paginator)
-  //           : null;
-  //         break;
-  //       case 1:
-  //         !this.fullPoeNinjaResponseTableSource.paginator
-  //           ? (this.fullPoeNinjaResponseTableSource.paginator = this.paginator2)
-  //           : null;
-  //     }
-  //   }, 5000);
-  // }
 
   // fetch = require("node-fetch");
 
   itemheaders: string[] = ["id", "name"];
+  currencyHeaders: string[] = [
+    "icon",
+    "chaosEquivalent",
+    "currencyTypeName",
+    "detailsId",
+    // "lowConfidencePaySparkLine",
+    // "lowConfidenceReceiveSparkLine",
+    "pay",
+    // "paySparkLine",
+    "receive"
+
+    // "receiveSparkLine"
+  ];
   itemheadersTest: string[] = [
     // "artFilename",
     // "baseType",
@@ -347,6 +456,25 @@ export class DisplaylistComponent implements OnInit {
   // }
   isDev = require("electron-is-dev");
   //isDevMode = process.execPath.match(/dist[\\/]electron/i);
+  getClass(item) {
+    let iconstring;
+    // console.log(item);
+    this.fullPoeNinjaResponse[0].currencyDetails.find((o, i) => {
+      // console.log("here", o);
+      if (o.name == item) {
+        // console.log("here", o.icon);
+        iconstring = o.icon;
+        // return iconstring; // stop searching
+      }
+    });
+    // let obj = this.fullPoeNinjaResponse[0].currencyDetails.find((o, i) => {
+    //   if (o.name == item) {
+    //     console.log("here", i);
+    //     return i; // stop searching
+    //   }
+    // });
+    return iconstring;
+  }
   openModal() {
     console.log("Play");
     if (this._electronService.isElectronApp) {
@@ -356,6 +484,7 @@ export class DisplaylistComponent implements OnInit {
       this.versions.electron = this._electronService.process.versions.electron;
       console.log(this.versions, "versions");
     }
+
     this._electronService.ipcRenderer.on("ping-async", (event, resp, resp2) => {
       // prints "pong"
       console.log(resp);
@@ -376,18 +505,56 @@ export class DisplaylistComponent implements OnInit {
       this.uniqueaccessoriesDataResponse = resp2[11].data; //access
       this.uniqueflaskDataResponse = resp2[12].data; //flask
       this.essenceDataResponse = resp2[13].data; //essence
+
+      this.fullPoeNinjaResponseTableSourceCurrency = new MatTableDataSource(
+        resp2[0].lines
+      ); // currency
+      this.fragmentsDataResponseTableSource = new MatTableDataSource(
+        resp2[1].lines
+      ); //frag
+      this.oilsDataResponseTableSource = new MatTableDataSource(resp2[2].lines); //oils
+      this.fossilsDataResponse = new MatTableDataSource(resp2[3].lines); //fossil
+      this.resonatorsDataResponseTableSource = new MatTableDataSource(
+        resp2[4].lines
+      ); //reso
+      this.scarabsDataResponseTableSource = new MatTableDataSource(
+        resp2[5].lines
+      ); //scarab
+      this.divsDataResponseTableSource = new MatTableDataSource(resp2[6].lines); //divs
+      this.propheciesDataResponseTableSource = new MatTableDataSource(
+        resp2[7].lines
+      ); //prop
+      this.uniquejewelDataResponseTableSource = new MatTableDataSource(
+        resp2[8].lines
+      ); //jewels
+      this.uniqueweaponsDataResponseTableSource = new MatTableDataSource(
+        resp2[9].lines
+      ); //wapons
+      this.uniquearmoursDataResponseTableSource = new MatTableDataSource(
+        resp2[10].lines
+      ); //armor
+      this.uniqueaccessoriesDataResponseTableSource = new MatTableDataSource(
+        resp2[11].lines
+      ); //access
+      this.uniqueflaskDataResponseTableSource = new MatTableDataSource(
+        resp2[12].lines
+      ); //flask
+      this.essenceDataResponseTableSource = new MatTableDataSource(
+        resp2[13].lines
+      ); //essence
       console.log(resp2[3], "fossil Response");
       this.fullPoeNinjaResponse = resp2;
       this.fullPoeNinjaResponseTableSource = new MatTableDataSource(resp2);
       this.fullPoeNinjaResponseTableSourceFossil = new MatTableDataSource(
         resp2[3].lines
       );
+
       this.itemheadersTest2 = Object.keys(resp2[3].lines[0]); // get all headers
       console.log(this.itemheadersTest2);
       for (let entry of this.stashdatarequest) {
         console.log(entry, "items");
       }
-      console.log(resp2[0].lines, "Currency?");
+      // console.log(resp2[0].lines, "Currency?");
       console.log(this.stashdatarequest, "stashData Request");
       // this.derpcolums = Object.keys(resp[3].data);
       console.log(this.derpcolums);
@@ -403,53 +570,52 @@ export class DisplaylistComponent implements OnInit {
       this.refresh(); // makes the display look for changes aka our new data
     });
 
-    this._electronService.ipcRenderer.send("ping-async", "ping");
+    this._electronService.ipcRenderer.send("ping-async", "ping"); // get us data
   }
 
   onFormSubmit(): void {
-    if (this.isDev) {
-      console.log("IS IT DEV MODE?");
-      this.devurl =
-        "https://cors-anywhere.herokuapp.com/https://poe.ninja/api/data/ItemOverview?league=Blight&type=Fossil";
-      this.characteritemsurl =
-        "https://cors-anywhere.herokuapp.com/https://www.pathofexile.com/character-window/get-items?accountName=" +
-        encodeURIComponent(this.userForm.get("accountName").value) +
-        "&character=" +
-        encodeURIComponent(this.userForm.get("characterName").value);
-      // let privatetesturl =
-      //   "https://poe.ninja/api/data/ItemOverview?league=Blight&type=Fossil";
-      this.stashurl =
-        "https://cors-anywhere.herokuapp.com/https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=qqazraelz&tabs=1&tabIndex=1";
-    } else {
-      this.characteritemsurl =
-        "https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=qqazraelz&tabs=1&tabIndex=1";
-      "https://www.pathofexile.com/character-window/get-items?accountName=" +
-        encodeURIComponent(this.userForm.get("accountName").value) +
-        "&character=" +
-        encodeURIComponent(this.userForm.get("characterName").value);
-      this.stashItems =
-        "https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=qqazraelz&tabs=1&tabIndex=1";
-    }
-
-    this.http.get<CharacterData>(this.characteritemsurl).subscribe(
-      data => {
-        this.tester3 = data;
-        this.itemsdata3 = data.items;
-        // console.log("Items: " + data.items, "derp", typeof data.items);
-        this.dataSource2 = new MatTableDataSource(data.items);
-        console.log("Items: " + data.items);
-        for (let entry of data.items) {
-          console.log(entry);
-        }
-      },
-      (err: HttpErrorResponse) => {
-        if (err.error instanceof Error) {
-          console.log("Client-side error occured.");
-        } else {
-          console.log("Server-side error occured.");
-        }
-      }
-    );
+    // if (this.isDev) {
+    //   console.log("IS IT DEV MODE?");
+    //   this.devurl =
+    //     "https://cors-anywhere.herokuapp.com/https://poe.ninja/api/data/ItemOverview?league=Blight&type=Fossil";
+    //   this.characteritemsurl =
+    //     "https://cors-anywhere.herokuapp.com/https://www.pathofexile.com/character-window/get-items?accountName=" +
+    //     encodeURIComponent(this.userForm.get("accountName").value) +
+    //     "&character=" +
+    //     encodeURIComponent(this.userForm.get("characterName").value);
+    //   // let privatetesturl =
+    //   //   "https://poe.ninja/api/data/ItemOverview?league=Blight&type=Fossil";
+    //   this.stashurl =
+    //     "https://cors-anywhere.herokuapp.com/https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=qqazraelz&tabs=1&tabIndex=1";
+    // } else {
+    //   this.characteritemsurl =
+    //     "https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=qqazraelz&tabs=1&tabIndex=1";
+    //   "https://www.pathofexile.com/character-window/get-items?accountName=" +
+    //     encodeURIComponent(this.userForm.get("accountName").value) +
+    //     "&character=" +
+    //     encodeURIComponent(this.userForm.get("characterName").value);
+    //   this.stashItems =
+    //     "https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=qqazraelz&tabs=1&tabIndex=1";
+    // }
+    // this.http.get<CharacterData>(this.characteritemsurl).subscribe(
+    //   data => {
+    //     this.tester3 = data;
+    //     this.itemsdata3 = data.items;
+    //     // console.log("Items: " + data.items, "derp", typeof data.items);
+    //     this.dataSource2 = new MatTableDataSource(data.items);
+    //     console.log("Items: " + data.items);
+    //     for (let entry of data.items) {
+    //       console.log(entry);
+    //     }
+    //   },
+    //   (err: HttpErrorResponse) => {
+    //     if (err.error instanceof Error) {
+    //       console.log("Client-side error occured.");
+    //     } else {
+    //       console.log("Server-side error occured.");
+    //     }
+    //   }
+    // );
   }
 
   // end of on submit
@@ -478,119 +644,91 @@ export class DisplaylistComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.openModal();
+    this.openModal(); // run the button
 
     let testurl =
       "https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=qqazraelz&tabs=1&tabIndex=1";
     let testurl2 = "https://cors-anywhere.herokuapp.com/" + testurl;
-    let headers = new HttpHeaders();
-    headers = headers.append("COOKIE", "POE=DERP");
-
     // this.onChanges();
 
-    // let isDevMode = process.execPath.match(/dist[\\/]electron/i);
-    if (this.isDev) {
-      console.log("IS IT DEV MODE?");
-      this.devurl =
-        "https://cors-anywhere.herokuapp.com/https://poe.ninja/api/data/ItemOverview?league=Blight&type=Fossil";
-      this.characteritemsurl =
-        "https://cors-anywhere.herokuapp.com/https://www.pathofexile.com/character-window/get-items?accountName=" +
-        encodeURIComponent(this.userForm.get("accountName").value) +
-        "&character=" +
-        encodeURIComponent(this.userForm.get("characterName").value);
-      // let privatetesturl =
-      //   "https://poe.ninja/api/data/ItemOverview?league=Blight&type=Fossil";
-    } else {
-      this.devurl =
-        "https://poe.ninja/api/data/ItemOverview?league=Blight&type=Fossil";
-      this.characteritemsurl =
-        "https://www.pathofexile.com/character-window/get-items?accountName=" +
-        encodeURIComponent(this.userForm.get("accountName").value) +
-        "&character=" +
-        encodeURIComponent(this.userForm.get("characterName").value);
-    }
+    // // let isDevMode = process.execPath.match(/dist[\\/]electron/i);
+    // if (this.isDev) {
+    //   console.log("IS IT DEV MODE?");
+    //   this.devurl =
+    //     "https://cors-anywhere.herokuapp.com/https://poe.ninja/api/data/ItemOverview?league=Blight&type=Fossil";
+    //   this.characteritemsurl =
+    //     "https://cors-anywhere.herokuapp.com/https://www.pathofexile.com/character-window/get-items?accountName=" +
+    //     encodeURIComponent(this.userForm.get("accountName").value) +
+    //     "&character=" +
+    //     encodeURIComponent(this.userForm.get("characterName").value);
+    //   // let privatetesturl =
+    //   //   "https://poe.ninja/api/data/ItemOverview?league=Blight&type=Fossil";
+    // } else {
+    //   this.devurl =
+    //     "https://poe.ninja/api/data/ItemOverview?league=Blight&type=Fossil";
+    //   this.characteritemsurl =
+    //     "https://www.pathofexile.com/character-window/get-items?accountName=" +
+    //     encodeURIComponent(this.userForm.get("accountName").value) +
+    //     "&character=" +
+    //     encodeURIComponent(this.userForm.get("characterName").value);
+    // }
 
     // get initial fossil data
-    this.svc.getPoeNinjaData(this.devurl).subscribe(data => {
-      this.poeninjaData = data;
-      this.sortedData = this.poeninjaData;
-      // add console output here and add to main data
-      console.log(this.poeninjaData);
-    });
+    // this.svc.getPoeNinjaData(this.devurl).subscribe(data => {
+    //   this.poeninjaData = data;
+    //   this.sortedData = this.poeninjaData;
+    //   // add console output here and add to main data
+    //   console.log(this.poeninjaData);
+    // });
 
     console.log("Before");
 
     let derplist;
 
     // get initial character data
-    this.http.get<CharacterData>(this.characteritemsurl).subscribe(
-      data => {
-        this.tester3 = data;
-        this.itemsdata3 = data.items;
-        // console.log("Items: " + data.items, "derp", typeof data.items);
-        this.dataSource2 = new MatTableDataSource(data.items);
-        console.log("Items: " + data.items);
-        for (let entry of data.items) {
-          console.log(entry);
-        }
+    // this.http.get<CharacterData>(this.characteritemsurl).subscribe(
+    //   data => {
+    //     this.tester3 = data;
+    //     this.itemsdata3 = data.items;
+    //     // console.log("Items: " + data.items, "derp", typeof data.items);
+    //     this.dataSource2 = new MatTableDataSource(data.items);
+    //     console.log("Items: " + data.items);
+    //     for (let entry of data.items) {
+    //       console.log(entry);
+    //     }
 
-        // EXTRACT VALUE FOR HTML HEADER.
-        // ('Book ID', 'Book Name', 'Category' and 'Price')
-        var col = [];
-        let temptable = data.items;
-        for (var i = 0; i < temptable.length; i++) {
-          // console.log(temptable);
-          for (var key in temptable[i]) {
-            if (col.indexOf(key) === -1) {
-              col.push(key);
-              // console.log(col, key, "hi");
-            }
-          }
-        }
-        // CREATE DYNAMIC TABLE.
-        this.restcolumns = col;
-        console.log(this.restcolumns, "rest Columns");
-      },
-      (err: HttpErrorResponse) => {
-        if (err.error instanceof Error) {
-          console.log("Client-side error occured.");
-        } else {
-          console.log("Server-side error occured.");
-        }
-      }
-    );
+    //     // EXTRACT VALUE FOR HTML HEADER.
+    //     // ('Book ID', 'Book Name', 'Category' and 'Price')
+    //     var col = [];
+    //     let temptable = data.items;
+    //     for (var i = 0; i < temptable.length; i++) {
+    //       // console.log(temptable);
+    //       for (var key in temptable[i]) {
+    //         if (col.indexOf(key) === -1) {
+    //           col.push(key);
+    //           // console.log(col, key, "hi");
+    //         }
+    //       }
+    //     }
+    //     // CREATE DYNAMIC TABLE.
+    //     this.restcolumns = col;
+    //     console.log(this.restcolumns, "rest Columns");
+    //   },
+    //   (err: HttpErrorResponse) => {
+    //     if (err.error instanceof Error) {
+    //       console.log("Client-side error occured.");
+    //     } else {
+    //       console.log("Server-side error occured.");
+    //     }
+    //   }
+    // );
 
     ///end of on init
+    this.refresh();
   }
 
   refresh() {
     this.changeDetectorRefs.detectChanges();
-  }
-  // start of functions after initasd
-  sortData(sort: Sort) {
-    const data = this.poeninjaData.slice();
-    if (!sort.active || sort.direction === "") {
-      this.sortedData = data;
-      return;
-    }
-
-    this.sortedData = data.sort((a, b) => {
-      const isAsc = sort.direction === "asc";
-      switch (sort.active) {
-        case "name":
-          return compare(a.name, b.name, isAsc);
-        case "chaosValue":
-          return compare(a.chaosValue, b.chaosValue, isAsc);
-        case "exaltedValue":
-          return compare(a.exaltedValue, b.exaltedValue, isAsc);
-        default:
-          return 0;
-      }
-    });
-
-    function compare(a: number | string, b: number | string, isAsc: boolean) {
-      return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
-    }
   }
 }
 interface poeNinjaFullResponseInterface {

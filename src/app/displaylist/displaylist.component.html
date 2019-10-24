@@ -41,225 +41,39 @@
 <button (click)="openModal()">
   Open Modal
 </button>
-<div>
+<!-- STASH ITEM TABLE -->
+<!-- <ng-container *ngIf="stashItems2">
+
   <div class="mat-elevation-z8" style="float: left">
-    <table mat-table [dataSource]="itemsdata3">
-      <ng-container matColumnDef="items">
-        <th mat-header-cell *matHeaderCellDef>Name</th>
+    <table mat-table [dataSource]="stashItems2">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>items__name</th>
         <td mat-cell *matCellDef="let element">
           {{ element.name }}
         </td>
       </ng-container>
-      <!-- Icon Column -->
+
       <ng-container matColumnDef="icon">
         <th mat-header-cell *matHeaderCellDef>Icon</th>
         <td mat-cell *matCellDef="let element">
           <img [src]="element.icon" />
         </td>
       </ng-container>
-      <!-- Socketed Items -->
-      <ng-container matColumnDef="socketedItems">
-        <th mat-header-cell *matHeaderCellDef>Socketed Items</th>
+
+      <ng-container matColumnDef="inventoryId">
+        <th mat-header-cell *matHeaderCellDef>Stash</th>
         <td mat-cell *matCellDef="let element">
-          <!-- {{ element.socketedItems }} -->
-          <ng-container *ngFor="let item of element.socketedItems">
-            <br />
-            <td *ngIf="item">
-              <!-- {{ element.typeLine }} -->
-              <!-- <div *ngIf="item.name == ''; else elseDiv2">
-              {{ element.typeLine }} No Name, Showing Typeline
-            </div>
-             -->
-              <img [src]="item.icon" />
-              {{ item.typeLine }}
-              <li *ngFor="let properties of item.properties">
-                {{ properties.name }} {{ properties.values }}
-              </li>
-            </td>
-          </ng-container>
-          <!-- <div *ngIf="element.socketedItems; else elseDiv2">
-          {{ element.socketedItems.typeLine }}
-        </div> -->
-        </td>
-      </ng-container>
-      <!-- type Column -->
-      <ng-container matColumnDef="type">
-        <th mat-header-cell *matHeaderCellDef>Icon</th>
-        <td mat-cell *matCellDef="let element">
-          <img [src]="element.icon" />
+          {{ element.inventoryId }}
         </td>
       </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumnsUser2"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumnsUser2"></tr>
+      <tr mat-header-row *matHeaderRowDef="disptest; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: disptest"></tr>
     </table>
   </div>
+</ng-container> -->
 
-  <div class="mat-elevation-z8" style="float: left">
-    <div *ngIf="poeninjaData" class="example-container">
-      <!-- <table
-        mat-table
-        [dataSource]="poeninjaData.lines"
-        class=" mat-elevation-z8"
-      >
-
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef>Item Name</th>
-          <td mat-cell *matCellDef="let element">{{ element.name }}</td>
-        </ng-container>
-
-
-        <ng-container matColumnDef="chaosValue">
-          <th mat-header-cell *matHeaderCellDef>Chaos Value</th>
-          <td mat-cell *matCellDef="let element">
-            {{ element.chaosValue }}
-            <img
-              src="https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyRerollRare.png?scale=1&w=1&h=1"
-            />
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="exaltedValue">
-          <th mat-header-cell *matHeaderCellDef>exaltedValue</th>
-          <td mat-cell *matCellDef="let element">
-            {{ element.exaltedValue }}
-            <img
-              src="https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyAddModToRare.png?scale=1&w=1&h=1"
-            />
-          </td>
-        </ng-container>
-
-
-        <ng-container matColumnDef="icon">
-          <th mat-header-cell *matHeaderCellDef>Icon</th>
-          <td mat-cell *matCellDef="let element">
-            <img [src]="element.icon" />
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="explicitModifiers">
-          <th mat-header-cell *matHeaderCellDef>Details</th>
-
-
-          <td mat-cell *matCellDef="let element; let i = index">
-  
-            {{ element.explicitModifiers[0].text }}
-          </td>
-        </ng-container>
-
-        <tr
-          mat-header-row
-          *matHeaderRowDef="displayedColumns; sticky: true"
-        ></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-      </table> -->
-    </div>
-  </div>
-
-  <!-- <div *ngVar="let variable = stashdatasource">
-    <span>{{ variable | json }}</span>
-  </div> -->
-
-  <ng-container *ngIf="stashItems2">
-    <!-- {{ stashdatasource }} -->
-    <div class="mat-elevation-z8" style="float: left">
-      <table mat-table [dataSource]="stashItems2">
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef>items__name</th>
-          <td mat-cell *matCellDef="let element">
-            {{ element.name }}
-          </td>
-        </ng-container>
-        <!-- Icon Column -->
-        <ng-container matColumnDef="icon">
-          <th mat-header-cell *matHeaderCellDef>Icon</th>
-          <td mat-cell *matCellDef="let element">
-            <img [src]="element.icon" />
-          </td>
-        </ng-container>
-        <!-- Icon Column -->
-        <ng-container matColumnDef="inventoryId">
-          <th mat-header-cell *matHeaderCellDef>Stash</th>
-          <td mat-cell *matCellDef="let element">
-            {{ element.inventoryId }}
-          </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="disptest; sticky: true"></tr>
-        <tr mat-row *matRowDef="let row; columns: disptest"></tr>
-      </table>
-    </div>
-  </ng-container>
-
-  <!-- <ng-container *ngIf="stashdatasource">
-    {{ stashdatasource }}
-    <div class="mat-elevation-z8" style="float: left">
-      <table mat-table [dataSource]="stashdatasource">
-        <ng-container matColumnDef="items">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>items__name</th>
-          <td mat-cell *matCellDef="let element">
-            {{ element.tabs }}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="quadLayout">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>items__name</th>
-          <td mat-cell *matCellDef="let element">
-            {{ element }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="numTabs">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>items__name</th>
-          <td mat-cell *matCellDef="let element">
-            {{ element }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="tabs">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>items__name</th>
-          <td mat-cell *matCellDef="let element">
-            {{ element }}
-          </td>
-        </ng-container>
-        <tr mat-header-row *matHeaderRowDef="derpcolums; sticky: true"></tr>
-        <tr mat-row *matRowDef="let row; columns: derpcolums"></tr>
-      </table>
-    </div>
-  </ng-container> -->
-  <!-- </div>
-    <div ng-click="loadData()">
-      <table ng-repeat="t in stashdatasource">
-        <tr ng-repeat="row in t.data.rows">
-          <td ng-repeat="col in row.cols">
-            {{ col.data }}
-          </td>
-        </tr>
-      </table>
-    </div> -->
-
-  <!-- <div *ngIf="characteritemsurl; let url">
-  <iframe id="iframe" width="100%" height="600px" src="url"> {{ url }}</iframe>
-</div> -->
-
-  <!-- <ng-container *ngIf="stashItems2"> -->
-  <!-- <div *ngFor="let item of stashItems2.items | keyvalue"> -->
-  <!-- Key: <b>{{ item.key }}</b> and Value: <b>{{ item.value }}</b> -->
-  <!-- {{ item.name }} -->
-  <!-- <ng-container *ngFor="let item of stashItems2.items">
-    <li *ngIf="item.name">{{ item.name }}</li> -->
-
-  <!-- <ng-container> -->
-  <!-- <div *ngFor="let x of item.value | keyvalue">
-      Key: <b>{{ x.key }}</b> and Value: <b>{{ x.value }}</b>
-      <mat-list>
-        <mat-list-item> Name {{ x.name }} </mat-list-item>
-     
-      </mat-list>
-    </div> -->
-  <!-- </div> -->
-  <!-- </ng-container> -->
-</div>
-<div>
+<!-- <div>
   <ng-container *ngIf="fullPoeNinjaResponse">
     Hi
     <table
@@ -268,10 +82,7 @@
       matSort
       class="mat-elevation-z8"
     >
-      <!-- <ng-container matColumnDef="position">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>No.</th>
-        <td mat-cell *matCellDef="let element">{{ element.position }}</td>
-      </ng-container> -->
+     
 
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
@@ -297,94 +108,496 @@
         <td mat-cell *matCellDef="let element">{{ element.exaltedValue }}</td>
       </ng-container>
 
-      <!-- 
-      [
-      "artFilename",
-      "baseType",
-      "chaosValue",
-      "corrupted",
-      "count",
-      "detailsId",
-      "exaltedValue",
-      "explicitModifiers",
-      "flavourText",
-      "gemLevel",
-      "gemQuality",
-      "icon",
-      "id",
-      "implicitModifiers",
-      "itemClass",
-      "itemType",
-      "levelRequired",
-      "links",
-      "lowConfidenceSparkline",
-      "mapTier",
-      "name",
-      "prophecyText",
-      "sparkline",
-      "stackSize",
-      "variant"
-      ] -->
-
-      <!-- 
-      <ng-container matColumnDef="weight">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Weight</th>
-        <td mat-cell *matCellDef="let element">{{ element.weight }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="symbol">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Symbol</th>
-        <td mat-cell *matCellDef="let element">{{ element.symbol }}</td>
-      </ng-container> -->
+    
       <tr mat-header-row *matHeaderRowDef="itemheadersTest; sticky: true"></tr>
       <tr mat-row *matRowDef="let row; columns: itemheadersTest"></tr>
-    </table>
+    </table> 
 
-    <!-- Angular 8 pagination -->
-    <!-- <mat-paginator
-      #paginator
-      [pageSizeOptions]="[5, 10, 15]"
-      showFirstLastButtons
-    ></mat-paginator> -->
-  </ng-container>
-</div>
-<!-- <ng-container *ngIf="fullPoeNinjaResponse">
-  hi
-  <div *ngFor="let item of fullPoeNinjaResponse[0].lines | keyvalue">
-    {{ item.key }} - {{ item.value }}
+   </ng-container> -->
 
-    <div *ngFor="let item2 of item | keyvalue">
-      {{ item2.key }} - {{ item2.value }}
-      {{ item2 }}
-    </div>
-  </div>
-  <div *ngFor="let item of fullPoeNinjaResponse[0]">
-    {{ item.lines }}
-    <img
-      src="https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyRerollRare.png?scale=1&w=1&h=1"
-    />
-  </div>
-</ng-container> -->
+<!-- Single Table -->
+<!-- 
+        [
+        "artFilename",
+        "baseType",
+        "chaosValue",
+        "corrupted",
+        "count",
+        "detailsId",
+        "exaltedValue",
+        "explicitModifiers",
+        "flavourText",
+        "gemLevel",
+        "gemQuality",
+        "icon",
+        "id",
+        "implicitModifiers",
+        "itemClass",
+        "itemType",
+        "levelRequired",
+        "links",
+        "lowConfidenceSparkline",
+        "mapTier",
+        "name",
+        "prophecyText",
+        "sparkline",
+        "stackSize",
+        "variant"
+        ] -->
 
-<!-- <p>Table is just a mapping of objects to table rows with <code>ngFor</code></p>
-<ng-container *ngIf="fossilsDataResponse">
-  <table mat-table [dataSource]="fullPoeNinjaResponseTableSourceFossil" matSort>
+<!-- </div> -->
+<!-- <div> -->
+<ng-container *ngIf="fullPoeNinjaResponse">
+  <mat-tab-group #tabGroup (selectedIndexChange)="_setDataSource($event)">
+    <mat-tab label="Fossils">
+      <div class="example-container mat-elevation-z8">
+        <mat-table #table [dataSource]="fullPoeNinjaResponseTableSourceFossil">
+          <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef> name </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              {{ element.name }}
+            </mat-cell>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="chaosValue">
+            <mat-header-cell *matHeaderCellDef> chaosValue </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              {{ element.chaosValue }}
+            </mat-cell>
+          </ng-container>
+
+          <!-- Weight Column -->
+          <ng-container matColumnDef="exaltedValue">
+            <mat-header-cell *matHeaderCellDef>
+              exaltedValue
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              {{ element.exaltedValue }}
+            </mat-cell>
+          </ng-container>
+
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="icon">
+            <mat-header-cell *matHeaderCellDef> icon</mat-header-cell>
+            <mat-cell *matCellDef="let element"
+              ><img [src]="element.icon" />
+            </mat-cell>
+          </ng-container>
+
+          <!-- ID Column -->
+          <ng-container matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef> id</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{ element.id }} </mat-cell>
+          </ng-container>
+
+          <mat-header-row
+            *matHeaderRowDef="itemheadersTest; sticky: true"
+          ></mat-header-row>
+          <mat-row *matRowDef="let row; columns: itemheadersTest"></mat-row>
+        </mat-table>
+
+        <mat-paginator
+          #paginator
+          [pageSize]="10"
+          [pageSizeOptions]="[10, 20, 40, 60]"
+        >
+        </mat-paginator>
+      </div>
+    </mat-tab>
+    <mat-tab label="Currency">
+      <div class="example-container mat-elevation-z8">
+        <mat-table
+          #table
+          [dataSource]="fullPoeNinjaResponseTableSourceCurrency"
+        >
+          <ng-container matColumnDef="currencyTypeName">
+            <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              {{ element.currencyTypeName }}
+            </mat-cell>
+          </ng-container>
+          <!-- Name Column -->
+          <ng-container matColumnDef="chaosEquivalent">
+            <mat-header-cell *matHeaderCellDef>
+              Chaos Equivalent
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element; index as i">
+              {{ element.chaosEquivalent }}
+            </mat-cell>
+          </ng-container>
+
+          <!-- Weight Column -->
+          <ng-container matColumnDef="detailsId">
+            <mat-header-cell *matHeaderCellDef>
+              detailsId
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              {{ element.detailsId }}
+            </mat-cell>
+          </ng-container>
+
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="icon">
+            <mat-header-cell *matHeaderCellDef> icon</mat-header-cell>
+            <mat-cell *matCellDef="let element; index as i">
+              <img [src]="getClass(element.currencyTypeName)" />
+            </mat-cell>
+          </ng-container>
+
+          <!-- ID Column -->
+          <ng-container matColumnDef="pay">
+            <mat-header-cell *matHeaderCellDef> pay</mat-header-cell>
+            <mat-cell *matCellDef="let element; index as i">
+              {{ element.pay }}
+              <!-- <img [src]="getClass(element.currencyTypeName)" /> -->
+              <!-- {{ getClass(element.currencyTypeName) }} -->
+            </mat-cell>
+          </ng-container>
+          <!-- ID Column -->
+          <ng-container matColumnDef="receive">
+            <mat-header-cell *matHeaderCellDef> receive</mat-header-cell>
+            <mat-cell *matCellDef="let element"
+              >{{ element.receive }}
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row
+            *matHeaderRowDef="currencyHeaders; sticky: true"
+          ></mat-header-row>
+          <mat-row *matRowDef="let row; columns: currencyHeaders"></mat-row>
+        </mat-table>
+
+        <mat-paginator
+          #paginator2
+          [pageSize]="10"
+          [pageSizeOptions]="[10, 20, 40, 60]"
+        >
+        </mat-paginator>
+      </div>
+    </mat-tab>
+    <mat-tab label="Oils">
+      <div class="example-container mat-elevation-z8">
+        <mat-table #table [dataSource]="oilsDataResponseTableSource">
+          <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef> name </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              {{ element.name }}
+            </mat-cell>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="chaosValue">
+            <mat-header-cell *matHeaderCellDef> chaosValue </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              {{ element.chaosValue }}
+            </mat-cell>
+          </ng-container>
+
+          <!-- Weight Column -->
+          <ng-container matColumnDef="exaltedValue">
+            <mat-header-cell *matHeaderCellDef>
+              exaltedValue
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              {{ element.exaltedValue }}
+            </mat-cell>
+          </ng-container>
+
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="icon">
+            <mat-header-cell *matHeaderCellDef> icon</mat-header-cell>
+            <mat-cell *matCellDef="let element"
+              ><img [src]="element.icon" />
+            </mat-cell>
+          </ng-container>
+
+          <!-- ID Column -->
+          <ng-container matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef> id</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{ element.id }} </mat-cell>
+          </ng-container>
+
+          <mat-header-row
+            *matHeaderRowDef="itemheadersTest; sticky: true"
+          ></mat-header-row>
+          <mat-row *matRowDef="let row; columns: itemheadersTest"></mat-row>
+        </mat-table>
+
+        <mat-paginator
+          #paginatoroils
+          [pageSize]="20"
+          [pageSizeOptions]="[20, 30, 40, 60]"
+        >
+        </mat-paginator>
+      </div>
+    </mat-tab>
+
+        <mat-tab label="Unique Armour">
+          <div class="example-container mat-elevation-z8">
+            <mat-table #table [dataSource]="uniquearmoursDataResponseTableSource">
+              <ng-container matColumnDef="name">
+                <mat-header-cell *matHeaderCellDef> name </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  {{ element.name }}
+                </mat-cell>
+              </ng-container>
+        
+              <!-- Name Column -->
+              <ng-container matColumnDef="chaosValue">
+                <mat-header-cell *matHeaderCellDef> chaosValue </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  {{ element.chaosValue }}
+                </mat-cell>
+              </ng-container>
+        
+              <!-- Weight Column -->
+              <ng-container matColumnDef="exaltedValue">
+                <mat-header-cell *matHeaderCellDef>
+                  exaltedValue
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  {{ element.exaltedValue }}
+                </mat-cell>
+              </ng-container>
+        
+              <!-- Symbol Column -->
+              <ng-container matColumnDef="icon">
+                <mat-header-cell *matHeaderCellDef> icon</mat-header-cell>
+                <mat-cell *matCellDef="let element"><img [src]="element.icon" />
+                </mat-cell>
+              </ng-container>
+        
+              <!-- ID Column -->
+              <ng-container matColumnDef="id">
+                <mat-header-cell *matHeaderCellDef> id</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.id }} </mat-cell>
+              </ng-container>
+        
+              <mat-header-row *matHeaderRowDef="itemheadersTest; sticky: true"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: itemheadersTest"></mat-row>
+            </mat-table>
+        
+            <mat-paginator #paginator3 [pageSize]="20" [pageSizeOptions]="[20, 30, 40, 60]">
+            </mat-paginator>
+          </div>
+        </mat-tab>
+
+            <mat-tab label="Unique Armour">
+              <div class="example-container mat-elevation-z8">
+                <mat-table #table [dataSource]="uniquearmoursDataResponseTableSource">
+                  <ng-container matColumnDef="name">
+                    <mat-header-cell *matHeaderCellDef> name </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                      {{ element.name }}
+                    </mat-cell>
+                  </ng-container>
+            
+                  <!-- Name Column -->
+                  <ng-container matColumnDef="chaosValue">
+                    <mat-header-cell *matHeaderCellDef> chaosValue </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                      {{ element.chaosValue }}
+                    </mat-cell>
+                  </ng-container>
+            
+                  <!-- Weight Column -->
+                  <ng-container matColumnDef="exaltedValue">
+                    <mat-header-cell *matHeaderCellDef>
+                      exaltedValue
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                      {{ element.exaltedValue }}
+                    </mat-cell>
+                  </ng-container>
+            
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="icon">
+                    <mat-header-cell *matHeaderCellDef> icon</mat-header-cell>
+                    <mat-cell *matCellDef="let element"><img [src]="element.icon" />
+                    </mat-cell>
+                  </ng-container>
+            
+                  <!-- ID Column -->
+                  <ng-container matColumnDef="id">
+                    <mat-header-cell *matHeaderCellDef> id</mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{ element.id }} </mat-cell>
+                  </ng-container>
+            
+                  <mat-header-row *matHeaderRowDef="itemheadersTest; sticky: true"></mat-header-row>
+                  <mat-row *matRowDef="let row; columns: itemheadersTest"></mat-row>
+                </mat-table>
+            
+                <mat-paginator #paginator3 [pageSize]="20" [pageSizeOptions]="[20, 30, 40, 60]">
+                </mat-paginator>
+              </div>
+            </mat-tab>
+
+                <mat-tab label="Unique Armour">
+                  <div class="example-container mat-elevation-z8">
+                    <mat-table #table [dataSource]="uniquearmoursDataResponseTableSource">
+                      <ng-container matColumnDef="name">
+                        <mat-header-cell *matHeaderCellDef> name </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                          {{ element.name }}
+                        </mat-cell>
+                      </ng-container>
+                
+                      <!-- Name Column -->
+                      <ng-container matColumnDef="chaosValue">
+                        <mat-header-cell *matHeaderCellDef> chaosValue </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                          {{ element.chaosValue }}
+                        </mat-cell>
+                      </ng-container>
+                
+                      <!-- Weight Column -->
+                      <ng-container matColumnDef="exaltedValue">
+                        <mat-header-cell *matHeaderCellDef>
+                          exaltedValue
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                          {{ element.exaltedValue }}
+                        </mat-cell>
+                      </ng-container>
+                
+                      <!-- Symbol Column -->
+                      <ng-container matColumnDef="icon">
+                        <mat-header-cell *matHeaderCellDef> icon</mat-header-cell>
+                        <mat-cell *matCellDef="let element"><img [src]="element.icon" />
+                        </mat-cell>
+                      </ng-container>
+                
+                      <!-- ID Column -->
+                      <ng-container matColumnDef="id">
+                        <mat-header-cell *matHeaderCellDef> id</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.id }} </mat-cell>
+                      </ng-container>
+                
+                      <mat-header-row *matHeaderRowDef="itemheadersTest; sticky: true"></mat-header-row>
+                      <mat-row *matRowDef="let row; columns: itemheadersTest"></mat-row>
+                    </mat-table>
+                
+                    <mat-paginator #paginator3 [pageSize]="20" [pageSizeOptions]="[20, 30, 40, 60]">
+                    </mat-paginator>
+                  </div>
+                </mat-tab>
+
+                    <mat-tab label="Unique Armour">
+                      <div class="example-container mat-elevation-z8">
+                        <mat-table #table [dataSource]="uniquearmoursDataResponseTableSource">
+                          <ng-container matColumnDef="name">
+                            <mat-header-cell *matHeaderCellDef> name </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                              {{ element.name }}
+                            </mat-cell>
+                          </ng-container>
+                    
+                          <!-- Name Column -->
+                          <ng-container matColumnDef="chaosValue">
+                            <mat-header-cell *matHeaderCellDef> chaosValue </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                              {{ element.chaosValue }}
+                            </mat-cell>
+                          </ng-container>
+                    
+                          <!-- Weight Column -->
+                          <ng-container matColumnDef="exaltedValue">
+                            <mat-header-cell *matHeaderCellDef>
+                              exaltedValue
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                              {{ element.exaltedValue }}
+                            </mat-cell>
+                          </ng-container>
+                    
+                          <!-- Symbol Column -->
+                          <ng-container matColumnDef="icon">
+                            <mat-header-cell *matHeaderCellDef> icon</mat-header-cell>
+                            <mat-cell *matCellDef="let element"><img [src]="element.icon" />
+                            </mat-cell>
+                          </ng-container>
+                    
+                          <!-- ID Column -->
+                          <ng-container matColumnDef="id">
+                            <mat-header-cell *matHeaderCellDef> id</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.id }} </mat-cell>
+                          </ng-container>
+                    
+                          <mat-header-row *matHeaderRowDef="itemheadersTest; sticky: true"></mat-header-row>
+                          <mat-row *matRowDef="let row; columns: itemheadersTest"></mat-row>
+                        </mat-table>
+                    
+                        <mat-paginator #paginator3 [pageSize]="20" [pageSizeOptions]="[20, 30, 40, 60]">
+                        </mat-paginator>
+                      </div>
+                    </mat-tab>
+
+                        <mat-tab label="Unique Armour">
+                          <div class="example-container mat-elevation-z8">
+                            <mat-table #table [dataSource]="uniquearmoursDataResponseTableSource">
+                              <ng-container matColumnDef="name">
+                                <mat-header-cell *matHeaderCellDef> name </mat-header-cell>
+                                <mat-cell *matCellDef="let element">
+                                  {{ element.name }}
+                                </mat-cell>
+                              </ng-container>
+                        
+                              <!-- Name Column -->
+                              <ng-container matColumnDef="chaosValue">
+                                <mat-header-cell *matHeaderCellDef> chaosValue </mat-header-cell>
+                                <mat-cell *matCellDef="let element">
+                                  {{ element.chaosValue }}
+                                </mat-cell>
+                              </ng-container>
+                        
+                              <!-- Weight Column -->
+                              <ng-container matColumnDef="exaltedValue">
+                                <mat-header-cell *matHeaderCellDef>
+                                  exaltedValue
+                                </mat-header-cell>
+                                <mat-cell *matCellDef="let element">
+                                  {{ element.exaltedValue }}
+                                </mat-cell>
+                              </ng-container>
+                        
+                              <!-- Symbol Column -->
+                              <ng-container matColumnDef="icon">
+                                <mat-header-cell *matHeaderCellDef> icon</mat-header-cell>
+                                <mat-cell *matCellDef="let element"><img [src]="element.icon" />
+                                </mat-cell>
+                              </ng-container>
+                        
+                              <!-- ID Column -->
+                              <ng-container matColumnDef="id">
+                                <mat-header-cell *matHeaderCellDef> id</mat-header-cell>
+                                <mat-cell *matCellDef="let element">{{ element.id }} </mat-cell>
+                              </ng-container>
+                        
+                              <mat-header-row *matHeaderRowDef="itemheadersTest; sticky: true"></mat-header-row>
+                              <mat-row *matRowDef="let row; columns: itemheadersTest"></mat-row>
+                            </mat-table>
+                        
+                            <mat-paginator #paginator3 [pageSize]="20" [pageSizeOptions]="[20, 30, 40, 60]">
+                            </mat-paginator>
+                          </div>
+                        </mat-tab>
+  </mat-tab-group>
+</ng-container>
+<!-- </div> -->
+
+<!-- <div *ngFor="let map of fullPoeNinjaResponse[5].lines">
+  <mat-table class="mat-elevation-z8" [dataSource]="[map]">
     <ng-container
-      *ngFor="let column of itemheadersTest2"
-      matColumnDef="{{ column.name }}"
+      [matColumnDef]="column.key"
+      *ngFor="let column of map | keyvalue"
     >
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>
-        {{ column.label }}
-      </th>
-      <td mat-cell *matCellDef="let element">{{ element[column.name] }}</td>
+      <mat-header-cell *matHeaderCellDef>{{ column.key }}</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ column.value }}</mat-cell>
     </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="itemheadersTest2"></tr>
-    <tr mat-row *matRowDef="let row; columns: itemheadersTest2"></tr>
-  </table>
-
-  <mat-paginator
-    [pageSizeOptions]="[5, 10, 20]"
-    showFirstLastButtons
-  ></mat-paginator> -->
-<!-- </ng-container> -->
+    <mat-header-row
+      *matHeaderRowDef="{}.constructor.keys(map); sticky: true"
+    ></mat-header-row>
+    <mat-row *matRowDef="let row; columns: {}.constructor.keys(map)"></mat-row>
+  </mat-table>
+</div> -->

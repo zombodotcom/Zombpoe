@@ -108,11 +108,7 @@ const { session } = require("electron");
 let responsedata;
 ipcMain.on("ping-async", (event, message) => {
   console.log("hello");
-  const cookie = {
-    url: ".pathofexile.com",
-    name: "POESESSID",
-    value: "b82835daa9c1f8d4ed42af934af45d1b"
-  };
+
   // session.defaultSession.cookies.set(cookie, error => {
   //   if (error) console.error(error);
   // });
@@ -123,20 +119,21 @@ ipcMain.on("ping-async", (event, message) => {
   //   return this._http.get(`/api/races/${id}`)
   //     .map(response => response.json());
   // }
-  let options = {
-    headers: {
-      cookie: "POESESSID=b82835daa9c1f8d4ed42af934af45d1b" //the token is a variable which holds the token
-    }
-  };
-  var numTabs = axios
-    .get(
-      "https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=qqazraelz&tabs=0",
-      options
-    )
-    .catch(e => {
-      console.log("Error: ", e.response.data);
-    })
-    .then(response => console.log(response));
+  // let options = {
+  //   headers: {
+  //     cookie: "POESESSID=b82835daa9c1f8d4ed42af934af45d1b" //the token is a variable which holds the token
+  //   }
+  // };
+  // var numTabs = axios
+  //   .get(
+  //     "https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=qqazraelz&tabs=0",
+  //     options
+  //   )
+  //   .catch(e => {
+  //     console.log("Error: ", e.response.data);
+  //   })
+  //   .then(response => console.log(response));
+
   // console.log(numTabs);
   //TODO
   // get the number of tabs, concat the response data
@@ -200,6 +197,7 @@ ipcMain.on("ping-async", (event, message) => {
     "UniqueFlask",
     "Essence"
   ];
+
   let poeNinjaResponseArray;
   let currencyDataResponse;
   let fragmentsDataResponse;
@@ -215,6 +213,7 @@ ipcMain.on("ping-async", (event, message) => {
   let uniquejewelDataResponse;
   let uniqueflaskDataResponse;
   let essenceDataResponse;
+  let stashdata;
 
   axios
     .all([
@@ -238,7 +237,7 @@ ipcMain.on("ping-async", (event, message) => {
     // })
     .then(responseArr => {
       //this will be executed only when all requests are complete
-      console.log("Currency: ", responseArr[0].data);
+      // console.log("Currency: ", responseArr[0].data);
       this.currencyDataResponse = responseArr[0].data; // currency
       this.fragmentsDataResponse = responseArr[1].data; //frag
       this.oilsDataResponse = responseArr[2].data; //oils
@@ -267,7 +266,7 @@ ipcMain.on("ping-async", (event, message) => {
       // console.log("Unique Flasks: ", responseArr[12].data);
       // console.log("Unique Jewels: ", responseArr[13].data);
       // poeNinjaResponseArray = responseArr; //Changedd to .data
-      poeNinjaResponseArray = [
+      this.poeNinjaResponseArray = [
         responseArr[0].data,
         responseArr[1].data,
         responseArr[2].data,
@@ -283,6 +282,9 @@ ipcMain.on("ping-async", (event, message) => {
         responseArr[12].data,
         responseArr[13].data
       ]; //Changedd to .data
+    })
+    .catch(e => {
+      console.log("Error: ", e.response.data);
     });
 
   // .then(
@@ -292,12 +294,13 @@ ipcMain.on("ping-async", (event, message) => {
   //     // console.log("Repositories", reposResponse.data);
   //   })
   // );
+
   axios
     .get(
       "https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=qqazraelz&tabs=1&tabIndex=1",
       {
         headers: {
-          cookie: "POESESSID=b82835daa9c1f8d4ed42af934af45d1b" //the token is a variable which holds the token
+          cookie: "POESESSID=9e84de9e92b1173abbfde63928f7de97" //the token is a variable which holds the token
         }
       }
     )
@@ -305,34 +308,22 @@ ipcMain.on("ping-async", (event, message) => {
       // var finalObj = finalObj.concat(response); // should concat the data
       // console.log(response.data);
       // message = response.data as RootObject;
-      message = response.data;
-      event.sender.send("ping-async", message, poeNinjaResponseArray);
+      this.stashdata = response.data;
+      event.sender.send(
+        "ping-async",
+        this.stashdata,
+        this.poeNinjaResponseArray
+      );
     })
     .catch(e => {
       console.log("Error: ", e.response.data);
+      console.log("pathofexile.com Probably Down....");
+      event.sender.send("ping-async", null, this.poeNinjaResponseArray);
     });
   // getter();
 });
 const axios = require("axios").default;
 
-function getter() {
-  // const { net } = require("electron");
-  // const request = net.request(
-  //   "https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=qqazraelz&tabs=1&tabIndex=1"
-  // );
-  // request.setHeader("cookie", "POESESSID=b82835daa9c1f8d4ed42af934af45d1b");
-  // request.on("response", response => {
-  //   console.log(`STATUS: ${response.statusCode}`);
-  //   console.log(`HEADERS: ${JSON.stringify(response.headers)}`);
-  //   response.on("data", chunk => {
-  //     console.log(`BODY: ${chunk}`);
-  //   });
-  //   response.on("end", () => {
-  //     console.log("No more data in response.");
-  //   });
-  // });
-  // request.end();
-}
 ///Sync
 ipcMain.on("ping-sync", (event, message) => {
   message = "pong";
