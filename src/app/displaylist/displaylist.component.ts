@@ -464,7 +464,7 @@ export class DisplaylistComponent implements OnInit {
   formattedMessage;
   fullPoeNinjaResponseTableSource;
   userForm = new FormGroup({
-    POESESSID: new FormControl("***Replace***", Validators.maxLength(20)),
+    POESESSID: new FormControl("***Replace***"),
     accountName: new FormControl("qqazraelz", Validators.required),
     characterName: new FormControl("ZomboTD", Validators.maxLength(20))
   });
@@ -721,7 +721,10 @@ export class DisplaylistComponent implements OnInit {
       this.refresh(); // makes the display look for changes aka our new data
     });
 
-    this._electronService.ipcRenderer.send("ping-async", "ping"); // get us data
+    this._electronService.ipcRenderer.send("ping-async", [
+      this.userForm.get("POESESSID").value,
+      this.userForm.get("accountName").value
+    ]); // get us data
   }
 
   onFormSubmit(): void {

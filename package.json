@@ -1,7 +1,7 @@
 {
   "name": "zombpoe",
-  "version": "10.1.0",
-  "description": "Angular 8 with Electron (Typescript + SASS + Hot Reload)",
+  "version": "11.0.0",
+  "description": "Path of exile poe.ninja and stash program Angular 8 with Electron (Typescript + SASS + Hot Reload)",
   "homepage": "https://github.com/zombodotcom/Zombpoe",
   "author": {
     "name": "zombo"
@@ -11,7 +11,9 @@
     "angular 8",
     "electron",
     "typescript",
-    "sass"
+    "sass",
+    "Path of Exile",
+    "poe"
   ],
   "main": "main.js",
   "private": true,
