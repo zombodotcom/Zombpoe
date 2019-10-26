@@ -108,7 +108,7 @@ const { session } = require("electron");
 let responsedata;
 ipcMain.on("ping-async", (event, message) => {
   console.log("hello");
-
+  // console.log(message, "Message");
   // session.defaultSession.cookies.set(cookie, error => {
   //   if (error) console.error(error);
   // });
@@ -301,10 +301,12 @@ ipcMain.on("ping-async", (event, message) => {
 
   axios
     .get(
-      "https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=qqazraelz&tabs=1&tabIndex=1",
+      "https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=" +
+        message[1] +
+        "&tabs=1&tabIndex=1",
       {
         headers: {
-          cookie: "POESESSID=15790c12bf83f18e3c7e51245237dfe0" //the token is a variable which holds the token
+          cookie: "POESESSID=" + message[0] //the token is a variable which holds the token
         }
       }
     )
