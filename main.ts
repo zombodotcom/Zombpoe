@@ -121,7 +121,7 @@ ipcMain.on("ping-async", (event, message) => {
   // }
   // let options = {
   //   headers: {
-  //     cookie: "POESESSID=b82835daa9c1f8d4ed42af934af45d1b" //the token is a variable which holds the token
+  //     cookie: "POESESSID=asdasdasda" //the token is a variable which holds the token
   //   }
   // };
   // var numTabs = axios
@@ -165,7 +165,7 @@ ipcMain.on("ping-async", (event, message) => {
   //     axios
   //       .get(url, {
   //         headers: {
-  //           cookie: "POESESSID=b82835daa9c1f8d4ed42af934af45d1b" //the token is a variable which holds the token
+  //           cookie: "POESESSID=asdasdasd" //the token is a variable which holds the token
   //         }
   //       })
   //       .catch(e => {
@@ -195,7 +195,7 @@ ipcMain.on("ping-async", (event, message) => {
     "UniqueArmour",
     "UniqueAccessory",
     "UniqueFlask",
-    "Essence"
+    "Incubator"
   ];
 
   let poeNinjaResponseArray;
@@ -212,6 +212,7 @@ ipcMain.on("ping-async", (event, message) => {
   let uniqueaccessoriesDataResponse;
   let uniquejewelDataResponse;
   let uniqueflaskDataResponse;
+  let incubatorDataResponse;
   let essenceDataResponse;
   let stashdata;
 
@@ -223,14 +224,15 @@ ipcMain.on("ping-async", (event, message) => {
       axios.get(baseURL + urlendings[3]), //fossil
       axios.get(baseURL + urlendings[4]), //resonator
       axios.get(baseURL + urlendings[5]), //scarab
-      axios.get(baseURL + urlendings[6]), //divs
-      axios.get(baseURL + urlendings[7]), //prophecies
-      axios.get(baseURL + urlendings[8]), //uniquejewels
-      axios.get(baseURL + urlendings[9]), //uniqueweapons
-      axios.get(baseURL + urlendings[10]), //uniquearmours
-      axios.get(baseURL + urlendings[11]), //uniqueaccessory
-      axios.get(baseURL + urlendings[12]), //UniqueFlask
-      axios.get(baseURL + urlendings[13]) //Essence
+      axios.get(baseURL + urlendings[6]), //essence
+      axios.get(baseURL + urlendings[7]), //div
+      axios.get(baseURL + urlendings[8]), //prophecies
+      axios.get(baseURL + urlendings[9]), //uniquejewels
+      axios.get(baseURL + urlendings[10]), //uniqueweapons
+      axios.get(baseURL + urlendings[11]), //uniquearmours
+      axios.get(baseURL + urlendings[12]), //uniqueaccessory
+      axios.get(baseURL + urlendings[13]), //UniqueFlask
+      axios.get(baseURL + urlendings[14]) //incubator
     ])
     // .catch(e => {
     //   console.log("Error: ", e.response.data);
@@ -244,14 +246,15 @@ ipcMain.on("ping-async", (event, message) => {
       this.fossilsDataResponse = responseArr[3].data; //fossil
       this.resonatorsDataResponse = responseArr[4].data; //reso
       this.scarabsDataResponse = responseArr[5].data; //scarab
-      this.divsDataResponse = responseArr[6].data; //divs
-      this.propheciesDataResponse = responseArr[7].data; //prop
-      this.uniquejewelDataResponse = responseArr[8].data; //jewels
-      this.uniqueweaponsDataResponse = responseArr[9].data; //wapons
-      this.uniquearmoursDataResponse = responseArr[10].data; //armor
-      this.uniqueaccessoriesDataResponse = responseArr[11].data; //access
-      this.uniqueflaskDataResponse = responseArr[12].data; //flask
-      this.essenceDataResponse = responseArr[13].data; //essence
+      this.essenceDataResponse = responseArr[6].data; //essense
+      this.divsDataResponse = responseArr[7].data; //divs
+      this.propheciesDataResponse = responseArr[8].data; //prop
+      this.uniquejewelDataResponse = responseArr[9].data; //jewels
+      this.uniqueweaponsDataResponse = responseArr[10].data; //wapons
+      this.uniquearmoursDataResponse = responseArr[11].data; //armor
+      this.uniqueaccessoriesDataResponse = responseArr[12].data; //access
+      this.uniqueflaskDataResponse = responseArr[13].data; //flask
+      this.incubatorDataResponse = responseArr[14].data; //incubator
       // console.log("Fragments: ", responseArr[1].data);
       // console.log("Oils: ", responseArr[2].data);
       // console.log("Fossils: ", responseArr[3].data);
@@ -280,7 +283,8 @@ ipcMain.on("ping-async", (event, message) => {
         responseArr[10].data,
         responseArr[11].data,
         responseArr[12].data,
-        responseArr[13].data
+        responseArr[13].data,
+        responseArr[14].data
       ]; //Changedd to .data
     })
     .catch(e => {
@@ -300,7 +304,7 @@ ipcMain.on("ping-async", (event, message) => {
       "https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=qqazraelz&tabs=1&tabIndex=1",
       {
         headers: {
-          cookie: "POESESSID=9e84de9e92b1173abbfde63928f7de97" //the token is a variable which holds the token
+          cookie: "POESESSID=8b2a4fc3c2822a9590099564de2eae4a" //the token is a variable which holds the token
         }
       }
     )

@@ -1,0 +1,25 @@
+// // Alternate Angular Material Theme
+// @import "~@angular/material/theming";
+// // Alternate Angular Material Theme
+// .my-alternate-theme {
+//   $my-alternate-primary: mat-palette($mat-red);
+//   $my-alternate-accent: mat-palette($mat-green, 400);
+//   $my-alternate-warn: mat-palette($mat-grey);
+
+//   $my-alternate-theme: mat-light-theme(
+//     $my-alternate-primary,
+//     $my-alternate-accent,
+//     $my-alternate-warn
+//   );
+
+//   @include angular-material-theme($my-alternate-theme);
+// }
+// @include mat-core();
+
+// $primary: mat-palette($mat-indigo, A400);
+// $accent: mat-palette($mat-lime, A400);
+// $warn: mat-palette($mat-red);
+
+// $test: mat-dark-theme($primary, $accent, $warn);
+
+// @include angular-material-theme($test);

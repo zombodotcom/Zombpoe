@@ -8,7 +8,7 @@ import {
 } from "@angular/core";
 import { PoeninjaapiService, CharacterData } from "../poeninjaapi.service";
 import { DataSource } from "@angular/cdk/table";
-import { Sort } from "@angular/material/sort";
+import { Sort, MatSort } from "@angular/material/sort";
 import { NgForm, FormBuilder } from "@angular/forms";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { setTimeout } from "timers";
@@ -31,7 +31,11 @@ import { CookieService } from "ngx-cookie-service";
 // import { PythonShell } from "python-shell";
 import { map } from "rxjs/operators";
 import { StringDecoder } from "string_decoder";
-import { MatPaginator, MatTableDataSource } from "@angular/material";
+import {
+  MatPaginator,
+  MatTableDataSource,
+  MatTabChangeEvent
+} from "@angular/material";
 import { Cookies, dialog } from "electron";
 import { JsonPipe } from "@angular/common";
 import { async } from "@angular/core/testing";
@@ -167,83 +171,217 @@ interface Colour {
   styleUrls: ["./displaylist.component.scss"]
 })
 export class DisplaylistComponent implements OnInit {
+  @ViewChild("MatSortcurrency", { static: false }) sortcurrency: MatSort;
+  @ViewChild("MatSortfrag", { static: false }) sortfrag: MatSort;
+  @ViewChild("MatSortoil", { static: false }) sortoil: MatSort;
+  @ViewChild("MatSortfossil", { static: false }) sortfossil: MatSort;
+  @ViewChild("MatSortresonator", { static: false }) sortresonator: MatSort;
+  @ViewChild("MatSortscarab", { static: false }) sortscarab: MatSort;
+  @ViewChild("MatSortessence", { static: false }) sortessence: MatSort;
+  @ViewChild("MatSortdiv", { static: false }) sortdiv: MatSort;
+  @ViewChild("MatSortprophecy", { static: false }) sortprophecy: MatSort;
+  @ViewChild("MatSortuniquejewel", { static: false }) sortjewel: MatSort;
+  @ViewChild("MatSortweapon", { static: false }) sortweapon: MatSort;
+  @ViewChild("MatSortarmour", { static: false }) sortarmour: MatSort;
+  @ViewChild("MatSortaccess", { static: false }) sortaccess: MatSort;
+  @ViewChild("MatSortflask", { static: false }) sortflask: MatSort;
+  @ViewChild("MatSortincubator", { static: false }) sortincubator: MatSort;
+
+  onLinkClick(event: MatTabChangeEvent) {
+    // console.log("event => ", event);
+    // console.log("index => ", event.index);
+    // console.log("tab => ", event.tab);
+    switch (event.index) {
+      case 0:
+        this.fullPoeNinjaResponseTableSourceCurrency.sort = this.sortcurrency;
+        this.currenttablesource = this.fullPoeNinjaResponseTableSourceCurrency;
+        // this.currenttablesource.sort = this.sort;
+        break;
+
+      case 1:
+        this.fragmentsDataResponseTableSource.sort = this.sortfrag;
+        this.currenttablesource = this.fragmentsDataResponseTableSource;
+        // this.currenttablesource.sort = this.sort;
+        break;
+
+      case 2:
+        this.currenttablesource = this.oilsDataResponseTableSource;
+        this.oilsDataResponseTableSource.sort = this.sortoil;
+        // this.currenttablesource.sort = this.sort;
+        break;
+
+      case 3:
+        this.currenttablesource = this.fullPoeNinjaResponseTableSourceFossil;
+        this.fullPoeNinjaResponseTableSourceFossil.sort = this.sortfossil;
+        // this.currenttablesource.sort = this.sort;
+        break;
+
+      case 4:
+        this.currenttablesource = this.resonatorsDataResponseTableSource;
+        this.resonatorsDataResponseTableSource.sort = this.sortresonator;
+        // this.currenttablesource.sort = this.sort;
+        break;
+
+      case 6:
+        this.currenttablesource = this.essenceDataResponseTableSource;
+        this.essenceDataResponseTableSource.sort = this.sortessence;
+        // this.currenttablesource.sort = this.sort; // inneffective unless we use current table source
+        break;
+
+      case 7:
+        this.currenttablesource = this.divsDataResponseTableSource;
+        this.divsDataResponseTableSource.sort = this.sortdiv;
+        // this.currenttablesource.sort = this.sort;
+        break;
+
+      case 8:
+        this.currenttablesource = this.propheciesDataResponseTableSource;
+        this.propheciesDataResponseTableSource.sort = this.sortprophecy;
+        // this.currenttablesource.sort = this.sort;
+        break;
+
+      case 9:
+        this.currenttablesource = this.uniquejewelDataResponseTableSource;
+        this.uniquejewelDataResponseTableSource.sort = this.sortjewel;
+        // this.currenttablesource.sort = this.sort;
+        break;
+
+      case 10:
+        this.currenttablesource = this.uniqueweaponsDataResponseTableSource;
+        this.uniqueweaponsDataResponseTableSource.sort = this.sortweapon;
+        // this.currenttablesource.sort = this.sort;
+        break;
+
+      case 11:
+        this.currenttablesource = this.uniquearmoursDataResponseTableSource;
+        this.uniquearmoursDataResponseTableSource.sort = this.sortarmour;
+        // this.currenttablesource.sort = this.sort;
+        break;
+
+      case 12:
+        this.currenttablesource = this.uniqueaccessoriesDataResponseTableSource;
+        this.uniqueaccessoriesDataResponseTableSource.sort = this.sortaccess;
+        // this.currenttablesource.sort = this.sort;
+        break;
+
+      case 13:
+        this.currenttablesource = this.uniqueflaskDataResponseTableSource;
+        this.uniqueflaskDataResponseTableSource.sort = this.sortflask;
+        // this.currenttablesource.sort = this.sort;
+        break;
+
+      case 14:
+        this.currenttablesource = this.incubatorDataResponseTableSource;
+        this.incubatorDataResponseTableSource.sort = this.sortincubator;
+        // this.currenttablesource.sort = this.sort;
+        break;
+    }
+    // console.log('tab => ', event);
+  }
+
   _setDataSource(indexNumber) {
     setTimeout(() => {
       switch (indexNumber) {
         case 0:
-          !this.fullPoeNinjaResponseTableSourceFossil.paginator
-            ? (this.fullPoeNinjaResponseTableSourceFossil.paginator = this.paginator)
-            : null;
-          break;
-        case 1:
           !this.fullPoeNinjaResponseTableSourceCurrency.paginator
-            ? (this.fullPoeNinjaResponseTableSourceCurrency.paginator = this.paginator2)
+            ? (this.fullPoeNinjaResponseTableSourceCurrency.paginator = this.paginatorcurrency)
             : null;
-        case 2:
-          !this.uniquearmoursDataResponseTableSource.paginator
-            ? (this.uniquearmoursDataResponseTableSource.paginator = this.paginatorarmour)
-            : null;
-        case 3:
-          !this.uniqueweaponsDataResponseTableSource.paginator
-            ? (this.uniqueweaponsDataResponseTableSource.paginator = this.paginatorweapons)
-            : null;
-        case 4:
-          !this.oilsDataResponseTableSource.paginator
-            ? (this.oilsDataResponseTableSource.paginator = this.paginatoroils)
-            : null;
-        case 6:
+          // console.log(this.currenttablesource);
+          break;
+
+        case 1:
           !this.fragmentsDataResponseTableSource.paginator
             ? (this.fragmentsDataResponseTableSource.paginator = this.paginatorfrag)
             : null;
-        case 7:
+          // console.log(this.currenttablesource);
+          break;
+        case 2:
+          !this.oilsDataResponseTableSource.paginator
+            ? (this.oilsDataResponseTableSource.paginator = this.paginatoroils)
+            : null;
+          break;
+        case 3:
+          !this.fullPoeNinjaResponseTableSourceFossil.paginator
+            ? (this.fullPoeNinjaResponseTableSourceFossil.paginator = this.paginatorfossil)
+            : null;
+          break;
+        case 4:
           !this.resonatorsDataResponseTableSource.paginator
             ? (this.resonatorsDataResponseTableSource.paginator = this.paginatorreso)
             : null;
-        case 8:
+          break;
+        case 5:
           !this.scarabsDataResponseTableSource.paginator
             ? (this.scarabsDataResponseTableSource.paginator = this.paginatorscarabs)
             : null;
-        case 9:
+          break;
+        case 6:
+          !this.essenceDataResponseTableSource.paginator
+            ? (this.essenceDataResponseTableSource.paginator = this.paginatoressence)
+            : null;
+          break;
+        case 7:
           !this.divsDataResponseTableSource.paginator
             ? (this.divsDataResponseTableSource.paginator = this.paginatordivs)
             : null;
-        case 10:
+          break;
+        case 8:
           !this.propheciesDataResponseTableSource.paginator
             ? (this.propheciesDataResponseTableSource.paginator = this.paginatorproph)
             : null;
-        case 11:
+          break;
+        case 9:
           !this.uniquejewelDataResponseTableSource.paginator
             ? (this.uniquejewelDataResponseTableSource.paginator = this.paginatorjewel)
             : null;
+          break;
+        case 10:
+          !this.uniqueweaponsDataResponseTableSource.paginator
+            ? (this.uniqueweaponsDataResponseTableSource.paginator = this.paginatorjewel)
+            : null;
+          break;
+        case 11:
+          !this.uniquearmoursDataResponseTableSource.paginator
+            ? (this.uniquearmoursDataResponseTableSource.paginator = this.paginatorarmour)
+            : null;
+          break;
         case 12:
           !this.uniqueaccessoriesDataResponseTableSource.paginator
             ? (this.uniqueaccessoriesDataResponseTableSource.paginator = this.paginatoraccess)
             : null;
+          break;
         case 13:
           !this.uniqueflaskDataResponseTableSource.paginator
             ? (this.uniqueflaskDataResponseTableSource.paginator = this.paginatorflask)
             : null;
+          break;
         case 14:
-          !this.essenceDataResponseTableSource.paginator
-            ? (this.essenceDataResponseTableSource.paginator = this.paginatoressence)
+          !this.incubatorDataResponseTableSource.paginator
+            ? (this.incubatorDataResponseTableSource.paginator = this.paginatorincubator)
             : null;
+          break;
+        default:
+          break;
       }
     }, 100);
   }
 
-  @ViewChild("paginator", { static: false }) paginator: MatPaginator;
-  @ViewChild("paginator2", { static: false }) paginator2: MatPaginator;
+  @ViewChild("paginatorcurrency", { static: false })
+  paginatorcurrency: MatPaginator;
+  @ViewChild("paginatorfragment", { static: false })
+  paginatorfragment: MatPaginator;
   @ViewChild("paginatorarmour", { static: false })
   paginatorarmour: MatPaginator;
   @ViewChild("paginatorweapons", { static: false })
   paginatorweapons: MatPaginator;
-  @ViewChild("paginatofossil", { static: false }) paginatorfossil: MatPaginator;
+  @ViewChild("paginatorfossil", { static: false })
+  paginatorfossil: MatPaginator;
   @ViewChild("paginatoroils", { static: false }) paginatoroils: MatPaginator;
   @ViewChild("paginatorfrag", { static: false }) paginatorfrag: MatPaginator;
   @ViewChild("paginatorreso", { static: false }) paginatorreso: MatPaginator;
   @ViewChild("paginatorscarabs", { static: false })
   paginatorscarabs: MatPaginator;
-  @ViewChild("paginatorsaccess", { static: false })
+  @ViewChild("paginatoraccess", { static: false })
   paginatoraccess: MatPaginator;
   @ViewChild("paginatordivs", { static: false }) paginatordivs: MatPaginator;
   @ViewChild("paginatorproph", { static: false }) paginatorproph: MatPaginator;
@@ -251,6 +389,8 @@ export class DisplaylistComponent implements OnInit {
   @ViewChild("paginatorflask", { static: false }) paginatorflask: MatPaginator;
   @ViewChild("paginatoressence", { static: false })
   paginatoressence: MatPaginator;
+  @ViewChild("paginatorincubator", { static: false })
+  paginatorincubator: MatPaginator;
 
   displayedColumnstester: string[];
   currencyDataResponse;
@@ -267,6 +407,7 @@ export class DisplaylistComponent implements OnInit {
   uniquejewelDataResponse;
   uniqueflaskDataResponse;
   essenceDataResponse;
+  incubatorDataResponse;
   public POESESSID;
   public accountName;
   public characterName;
@@ -299,6 +440,8 @@ export class DisplaylistComponent implements OnInit {
   uniqueaccessoriesDataResponseTableSource = new MatTableDataSource(); //access
   uniqueflaskDataResponseTableSource = new MatTableDataSource(); //flask
   essenceDataResponseTableSource = new MatTableDataSource(); //essence
+  incubatorDataResponseTableSource = new MatTableDataSource(); //essence
+  currenttablesource = new MatTableDataSource(); // storage for filter test
   // public itemlist:any;
   sortedData: PoeNinjaItemData[];
   dataSource2;
@@ -327,8 +470,8 @@ export class DisplaylistComponent implements OnInit {
   accform = new FormControl(20, Validators.required);
   characterform = new FormControl();
   ngAfterViewInit() {
-    this.fullPoeNinjaResponseTableSourceFossil.paginator = this.paginator;
-    this.fullPoeNinjaResponseTableSourceCurrency.paginator = this.paginator2;
+    this.fullPoeNinjaResponseTableSourceFossil.paginator = this.paginatorcurrency;
+    this.fullPoeNinjaResponseTableSourceCurrency.paginator = this.paginatorfragment;
     // this.uniquearmoursDataResponseTableSource.paginator = this.paginatorar;
     this.fragmentsDataResponseTableSource.paginator = this.paginatorfrag; //frag
     this.oilsDataResponseTableSource.paginator = this.paginatoroils; //oils
@@ -343,6 +486,7 @@ export class DisplaylistComponent implements OnInit {
     this.uniqueaccessoriesDataResponseTableSource.paginator = this.paginatoraccess; //access
     this.uniqueflaskDataResponseTableSource.paginator = this.paginatorflask; //flask
     this.essenceDataResponseTableSource.paginator = this.paginatoressence; //essence
+    this.incubatorDataResponseTableSource.paginator = this.paginatorincubator; //essence
   }
 
   // fetch = require("node-fetch");
@@ -421,13 +565,6 @@ export class DisplaylistComponent implements OnInit {
     // "explicitModifiers"
   ];
   arrayOfKeys;
-  httpOptions = {
-    withCredentials: true,
-    headers: new HttpHeaders({
-      "Content-Type": "application/json",
-      POESESSID: "insert here"
-    })
-  };
   itemsdata3: any;
   stashurl: string;
   stashitemOBJ;
@@ -475,6 +612,10 @@ export class DisplaylistComponent implements OnInit {
     // });
     return iconstring;
   }
+  applyFilter(filterValue: string) {
+    this.currenttablesource.filter = filterValue.trim().toLowerCase();
+    // console.log(this.currenttablesource);
+  }
   openModal() {
     console.log("Play");
     if (this._electronService.isElectronApp) {
@@ -497,14 +638,15 @@ export class DisplaylistComponent implements OnInit {
       this.fossilsDataResponse = resp2[3].data; //fossil
       this.resonatorsDataResponse = resp2[4].data; //reso
       this.scarabsDataResponse = resp2[5].data; //scarab
-      this.divsDataResponse = resp2[6].data; //divs
-      this.propheciesDataResponse = resp2[7].data; //prop
-      this.uniquejewelDataResponse = resp2[8].data; //jewels
-      this.uniqueweaponsDataResponse = resp2[9].data; //wapons
-      this.uniquearmoursDataResponse = resp2[10].data; //armor
-      this.uniqueaccessoriesDataResponse = resp2[11].data; //access
-      this.uniqueflaskDataResponse = resp2[12].data; //flask
-      this.essenceDataResponse = resp2[13].data; //essence
+      this.essenceDataResponse = resp2[6].data; //essence
+      this.divsDataResponse = resp2[7].data; //divs
+      this.propheciesDataResponse = resp2[8].data; //prop]
+      this.uniquejewelDataResponse = resp2[9].data; //jewels
+      this.uniqueweaponsDataResponse = resp2[10].data; //wapons
+      this.uniquearmoursDataResponse = resp2[11].data; //armor
+      this.uniqueaccessoriesDataResponse = resp2[12].data; //access
+      this.uniqueflaskDataResponse = resp2[13].data; //flask
+      this.uniqueflaskDataResponse = resp2[14].data; //incubator
 
       this.fullPoeNinjaResponseTableSourceCurrency = new MatTableDataSource(
         resp2[0].lines
@@ -513,41 +655,44 @@ export class DisplaylistComponent implements OnInit {
         resp2[1].lines
       ); //frag
       this.oilsDataResponseTableSource = new MatTableDataSource(resp2[2].lines); //oils
-      this.fossilsDataResponse = new MatTableDataSource(resp2[3].lines); //fossil
+      this.fullPoeNinjaResponseTableSourceFossil = new MatTableDataSource(
+        resp2[3].lines
+      ); // fossils
       this.resonatorsDataResponseTableSource = new MatTableDataSource(
         resp2[4].lines
       ); //reso
       this.scarabsDataResponseTableSource = new MatTableDataSource(
         resp2[5].lines
       ); //scarab
-      this.divsDataResponseTableSource = new MatTableDataSource(resp2[6].lines); //divs
+      this.essenceDataResponseTableSource = new MatTableDataSource(
+        resp2[6].lines
+      ); //essence
+      this.divsDataResponseTableSource = new MatTableDataSource(resp2[7].lines); //divs
       this.propheciesDataResponseTableSource = new MatTableDataSource(
-        resp2[7].lines
+        resp2[8].lines
       ); //prop
       this.uniquejewelDataResponseTableSource = new MatTableDataSource(
-        resp2[8].lines
+        resp2[9].lines
       ); //jewels
       this.uniqueweaponsDataResponseTableSource = new MatTableDataSource(
-        resp2[9].lines
+        resp2[10].lines
       ); //wapons
       this.uniquearmoursDataResponseTableSource = new MatTableDataSource(
-        resp2[10].lines
+        resp2[11].lines
       ); //armor
       this.uniqueaccessoriesDataResponseTableSource = new MatTableDataSource(
-        resp2[11].lines
+        resp2[12].lines
       ); //access
       this.uniqueflaskDataResponseTableSource = new MatTableDataSource(
-        resp2[12].lines
-      ); //flask
-      this.essenceDataResponseTableSource = new MatTableDataSource(
         resp2[13].lines
-      ); //essence
+      ); //flask
+      this.incubatorDataResponseTableSource = new MatTableDataSource(
+        resp2[14].lines
+      ); //flask
+
       console.log(resp2[3], "fossil Response");
       this.fullPoeNinjaResponse = resp2;
       this.fullPoeNinjaResponseTableSource = new MatTableDataSource(resp2);
-      this.fullPoeNinjaResponseTableSourceFossil = new MatTableDataSource(
-        resp2[3].lines
-      );
 
       this.itemheadersTest2 = Object.keys(resp2[3].lines[0]); // get all headers
       console.log(this.itemheadersTest2);

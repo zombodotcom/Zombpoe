@@ -41,7 +41,8 @@ import {
   MatSnackBarModule,
   MatSortModule,
   MatTabsModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatFormFieldModule
 } from "@angular/material";
 import { ReactiveFormsModule } from "@angular/forms";
 
@@ -135,6 +136,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule,
+    MatFormFieldModule,
+    MatInputModule,
     // HttpXhrBackend,
     // HttpClientXsrfModule.withOptions({
     //   cookieName: "POESESSID"
