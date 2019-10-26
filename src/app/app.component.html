@@ -2,11 +2,18 @@
   <h1>
     Zombo
   </h1>
-  <button mat-button routerLink="/">Home</button>
-  <button mat-button routerLink="/about">About</button>
+  <!-- <button mat-button routerLink="/">Home</button>
+  <button mat-button routerLink="/about">About</button> -->
   <button mat-button routerLink="/display">List</button>
+  <!-- <mat-card class="my-alternate-theme">
+    My Alternate Themes:
+    <button mat-raised-button color="primary">Primary</button>
+    <button mat-raised-button color="accent">Accent</button>
+    <button mat-raised-button color="warn">Warning</button>
+  </mat-card> -->
   <!-- <button mat-button routerLink="/userlist">Stash</button> -->
 </mat-toolbar>
-
-<router-outlet></router-outlet>
+<div class="mat-typography app-frame mat-app-background">
+  <router-outlet></router-outlet>
+</div>
 <!-- <displaylist></displaylist> -->

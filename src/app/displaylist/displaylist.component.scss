@@ -8,3 +8,24 @@
 // .mat-sort-header-container {
 //   align-items: center;
 // }
+// .my-mat-cell,
+// .my-mat-header-cell {
+//   flex: 0 0 30%;
+// }
+* {
+  transition: 0.1s;
+}
+.popover {
+  pointer-events: none !important;
+}
+.tooltip {
+  pointer-events: none !important;
+}
+
+.mat-column-explicitModifiers {
+  width: 100px;
+}
+::ng-deep .tooltip-inner {
+  background-color: #000000;
+  // opacity: 0.6;
+}
