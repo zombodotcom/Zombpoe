@@ -1,35 +1,17 @@
-<button mat-button
-  type="button"
-  class="btn btn-outline-secondary mr-2"
-  placement="top"
-  ngbTooltip="Tooltip on top"
->
+<!-- <button type="button" class="btn btn-outline-secondary mr-2" placement="top" placement="right" ngbTooltip="Tooltip on right">
   Tooltip on top
 </button>
-<button mat-button 
-  type="button"
-  class="btn btn-outline-secondary mr-2"
-  placement="right"
-  ngbTooltip="Tooltip on right"
->
-  Tooltip on right
+
+<button mat-button  placement="right" ngbTooltip="Tooltip on right">
+<img src="https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyDuplicate.png?scale=1&w=1&h=1" />
 </button>
-<button mat-button
-  type="button"
-  class="btn btn-outline-secondary mr-2"
-  placement="bottom"
-  ngbTooltip="Tooltip on bottom"
->
-  Tooltip on bottom
-</button>
-<button mat-button
-  type="button"
-  class="btn btn-outline-secondary mr-2"
-  placement="left"
-  ngbTooltip="Tooltip on left"
->
-  Tooltip on left
-</button>
+
+<button mat-raised-button matTooltip="Info about the action"
+  aria-label="Button that displays a tooltip when focused or hovered over">
+<img src="https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyDuplicate.png?scale=1&w=1&h=1" />
+
+</button> -->
+<script> $().tooltip({ container: 'body' }), $().popover({ container: 'body' })</script>
 
 <form [formGroup]="userForm" (ngSubmit)="onFormSubmit()">
   <mat-form-field color="primary" >
@@ -44,11 +26,11 @@
   <button type="submit"  mat-mini-fab color="primary">Send</button>
 </form>
 <button (click)="openModal()"  mat-flat-button color="primary">
-  Open Modal
+  Force Refresh
 </button>
 <!-- STASH ITEM TABLE -->
 
-<ng-container *ngIf="stashItems2">
+<!-- <ng-container *ngIf="stashItems2">
 
   <div class="mat-elevation-z8" style="float: left">
     <table mat-table [dataSource]="stashItems2">
@@ -62,7 +44,9 @@
       <ng-container matColumnDef="icon">
         <th mat-header-cell *matHeaderCellDef>Icon</th>
         <td mat-cell *matCellDef="let element">
-          <img [src]="element.icon" />
+            <button mat-button placement="right" ngbTooltip="Tooltip on right">
+                                  <img [src]="element.icon" />
+                                  </button>
         </td>
       </ng-container>
 
@@ -73,11 +57,14 @@
         </td>
       </ng-container>
 
+    
+ 
+
       <tr mat-header-row *matHeaderRowDef="disptest; sticky: true"></tr>
       <tr mat-row *matRowDef="let row; columns: disptest"></tr>
     </table>
   </div>
-</ng-container>
+</ng-container> -->
 
 <!-- <div>
   <ng-container *ngIf="fullPoeNinjaResponse">
@@ -200,7 +187,9 @@
           <ng-container matColumnDef="icon">
             <mat-header-cell *matHeaderCellDef> icon</mat-header-cell>
             <mat-cell *matCellDef="let element; index as i">
+              <button mat-button placement="right" ngbTooltip="Tooltip on right">
               <img [src]="getClass(element.currencyTypeName)" />
+              </button>
             </mat-cell>
           </ng-container>
 
@@ -268,7 +257,9 @@
           <ng-container matColumnDef="icon">
             <mat-header-cell *matHeaderCellDef > icon</mat-header-cell>
             <mat-cell *matCellDef="let element; index as i">
+              <button mat-button placement="right" ngbTooltip="Tooltip on right">
               <img [src]="getClass(element.currencyTypeName)" />
+              </button>
             </mat-cell>
           </ng-container>
     
@@ -328,7 +319,10 @@
           <!-- Symbol Column -->
           <ng-container matColumnDef="icon">
             <mat-header-cell *matHeaderCellDef> icon</mat-header-cell>
-            <mat-cell *matCellDef="let element"><img [src]="element.icon" />
+          
+            <mat-cell *matCellDef="let element"><button mat-button placement="right" ngbTooltip="Tooltip on right">
+              <img [src]="element.icon" />
+            </button>
             </mat-cell>
           </ng-container>
     
@@ -337,6 +331,13 @@
             <mat-header-cell *matHeaderCellDef mat-sort-header> id</mat-header-cell>
             <mat-cell *matCellDef="let element">{{ element.id }} </mat-cell>
           </ng-container>
+<!-- 
+            <ng-container matColumnDef="explicitModifiers">
+              <th mat-header-cell *matHeaderCellDef>Stuff</th>
+              <td mat-cell *matCellDef="let element">
+              <div *ngFor="let item of element.explicitModifiers"> {{item.text}}</div>
+              </td>
+            </ng-container> -->
     
           <mat-header-row *matHeaderRowDef="itemheadersTest; sticky: true"></mat-header-row>
           <mat-row *matRowDef="let row; columns: itemheadersTest"></mat-row>
@@ -382,7 +383,11 @@
           <ng-container matColumnDef="icon">
             <mat-header-cell *matHeaderCellDef> icon</mat-header-cell>
             <mat-cell *matCellDef="let element"
-              ><img [src]="element.icon" />
+              >
+              <ng-template #testtooltip>  <ul *ngFor="let item of element.explicitModifiers"> {{item.text}}</ul> </ng-template>
+              <button mat-button [ngbTooltip]="testtooltip">
+              <img [src]="element.icon" />
+              </button>
             </mat-cell>
           </ng-container>
 
@@ -391,6 +396,15 @@
             <mat-header-cell *matHeaderCellDef mat-sort-header> id</mat-header-cell>
             <mat-cell *matCellDef="let element">{{ element.id }} </mat-cell>
           </ng-container>
+          
+  <!-- <ng-container matColumnDef="explicitModifiers">
+    <th mat-header-cell *matHeaderCellDef>Stuff</th>
+    <td mat-cell *matCellDef="let element">
+    <div *ngFor="let item of element.explicitModifiers"> {{item.text}}</div>
+    </td>
+  </ng-container> -->
+
+
 
           <mat-header-row
             *matHeaderRowDef="itemheadersTest; sticky: true"
@@ -443,18 +457,31 @@
         </mat-cell>
       </ng-container>
 
-      <!-- Symbol Column -->
-      <ng-container matColumnDef="icon">
-        <mat-header-cell *matHeaderCellDef> icon</mat-header-cell>
-        <mat-cell *matCellDef="let element"><img [src]="element.icon" />
-        </mat-cell>
-      </ng-container>
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="icon">
+    <mat-header-cell *matHeaderCellDef> icon</mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      <ng-template #testtooltip>
+        <ul *ngFor="let item of element.explicitModifiers"> {{item.text}}</ul>
+      </ng-template>
+      <button mat-button [ngbTooltip]="testtooltip">
+        <img [src]="element.icon" />
+      </button>
+    </mat-cell>
+  </ng-container>
 
       <!-- ID Column -->
       <ng-container matColumnDef="id">
         <mat-header-cell *matHeaderCellDef mat-sort-header> id</mat-header-cell>
         <mat-cell *matCellDef="let element">{{ element.id }} </mat-cell>
       </ng-container>
+
+        <!-- <ng-container matColumnDef="explicitModifiers">
+          <th mat-header-cell *matHeaderCellDef>Stuff</th>
+          <td mat-cell *matCellDef="let element">
+          <div *ngFor="let item of element.explicitModifiers"> {{item.text}}</div>
+          </td>
+        </ng-container> -->
 
       <mat-header-row *matHeaderRowDef="itemheadersTest; sticky: true"></mat-header-row>
       <mat-row *matRowDef="let row; columns: itemheadersTest"></mat-row>
@@ -494,18 +521,35 @@
                 </mat-cell>
               </ng-container>
         
-              <!-- Symbol Column -->
-              <ng-container matColumnDef="icon">
-                <mat-header-cell *matHeaderCellDef> icon</mat-header-cell>
-                <mat-cell *matCellDef="let element"><img [src]="element.icon" />
-                </mat-cell>
-              </ng-container>
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="icon">
+              <mat-header-cell *matHeaderCellDef> icon</mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                <ng-template #testtooltip>
+                  <ul *ngFor="let item of element.explicitModifiers"> {{item.text}}</ul>
+                </ng-template>
+                <button mat-button [ngbTooltip]="testtooltip">
+                  <img [src]="element.icon" />
+                </button>
+              </mat-cell>
+            </ng-container>
+
+
         
               <!-- ID Column -->
               <ng-container matColumnDef="id">
                 <mat-header-cell *matHeaderCellDef mat-sort-header> id</mat-header-cell>
                 <mat-cell *matCellDef="let element">{{ element.id }} </mat-cell>
               </ng-container>
+
+
+  <!-- <ng-container matColumnDef="explicitModifiers">
+    <th mat-header-cell *matHeaderCellDef>Stuff</th>
+    <td mat-cell *matCellDef="let element">
+    <div *ngFor="let item of element.explicitModifiers"> {{item.text}}</div>
+    </td>
+  </ng-container> -->
+
         
               <mat-header-row *matHeaderRowDef="itemheadersTest; sticky: true"></mat-header-row>
               <mat-row *matRowDef="let row; columns: itemheadersTest"></mat-row>
@@ -544,19 +588,33 @@
                     </mat-cell>
                   </ng-container>
             
-                  <!-- Symbol Column -->
-                  <ng-container matColumnDef="icon">
-                    <mat-header-cell *matHeaderCellDef> icon</mat-header-cell>
-                    <mat-cell *matCellDef="let element"><img [src]="element.icon" />
-                    </mat-cell>
-                  </ng-container>
+                <!-- Symbol Column -->
+                <mat-cell matColumnDef="icon">
+                  <mat-header-cell *matHeaderCellDef> icon</mat-header-cell>
+                  <mat-cell *matCellDef="let element">
+                    <ng-template #testtooltip>
+                      <ul *ngFor="let item of element.explicitModifiers"> {{item.text}}</ul>
+                    </ng-template>
+                    <button mat-button [ngbTooltip]="testtooltip">
+                      <img [src]="element.icon" />
+                    </button>
+                  </mat-cell>
+                </mat-cell>
             
                   <!-- ID Column -->
                   <ng-container matColumnDef="id">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> id</mat-header-cell>
                     <mat-cell *matCellDef="let element">{{ element.id }} </mat-cell>
                   </ng-container>
-            
+
+<!-- 
+                    <ng-container matColumnDef="explicitModifiers">
+                      <th mat-header-cell *matHeaderCellDef>Stuff</th>
+                      <td mat-cell *matCellDef="let element">
+                      <div *ngFor="let item of element.explicitModifiers"> {{item.text}}</div>
+                      </td>
+                    </ng-container>
+             -->
                   <mat-header-row *matHeaderRowDef="itemheadersTest; sticky: true"></mat-header-row>
                   <mat-row *matRowDef="let row; columns: itemheadersTest"></mat-row>
                 </mat-table>
@@ -594,19 +652,33 @@
                         </mat-cell>
                       </ng-container>
                 
-                      <!-- Symbol Column -->
-                      <ng-container matColumnDef="icon">
-                        <mat-header-cell *matHeaderCellDef> icon</mat-header-cell>
-                        <mat-cell *matCellDef="let element"><img [src]="element.icon" />
-                        </mat-cell>
-                      </ng-container>
+                    <!-- Symbol Column -->
+                    <mat-cell matColumnDef="icon">
+                      <mat-header-cell *matHeaderCellDef> icon</mat-header-cell>
+                      <mat-cell *matCellDef="let element">
+                        <ng-template #testtooltip>
+                          <ul *ngFor="let item of element.explicitModifiers"> {{item.text}}</ul>
+                        </ng-template>
+                        <button mat-button [ngbTooltip]="testtooltip">
+                          <img [src]="element.icon" />
+                        </button>
+                      </mat-cell>
+                    </mat-cell>
                 
                       <!-- ID Column -->
                       <ng-container matColumnDef="id">
                         <mat-header-cell *matHeaderCellDef mat-sort-header> id</mat-header-cell>
                         <mat-cell *matCellDef="let element">{{ element.id }} </mat-cell>
                       </ng-container>
-                
+
+
+                        <!-- <ng-container matColumnDef="explicitModifiers">
+                          <th mat-header-cell *matHeaderCellDef>Stuff</th>
+                          <td mat-cell *matCellDef="let element">
+                          <div *ngFor="let item of element.explicitModifiers"> {{item.text}}</div>
+                          </td>
+                        </ng-container>
+                 -->
                       <mat-header-row *matHeaderRowDef="itemheadersTest; sticky: true"></mat-header-row>
                       <mat-row *matRowDef="let row; columns: itemheadersTest"></mat-row>
                     </mat-table>
@@ -647,7 +719,13 @@
                           <!-- Symbol Column -->
                           <ng-container matColumnDef="icon">
                             <mat-header-cell *matHeaderCellDef> icon</mat-header-cell>
-                            <mat-cell *matCellDef="let element"><img [src]="element.icon" />
+                            <mat-cell *matCellDef="let element">
+                              <ng-template #testtooltip>
+                                <ul *ngFor="let item of element.explicitModifiers"> {{item.text}}</ul>
+                              </ng-template>
+                              <button mat-button [ngbTooltip]="testtooltip">
+                                <img [src]="element.icon" />
+                              </button>
                             </mat-cell>
                           </ng-container>
                     
@@ -656,6 +734,14 @@
                             <mat-header-cell *matHeaderCellDef mat-sort-header> id</mat-header-cell>
                             <mat-cell *matCellDef="let element">{{ element.id }} </mat-cell>
                           </ng-container>
+
+
+                            <!-- <ng-container matColumnDef="explicitModifiers">
+                              <th mat-header-cell *matHeaderCellDef>Stuff</th>
+                              <td mat-cell *matCellDef="let element">
+                              <div *ngFor="let item of element.explicitModifiers"> {{item.text}}</div>
+                              </td>
+                            </ng-container> -->
                     
                           <mat-header-row *matHeaderRowDef="itemheadersTest; sticky: true"></mat-header-row>
                           <mat-row *matRowDef="let row; columns: itemheadersTest"></mat-row>
@@ -697,7 +783,13 @@
                               <!-- Symbol Column -->
                               <ng-container matColumnDef="icon">
                                 <mat-header-cell *matHeaderCellDef> icon</mat-header-cell>
-                                <mat-cell *matCellDef="let element"><img [src]="element.icon" />
+                                <mat-cell *matCellDef="let element">
+                                  <ng-template #testtooltip>
+                                    <ul *ngFor="let item of element.explicitModifiers"> {{item.text}}</ul>
+                                  </ng-template>
+                                  <button mat-button [ngbTooltip]="testtooltip">
+                                    <img [src]="element.icon" />
+                                  </button>
                                 </mat-cell>
                               </ng-container>
                         
@@ -706,6 +798,13 @@
                                 <mat-header-cell *matHeaderCellDef mat-sort-header> id</mat-header-cell>
                                 <mat-cell *matCellDef="let element">{{ element.id }} </mat-cell>
                               </ng-container>
+
+                                <!-- <ng-container matColumnDef="explicitModifiers">
+                                  <th mat-header-cell *matHeaderCellDef>Stuff</th>
+                                  <td mat-cell *matCellDef="let element">
+                                  <div *ngFor="let item of element.explicitModifiers"> {{item.text}}</div>
+                                  </td>
+                                </ng-container> -->
                         
                               <mat-header-row *matHeaderRowDef="itemheadersTest; sticky: true"></mat-header-row>
                               <mat-row *matRowDef="let row; columns: itemheadersTest"></mat-row>
@@ -745,12 +844,18 @@
                                         </mat-cell>
                                       </ng-container>
                                 
-                                      <!-- Symbol Column -->
-                                      <ng-container matColumnDef="icon">
-                                        <mat-header-cell *matHeaderCellDef> icon</mat-header-cell>
-                                        <mat-cell *matCellDef="let element"><img [src]="element.icon" />
-                                        </mat-cell>
-                                      </ng-container>
+                                    <!-- Symbol Column -->
+                                    <ng-container matColumnDef="icon">
+                                      <mat-header-cell *matHeaderCellDef> icon</mat-header-cell>
+                                      <mat-cell *matCellDef="let element">
+                                        <ng-template #testtooltip>
+                                          <ul *ngFor="let item of element.explicitModifiers"> {{item.text}}</ul>
+                                        </ng-template>
+                                        <button mat-button [ngbTooltip]="testtooltip">
+                                          <img [src]="element.icon" />
+                                        </button>
+                                      </mat-cell>
+                                    </ng-container>
                                 
                                       <!-- ID Column -->
                                       <ng-container matColumnDef="id">
@@ -758,6 +863,13 @@
                                         <mat-cell *matCellDef="let element">{{ element.id }} </mat-cell>
                                       </ng-container>
                                 
+  <!-- <ng-container matColumnDef="explicitModifiers">
+    <th mat-header-cell *matHeaderCellDef>Stuff</th>
+    <td mat-cell *matCellDef="let element">
+    <div *ngFor="let item of element.explicitModifiers"> {{item.text}}</div>
+    </td>
+  </ng-container> -->
+
                                       <mat-header-row *matHeaderRowDef="itemheadersTest; sticky: true"></mat-header-row>
                                       <mat-row *matRowDef="let row; columns: itemheadersTest"></mat-row>
                                     </mat-table>
@@ -793,19 +905,30 @@
                                   {{ element.exaltedValue }}
                                 </mat-cell>
                               </ng-container>
-                        
-                              <!-- Symbol Column -->
-                              <ng-container matColumnDef="icon">
-                                <mat-header-cell *matHeaderCellDef> icon</mat-header-cell>
-                                <mat-cell *matCellDef="let element"><img [src]="element.icon" />
-                                </mat-cell>
-                              </ng-container>
-                        
+                        <!-- Symbol Column -->
+                        <ng-container matColumnDef="icon">
+                          <mat-header-cell *matHeaderCellDef> icon</mat-header-cell>
+                          <mat-cell *matCellDef="let element">
+                            <ng-template #testtooltip>
+                              <ul *ngFor="let item of element.explicitModifiers"> {{item.text}}</ul>
+                            </ng-template>
+                            <button mat-button [ngbTooltip]="testtooltip">
+                              <img [src]="element.icon" />
+                            </button>
+                          </mat-cell>
+                        </ng-container>
                               <!-- ID Column -->
                               <ng-container matColumnDef="id">
                                 <mat-header-cell *matHeaderCellDef mat-sort-header> id</mat-header-cell>
                                 <mat-cell *matCellDef="let element">{{ element.id }} </mat-cell>
                               </ng-container>
+
+                                <!-- <ng-container matColumnDef="explicitModifiers">
+                                  <th mat-header-cell *matHeaderCellDef>Stuff</th>
+                                  <td mat-cell *matCellDef="let element">
+                                  <div *ngFor="let item of element.explicitModifiers"> {{item.text}}</div>
+                                  </td>
+                                </ng-container> -->
                         
                               <mat-header-row *matHeaderRowDef="itemheadersTest; sticky: true"></mat-header-row>
                               <mat-row *matRowDef="let row; columns: itemheadersTest"></mat-row>
@@ -846,7 +969,13 @@
                                       <!-- Symbol Column -->
                                       <ng-container matColumnDef="icon">
                                         <mat-header-cell *matHeaderCellDef> icon</mat-header-cell>
-                                        <mat-cell *matCellDef="let element"><img [src]="element.icon" />
+                                        <mat-cell *matCellDef="let element">
+                                          <ng-template #testtooltip>
+                                            <ul *ngFor="let item of element.explicitModifiers"> {{item.text}}</ul>
+                                          </ng-template>
+                                          <button mat-button [ngbTooltip]="testtooltip">
+                                            <img [src]="element.icon" />
+                                          </button>
                                         </mat-cell>
                                       </ng-container>
                                 
@@ -855,6 +984,13 @@
                                         <mat-header-cell *matHeaderCellDef mat-sort-header> id</mat-header-cell>
                                         <mat-cell *matCellDef="let element">{{ element.id }} </mat-cell>
                                       </ng-container>
+
+                                        <!-- <ng-container matColumnDef="explicitModifiers">
+                                          <th mat-header-cell *matHeaderCellDef>Stuff</th>
+                                          <td mat-cell *matCellDef="let element">
+                                          <div *ngFor="let item of element.explicitModifiers"> {{item.text}}</div>
+                                          </td>
+                                        </ng-container> -->
                                 
                                       <mat-header-row *matHeaderRowDef="itemheadersTest; sticky: true"></mat-header-row>
                                       <mat-row *matRowDef="let row; columns: itemheadersTest"></mat-row>
@@ -892,18 +1028,31 @@
                                                 </mat-cell>
                                               </ng-container>
                                         
-                                              <!-- Symbol Column -->
-                                              <ng-container matColumnDef="icon">
-                                                <mat-header-cell *matHeaderCellDef > icon</mat-header-cell>
-                                                <mat-cell *matCellDef="let element"><img [src]="element.icon" />
-                                                </mat-cell>
-                                              </ng-container>
+                                            <!-- Symbol Column -->
+                                            <ng-container matColumnDef="icon">
+                                              <mat-header-cell *matHeaderCellDef> icon</mat-header-cell>
+                                              <mat-cell *matCellDef="let element">
+                                                <ng-template #testtooltip>
+                                                  <ul *ngFor="let item of element.explicitModifiers"> {{item.text}}</ul>
+                                                </ng-template>
+                                                <button mat-button [ngbTooltip]="testtooltip">
+                                                  <img [src]="element.icon" />
+                                                </button>
+                                              </mat-cell>
+                                            </ng-container>
                                         
                                               <!-- ID Column -->
                                               <ng-container matColumnDef="id">
                                                 <mat-header-cell *matHeaderCellDef mat-sort-header> id</mat-header-cell>
                                                 <mat-cell *matCellDef="let element">{{ element.id }} </mat-cell>
                                               </ng-container>
+<!-- 
+                                                <ng-container matColumnDef="explicitModifiers">
+                                                  <th mat-header-cell *matHeaderCellDef>Stuff</th>
+                                                  <td mat-cell *matCellDef="let element">
+                                                  <div *ngFor="let item of element.explicitModifiers"> {{item.text}}</div>
+                                                  </td>
+                                                </ng-container> -->
                                         
                                               <mat-header-row *matHeaderRowDef="itemheadersTest; sticky: true"></mat-header-row>
                                               <mat-row *matRowDef="let row; columns: itemheadersTest"></mat-row>
@@ -944,7 +1093,13 @@
                                                       <!-- Symbol Column -->
                                                       <ng-container matColumnDef="icon">
                                                         <mat-header-cell *matHeaderCellDef> icon</mat-header-cell>
-                                                        <mat-cell *matCellDef="let element"><img [src]="element.icon" />
+                                                        <mat-cell *matCellDef="let element">
+                                                          <ng-template #testtooltip>
+                                                            <ul *ngFor="let item of element.explicitModifiers"> {{item.text}}</ul>
+                                                          </ng-template>
+                                                          <button mat-button [ngbTooltip]="testtooltip">
+                                                            <img [src]="element.icon" />
+                                                          </button>
                                                         </mat-cell>
                                                       </ng-container>
                                                 
@@ -953,6 +1108,13 @@
                                                         <mat-header-cell *matHeaderCellDef mat-sort-header> id</mat-header-cell>
                                                         <mat-cell *matCellDef="let element">{{ element.id }} </mat-cell>
                                                       </ng-container>
+
+                                                        <!-- <ng-container matColumnDef="explicitModifiers">
+                                                          <th mat-header-cell *matHeaderCellDef>Stuff</th>
+                                                          <td mat-cell *matCellDef="let element">
+                                                          <div *ngFor="let item of element.explicitModifiers"> {{item.text}}</div>
+                                                          </td>
+                                                        </ng-container> -->
                                                 
                                                       <mat-header-row *matHeaderRowDef="itemheadersTest; sticky: true"></mat-header-row>
                                                       <mat-row *matRowDef="let row; columns: itemheadersTest"></mat-row>

@@ -304,7 +304,7 @@ ipcMain.on("ping-async", (event, message) => {
       "https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=qqazraelz&tabs=1&tabIndex=1",
       {
         headers: {
-          cookie: "POESESSID=8b2a4fc3c2822a9590099564de2eae4a" //the token is a variable which holds the token
+          cookie: "POESESSID=15790c12bf83f18e3c7e51245237dfe0" //the token is a variable which holds the token
         }
       }
     )
@@ -374,9 +374,9 @@ function createWindow() {
     // [25880: 1011 / 085007.559: ERROR: CONSOLE(109)]
     //  "Uncaught (in promise) Error: Could not instantiate: ProductRegistryImpl.Registry",
     // source: devtools://devtools/bundled/shell.js (109)
-    win.webContents.once("dom-ready", () => {
-      win.webContents.openDevTools();
-    });
+    // win.webContents.once("dom-ready", () => {
+    win.webContents.openDevTools();
+    // });
     // win.webContents.openDevTools();
   }
 

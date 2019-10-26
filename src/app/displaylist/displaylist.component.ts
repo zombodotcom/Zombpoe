@@ -40,6 +40,7 @@ import { Cookies, dialog } from "electron";
 import { JsonPipe } from "@angular/common";
 import { async } from "@angular/core/testing";
 import { spawn } from "child_process";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 export interface PoeNinjaItemData {
   name: string;
   chaosValue: number;
@@ -505,6 +506,9 @@ export class DisplaylistComponent implements OnInit {
 
     // "receiveSparkLine"
   ];
+  openWindowCustomClass(content) {
+    this.modalService.open(content, { windowClass: "dark-modal" });
+  }
   itemheadersTest: string[] = [
     // "artFilename",
     // "baseType",
@@ -515,12 +519,13 @@ export class DisplaylistComponent implements OnInit {
     // "count",
     // "detailsId",
     "exaltedValue",
-    // "explicitModifiers",
+
     // "flavourText",
     // "gemLevel",
     // "gemQuality",
-
+    // "explicitModifiers",
     "id"
+
     // "implicitModifiers",
     // "itemClass",
     // "itemType",
@@ -574,7 +579,8 @@ export class DisplaylistComponent implements OnInit {
     private cookieService: CookieService,
     private fb: FormBuilder,
     private _electronService: ElectronService,
-    private changeDetectorRefs: ChangeDetectorRef
+    private changeDetectorRefs: ChangeDetectorRef,
+    private modalService: NgbModal
   ) {}
   versions = { node: "", chrome: "", electron: "" };
 

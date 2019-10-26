@@ -45,7 +45,7 @@ import {
   MatFormFieldModule
 } from "@angular/material";
 import { ReactiveFormsModule } from "@angular/forms";
-
+import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 // NG Translate
 import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
@@ -138,6 +138,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatTooltipModule,
     MatFormFieldModule,
     MatInputModule,
+    NgbModule,
     // HttpXhrBackend,
     // HttpClientXsrfModule.withOptions({
     //   cookieName: "POESESSID"
