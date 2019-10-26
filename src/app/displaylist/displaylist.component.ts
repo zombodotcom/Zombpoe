@@ -464,7 +464,7 @@ export class DisplaylistComponent implements OnInit {
   formattedMessage;
   fullPoeNinjaResponseTableSource;
   userForm = new FormGroup({
-    POESESSID: new FormControl("***Replace***"),
+    POESESSID: new FormControl("***Replace***", Validators.maxLength(32)),
     accountName: new FormControl("qqazraelz", Validators.required),
     characterName: new FormControl("ZomboTD", Validators.maxLength(20))
   });
