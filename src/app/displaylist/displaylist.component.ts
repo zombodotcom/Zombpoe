@@ -181,7 +181,7 @@ export class DisplaylistComponent implements OnInit {
   @ViewChild("MatSortessence", { static: false }) sortessence: MatSort;
   @ViewChild("MatSortdiv", { static: false }) sortdiv: MatSort;
   @ViewChild("MatSortprophecy", { static: false }) sortprophecy: MatSort;
-  @ViewChild("MatSortuniquejewel", { static: false }) sortjewel: MatSort;
+  @ViewChild("MatSortjewel", { static: false }) sortjewel: MatSort;
   @ViewChild("MatSortweapon", { static: false }) sortweapon: MatSort;
   @ViewChild("MatSortarmour", { static: false }) sortarmour: MatSort;
   @ViewChild("MatSortaccess", { static: false }) sortaccess: MatSort;
@@ -220,6 +220,11 @@ export class DisplaylistComponent implements OnInit {
       case 4:
         this.currenttablesource = this.resonatorsDataResponseTableSource;
         this.resonatorsDataResponseTableSource.sort = this.sortresonator;
+        // this.currenttablesource.sort = this.sort;
+        break;
+      case 5:
+        this.currenttablesource = this.scarabsDataResponseTableSource;
+        this.scarabsDataResponseTableSource.sort = this.sortscarab;
         // this.currenttablesource.sort = this.sort;
         break;
 
