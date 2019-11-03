@@ -187,6 +187,7 @@ export class DisplaylistComponent implements OnInit {
   @ViewChild("MatSortaccess", { static: false }) sortaccess: MatSort;
   @ViewChild("MatSortflask", { static: false }) sortflask: MatSort;
   @ViewChild("MatSortincubator", { static: false }) sortincubator: MatSort;
+  @ViewChild("MatSortstash", { static: false }) sortstash: MatSort;
 
   onLinkClick(event: MatTabChangeEvent) {
     // console.log("event => ", event);
@@ -397,6 +398,8 @@ export class DisplaylistComponent implements OnInit {
   paginatoressence: MatPaginator;
   @ViewChild("paginatorincubator", { static: false })
   paginatorincubator: MatPaginator;
+  @ViewChild("paginatorstash", { static: false })
+  paginatorstash: MatPaginator;
 
   displayedColumnstester: string[];
   currencyDataResponse;
@@ -447,10 +450,13 @@ export class DisplaylistComponent implements OnInit {
   uniqueflaskDataResponseTableSource = new MatTableDataSource(); //flask
   essenceDataResponseTableSource = new MatTableDataSource(); //essence
   incubatorDataResponseTableSource = new MatTableDataSource(); //essence
+  fullstashDataResponseSource = new MatTableDataSource();
   currenttablesource = new MatTableDataSource(); // storage for filter test
   // public itemlist:any;
   sortedData: PoeNinjaItemData[];
   dataSource2;
+  fullstashdataBigBoiArray;
+  accountinfo;
   stashdatasource;
   cookieValue = "UNKNOWN";
   users2: CharacterData[];
@@ -546,7 +552,7 @@ export class DisplaylistComponent implements OnInit {
   ];
   itemheadersTest2: string[];
   derpcolums: string[] = ["items", "tabs", "quadLayout", "numTabs"];
-  disptest: string[] = ["name", "icon", "inventoryId"];
+  disptest: string[] = ["name", "stackSize", "icon", "inventoryId"];
   displayedColumns: string[] = [
     "name",
     "chaosValue",
@@ -602,6 +608,31 @@ export class DisplaylistComponent implements OnInit {
   //     console.log(val.POESESSID, val.accountName, val.characterName);
   //   });
   // }
+
+  // NINJA FIND
+
+  //   ninjadata.find((o, i) => {
+  //     // console.log("here", o.lines);
+  //     o.lines.find((z, i) => {
+  //       // console.log(z.name)
+  //       if (z.name === "Xoph's Nurture") {
+  //         console.log(z)
+  //         console.log(z.chaosValue)
+  //       }
+  //     });
+
+  //     // if (o.lines.name) {
+  //     //   console.log(o.lines.name)
+  //     //   // console.log("here", o.icon);
+  //     //   console.log(o.lines.chaosValue);
+  //     //   // return iconstring; // stop searching
+  //     // }
+  //   });
+
+  // NINJA FIND
+
+  // console.log("done")
+
   isDev = require("electron-is-dev");
   //isDevMode = process.execPath.match(/dist[\\/]electron/i);
   getClass(item) {
@@ -627,8 +658,13 @@ export class DisplaylistComponent implements OnInit {
     this.currenttablesource.filter = filterValue.trim().toLowerCase();
     // console.log(this.currenttablesource);
   }
+  applyFilterStash(filterValue: string) {
+    this.fullstashDataResponseSource.filter = filterValue.trim().toLowerCase();
+    // console.log(this.currenttablesource);
+  }
   openModal() {
     console.log("Play");
+
     if (this._electronService.isElectronApp) {
       // We have access to node process.
       this.versions.node = this._electronService.process.versions.node;
@@ -637,98 +673,140 @@ export class DisplaylistComponent implements OnInit {
       console.log(this.versions, "versions");
     }
 
-    this._electronService.ipcRenderer.on("ping-async", (event, resp, resp2) => {
-      // prints "pong"
-      console.log(resp);
-      console.log(resp2, "resp2");
-      this.stashdatarequest = resp;
+    this._electronService.ipcRenderer.on(
+      "ping-async",
+      (event, resp, resp2, resp3) => {
+        // prints "pong"
+        console.log(resp);
+        console.log(resp2, "resp2");
+        console.log(resp3, "resp3");
+        let bigboyarray2 = [];
+        for (let x = 0; x < resp3.length; x++) {
+          console.log(resp3[x].data.items);
+          if (resp3[x].data.items) {
+            bigboyarray2.push(resp3[x].data.items);
+          }
+        }
 
-      this.currencyDataResponse = resp2[0].data; // currency
-      this.fragmentsDataResponse = resp2[1].data; //frag
-      this.oilsDataResponse = resp2[2].data; //oils
-      this.fossilsDataResponse = resp2[3].data; //fossil
-      this.resonatorsDataResponse = resp2[4].data; //reso
-      this.scarabsDataResponse = resp2[5].data; //scarab
-      this.essenceDataResponse = resp2[6].data; //essence
-      this.divsDataResponse = resp2[7].data; //divs
-      this.propheciesDataResponse = resp2[8].data; //prop]
-      this.uniquejewelDataResponse = resp2[9].data; //jewels
-      this.uniqueweaponsDataResponse = resp2[10].data; //wapons
-      this.uniquearmoursDataResponse = resp2[11].data; //armor
-      this.uniqueaccessoriesDataResponse = resp2[12].data; //access
-      this.uniqueflaskDataResponse = resp2[13].data; //flask
-      this.uniqueflaskDataResponse = resp2[14].data; //incubator
+        let bigarrayconcat = [].concat(bigboyarray2);
+        let biggestitemarrayever = [];
+        for (var i = 0; i < bigarrayconcat.length; ++i) {
+          for (var j = 0; j < bigarrayconcat[i].length; ++j)
+            biggestitemarrayever.push(bigarrayconcat[i][j]);
+        }
+        this.fullstashdataBigBoiArray = biggestitemarrayever;
+        console.log(this.fullstashdataBigBoiArray, "Big Boi");
+        this.fullstashDataResponseSource = new MatTableDataSource(
+          this.fullstashdataBigBoiArray
+        );
+        this.fullstashDataResponseSource.paginator = this.paginatorstash;
+        this.fullstashDataResponseSource.sort = this.sortstash;
+        this.stashdatarequest = resp;
+        this.currencyDataResponse = resp2[0].data; // currency
+        this.fragmentsDataResponse = resp2[1].data; //frag
+        this.oilsDataResponse = resp2[2].data; //oils
+        this.fossilsDataResponse = resp2[3].data; //fossil
+        this.resonatorsDataResponse = resp2[4].data; //reso
+        this.scarabsDataResponse = resp2[5].data; //scarab
+        this.essenceDataResponse = resp2[6].data; //essence
+        this.divsDataResponse = resp2[7].data; //divs
+        this.propheciesDataResponse = resp2[8].data; //prop]
+        this.uniquejewelDataResponse = resp2[9].data; //jewels
+        this.uniqueweaponsDataResponse = resp2[10].data; //wapons
+        this.uniquearmoursDataResponse = resp2[11].data; //armor
+        this.uniqueaccessoriesDataResponse = resp2[12].data; //access
+        this.uniqueflaskDataResponse = resp2[13].data; //flask
+        this.uniqueflaskDataResponse = resp2[14].data; //incubator
 
-      this.fullPoeNinjaResponseTableSourceCurrency = new MatTableDataSource(
-        resp2[0].lines
-      ); // currency
-      this.fragmentsDataResponseTableSource = new MatTableDataSource(
-        resp2[1].lines
-      ); //frag
-      this.oilsDataResponseTableSource = new MatTableDataSource(resp2[2].lines); //oils
-      this.fullPoeNinjaResponseTableSourceFossil = new MatTableDataSource(
-        resp2[3].lines
-      ); // fossils
-      this.resonatorsDataResponseTableSource = new MatTableDataSource(
-        resp2[4].lines
-      ); //reso
-      this.scarabsDataResponseTableSource = new MatTableDataSource(
-        resp2[5].lines
-      ); //scarab
-      this.essenceDataResponseTableSource = new MatTableDataSource(
-        resp2[6].lines
-      ); //essence
-      this.divsDataResponseTableSource = new MatTableDataSource(resp2[7].lines); //divs
-      this.propheciesDataResponseTableSource = new MatTableDataSource(
-        resp2[8].lines
-      ); //prop
-      this.uniquejewelDataResponseTableSource = new MatTableDataSource(
-        resp2[9].lines
-      ); //jewels
-      this.uniqueweaponsDataResponseTableSource = new MatTableDataSource(
-        resp2[10].lines
-      ); //wapons
-      this.uniquearmoursDataResponseTableSource = new MatTableDataSource(
-        resp2[11].lines
-      ); //armor
-      this.uniqueaccessoriesDataResponseTableSource = new MatTableDataSource(
-        resp2[12].lines
-      ); //access
-      this.uniqueflaskDataResponseTableSource = new MatTableDataSource(
-        resp2[13].lines
-      ); //flask
-      this.incubatorDataResponseTableSource = new MatTableDataSource(
-        resp2[14].lines
-      ); //flask
+        this.fullPoeNinjaResponseTableSourceCurrency = new MatTableDataSource(
+          resp2[0].lines
+        ); // currency
+        this.fragmentsDataResponseTableSource = new MatTableDataSource(
+          resp2[1].lines
+        ); //frag
+        this.oilsDataResponseTableSource = new MatTableDataSource(
+          resp2[2].lines
+        ); //oils
+        this.fullPoeNinjaResponseTableSourceFossil = new MatTableDataSource(
+          resp2[3].lines
+        ); // fossils
+        this.resonatorsDataResponseTableSource = new MatTableDataSource(
+          resp2[4].lines
+        ); //reso
+        this.scarabsDataResponseTableSource = new MatTableDataSource(
+          resp2[5].lines
+        ); //scarab
+        this.essenceDataResponseTableSource = new MatTableDataSource(
+          resp2[6].lines
+        ); //essence
+        this.divsDataResponseTableSource = new MatTableDataSource(
+          resp2[7].lines
+        ); //divs
+        this.propheciesDataResponseTableSource = new MatTableDataSource(
+          resp2[8].lines
+        ); //prop
+        this.uniquejewelDataResponseTableSource = new MatTableDataSource(
+          resp2[9].lines
+        ); //jewels
+        this.uniqueweaponsDataResponseTableSource = new MatTableDataSource(
+          resp2[10].lines
+        ); //wapons
+        this.uniquearmoursDataResponseTableSource = new MatTableDataSource(
+          resp2[11].lines
+        ); //armor
+        this.uniqueaccessoriesDataResponseTableSource = new MatTableDataSource(
+          resp2[12].lines
+        ); //access
+        this.uniqueflaskDataResponseTableSource = new MatTableDataSource(
+          resp2[13].lines
+        ); //flask
+        this.incubatorDataResponseTableSource = new MatTableDataSource(
+          resp2[14].lines
+        ); //flask
 
-      console.log(resp2[3], "fossil Response");
-      this.fullPoeNinjaResponse = resp2;
-      this.fullPoeNinjaResponseTableSource = new MatTableDataSource(resp2);
+        console.log(resp2[3], "fossil Response");
+        this.fullPoeNinjaResponse = resp2;
+        this.fullPoeNinjaResponseTableSource = new MatTableDataSource(resp2);
 
-      this.itemheadersTest2 = Object.keys(resp2[3].lines[0]); // get all headers
-      console.log(this.itemheadersTest2);
-      for (let entry of this.stashdatarequest) {
-        console.log(entry, "items");
+        this.itemheadersTest2 = Object.keys(resp2[3].lines[0]); // get all headers
+        console.log(this.itemheadersTest2);
+        for (let entry of this.stashdatarequest) {
+          console.log(entry, "items");
+        }
+        // console.log(resp2[0].lines, "Currency?");
+        console.log(this.stashdatarequest, "stashData Request");
+        // this.derpcolums = Object.keys(resp[3].data);
+        console.log(this.derpcolums);
+        // console.log(resp2);
+        console.log(this.fullPoeNinjaResponse, "Full Response");
+
+        let stashdatasourceitems = resp.items;
+        this.stashdatasource = new MatTableDataSource(resp);
+        this.stashItems2 = new MatTableDataSource(stashdatasourceitems);
+        this.arrayOfKeys = Object.keys(this.stashdatarequest);
+        this.stashitemOBJ = Object;
+        this.stashitemOBJ = this.stashdatarequest;
+        this.refresh(); // makes the display look for changes aka our new data
       }
-      // console.log(resp2[0].lines, "Currency?");
-      console.log(this.stashdatarequest, "stashData Request");
-      // this.derpcolums = Object.keys(resp[3].data);
-      console.log(this.derpcolums);
-      // console.log(resp2);
-      console.log(this.fullPoeNinjaResponse, "Full Response");
+    );
 
-      let stashdatasourceitems = resp.items;
-      this.stashdatasource = new MatTableDataSource(resp);
-      this.stashItems2 = new MatTableDataSource(stashdatasourceitems);
-      this.arrayOfKeys = Object.keys(this.stashdatarequest);
-      this.stashitemOBJ = Object;
-      this.stashitemOBJ = this.stashdatarequest;
-      this.refresh(); // makes the display look for changes aka our new data
-    });
+    let localstorageAccountData = JSON.parse(
+      localStorage.getItem("AccountData")
+    );
+
+    // this.accountinfo = {
+    //   POESESSID: localstorageAccountData.POESESSID ? localstorageAccountData.POESESSID: this.userForm.get("POESESSID").value,
+    //   accountName: ? localstorageAccountData.accountName : this.userForm.get("accountName").value
+    // };
+    // localStorage.setItem("AccountData", JSON.stringify(this.accountinfo));
 
     this._electronService.ipcRenderer.send("ping-async", [
-      this.userForm.get("POESESSID").value,
-      this.userForm.get("accountName").value
+      localStorage.length > 0
+        ? localstorageAccountData.POESESSID
+        : this.userForm.get("POESESSID").value,
+      localStorage.length > 0
+        ? localstorageAccountData.accountName
+        : this.userForm.get("accountName").value
     ]); // get us data
   }
 

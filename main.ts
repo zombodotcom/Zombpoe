@@ -2,7 +2,7 @@ import { app, BrowserWindow, autoUpdater, screen } from "electron";
 import * as path from "path";
 import * as url from "url";
 import { HttpHeaders, HttpClient, HttpParams } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { Observable, range } from "rxjs";
 interface RootObject {
   numTabs: number;
   tabs: Tab[];
@@ -298,6 +298,51 @@ ipcMain.on("ping-async", (event, message) => {
   //     // console.log("Repositories", reposResponse.data);
   //   })
   // );
+  let downloadurl = (a, b) =>
+    `https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=${a}&tabIndex=0&tabs=${b}`;
+  let stashurl2 =
+    "https://www.pathofexile.com/character-window/get-stash-items?league={}&accountName={}&tabs={}";
+  let addinURL = "&tabIndex=";
+  let stashTabWhiteList = [
+    "DivinationCardStash",
+    "PremiumStash",
+    "QuadStash",
+    "NormalStash",
+    "CurrencyStash",
+    "FragmentStash",
+    "EssenceStash"
+  ];
+  let stashurlsFull = [];
+
+  //   axios
+  //     .get(
+  //       "https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=" +
+  //       message[1] +
+  //       "&tabs=0&tabIndex=",
+  //       {
+  //         headers: {
+  //           cookie: "POESESSID=" + message[0] //the token is a variable which holds the token
+  //         }
+  //       }
+  //     )
+  //     .then(response => {
+  //       // var finalObj = finalObj.concat(response); // should concat the data
+  //       // console.log(response.data);
+  //       // message = response.data as RootObject;
+  //       // this.stashdata = response.data;
+  //       // event.sender.send(
+  //       //   "ping-async",
+  //       //   this.stashdata,
+  //       //   this.poeNinjaResponseArray
+  //       // );
+  //     })
+  //     .catch(e => {
+  //       console.log("Error: ", e.response.data);
+  //       console.log("pathofexile.com Probably Down....");
+  //     //   event.sender.send("ping-async", null, this.poeNinjaResponseArray);
+  //     // });
+  //   // getter();
+  // });
 
   axios
     .get(
@@ -315,16 +360,77 @@ ipcMain.on("ping-async", (event, message) => {
       // console.log(response.data);
       // message = response.data as RootObject;
       this.stashdata = response.data;
-      event.sender.send(
-        "ping-async",
-        this.stashdata,
-        this.poeNinjaResponseArray
-      );
+
+      // get stash data
+      let responseNumTabsTotal = response.data.numTabs;
+      console.log(responseNumTabsTotal);
+      // let numTabsResponse =
+      for (let x = 0; x < Number(responseNumTabsTotal); x++) {
+        stashurlsFull.push(
+          "https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=" +
+            message[1] +
+            "&tabs=0&tabIndex=" +
+            x
+        );
+      }
+      console.log(stashurlsFull);
+      // get all stash data
+      let promisesurls = [];
+      // ## CHANGE HERE FOR RATE LIMIT
+      // for (let x = 0; x < stashurlsFull.length; x++) { ## CHANGE HERE FOR RATE LIMIT
+      // ## CHANGE HERE FOR RATE LIMIT
+      for (let x = 0; x < 5; x++) {
+        promisesurls.push(
+          axios.get(stashurlsFull[x], {
+            headers: {
+              cookie: "POESESSID=" + message[0] //the token is a variable which holds the token
+            }
+          })
+        );
+      }
+
+      // event.sender.send(
+      //   "ping-async",
+      //   this.stashdata,
+      //   this.poeNinjaResponseArray,
+      //   this.fullstashdata
+      // );
+      axios
+        .all(promisesurls)
+        .then(responseArr => {
+          //this will be executed only when all requests are complete
+          // console.log("Currency: ", responseArr[0].data);
+          this.fullstashdata = responseArr; // currency
+          // console.log(responseArr.data)
+          // console.log(responseArr[0].data)
+          // for (let x = 0; x < stashurlsFull.length; x++) {
+          //   console.log(this.fullstashdata[x].data);
+          // }
+          // this.poeNinjaResponseArray = [
+          //   responseArr[0].data,
+          // ]; //Changedd to .data
+          event.sender.send(
+            "ping-async",
+            this.stashdata,
+            this.poeNinjaResponseArray,
+            this.fullstashdata
+          );
+        })
+        .catch(e => {
+          console.log("Error: in stash responses", e.response.data);
+        });
+
+      // event.sender.send(
+      //   "ping-async",
+      //   this.stashdata,
+      //   this.poeNinjaResponseArray,
+      //   this.fullstashdata
+      // );
     })
     .catch(e => {
       console.log("Error: ", e.response.data);
       console.log("pathofexile.com Probably Down....");
-      event.sender.send("ping-async", null, this.poeNinjaResponseArray);
+      event.sender.send("ping-async", null, this.poeNinjaResponseArray, null);
     });
   // getter();
 });
