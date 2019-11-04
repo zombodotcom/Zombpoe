@@ -172,6 +172,174 @@ interface Colour {
   styleUrls: ["./displaylist.component.scss"]
 })
 export class DisplaylistComponent implements OnInit {
+  displayedColumnstester: string[];
+  currencyDataResponse;
+  fragmentsDataResponse;
+  oilsDataResponse;
+  fossilsDataResponse;
+  scarabsDataResponse;
+  divsDataResponse;
+  resonatorsDataResponse;
+  propheciesDataResponse;
+  uniqueweaponsDataResponse;
+  uniquearmoursDataResponse;
+  uniqueaccessoriesDataResponse;
+  uniquejewelDataResponse;
+  uniqueflaskDataResponse;
+  essenceDataResponse;
+  incubatorDataResponse;
+  giantpoeninjaarray;
+  hide = true;
+  public POESESSID;
+  public accountName;
+  public characterName;
+  public acountNameForString = "qqazraelz";
+  public poessForString = "Null";
+  public characterNameForString = "ZomboTD";
+  public restcolumns: string[];
+  public poeninjaData: any;
+  public stashItems: any;
+  public stashItems2: any;
+  public characterItems: any;
+  public charactersRequest: any;
+  public images;
+  public stashdata2;
+  public stashdatarequest: RootObject[];
+  public inter2: poeNinjaFullResponseInterface[];
+  fullPoeNinjaResponse = new MatTableDataSource();
+  fullPoeNinjaResponseTableSourceFossil = new MatTableDataSource(); //fossils
+  fullPoeNinjaResponseTableSourceCurrency = new MatTableDataSource(); //currency
+  fragmentsDataResponseTableSource = new MatTableDataSource(); //frag
+  oilsDataResponseTableSource = new MatTableDataSource(); //oils
+  fossilsDataResponseTableSource = new MatTableDataSource(); //fossil
+  resonatorsDataResponseTableSource = new MatTableDataSource(); //reso
+  scarabsDataResponseTableSource = new MatTableDataSource(); //scarab
+  divsDataResponseTableSource = new MatTableDataSource(); //divs
+  propheciesDataResponseTableSource = new MatTableDataSource(); //prop
+  uniquejewelDataResponseTableSource = new MatTableDataSource(); //jewels
+  uniqueweaponsDataResponseTableSource = new MatTableDataSource(); //wapons
+  uniquearmoursDataResponseTableSource = new MatTableDataSource(); //armor
+  uniqueaccessoriesDataResponseTableSource = new MatTableDataSource(); //access
+  uniqueflaskDataResponseTableSource = new MatTableDataSource(); //flask
+  essenceDataResponseTableSource = new MatTableDataSource(); //essence
+  incubatorDataResponseTableSource = new MatTableDataSource(); //essence
+  fullstashDataResponseSource = new MatTableDataSource();
+  currenttablesource = new MatTableDataSource(); // storage for filter test
+  // public itemlist:any;
+  sortedData: PoeNinjaItemData[];
+  dataSource2;
+  fullstashdataBigBoiArray;
+  accountinfo;
+  stashdatasource;
+  arrayOfKeys;
+  itemsdata3: any;
+  stashurl: string;
+  stashitemOBJ;
+  cookieValue = "UNKNOWN";
+  users2: CharacterData[];
+  tester3: CharacterData;
+  profileForm: FormGroup;
+  devstashurl;
+  publicstashurl;
+  usrNameChanges: string;
+  usrNameStatus: string;
+  requestOptions;
+  headerDict = {
+    POESESSID: "null"
+  };
+  devurl;
+  characteritemsurl;
+  formattedMessage;
+  fullPoeNinjaResponseTableSource;
+  itemsearchtest = new FormGroup({
+    itemsearchstring: new FormControl("Enter Item", Validators.maxLength(100))
+  });
+  userForm = new FormGroup({
+    POESESSID: new FormControl("***Replace***", Validators.maxLength(32)),
+    accountName: new FormControl("qqazraelz", Validators.required),
+    characterName: new FormControl("ZomboTD", Validators.maxLength(20))
+  });
+  accform = new FormControl(20, Validators.required);
+  characterform = new FormControl();
+
+  // fetch = require("node-fetch");
+
+  itemheaders: string[] = ["id", "name"];
+  currencyHeaders: string[] = [
+    "icon",
+    "chaosEquivalent",
+    "currencyTypeName",
+    "detailsId",
+    // "lowConfidencePaySparkLine",
+    // "lowConfidenceReceiveSparkLine",
+    "pay",
+    // "paySparkLine",
+    "receive"
+
+    // "receiveSparkLine"
+  ];
+
+  itemheadersTest: string[] = [
+    // "artFilename",
+    // "baseType",
+    "icon",
+    "name",
+    "chaosValue",
+    // "corrupted",
+    // "count",
+    // "detailsId",
+    "exaltedValue",
+
+    // "flavourText",
+    // "gemLevel",
+    // "gemQuality",
+    // "explicitModifiers",
+    "id"
+
+    // "implicitModifiers",
+    // "itemClass",
+    // "itemType",
+    // "levelRequired",
+    // "links",
+    // "lowConfidenceSparkline",
+    // "mapTier",
+
+    // "prophecyText",
+    // "sparkline",
+    // "stackSize",
+    // "variant"
+  ];
+  itemheadersTest2: string[];
+  derpcolums: string[] = ["items", "tabs", "quadLayout", "numTabs"];
+  disptest: string[] = ["name", "stackSize", "icon", "inventoryId", "worth"];
+  displayedColumns: string[] = [
+    "name",
+    "chaosValue",
+    "exaltedValue",
+    "icon",
+    "explicitModifiers"
+  ];
+  displayedColumnsUser: string[] = [
+    "name",
+    "icon",
+    "socketedItems"
+    // "chaosValue",
+    // "exaltedValue",
+    // "icon",
+    // "explicitModifiers"
+  ];
+  displayedColumnsUser2: string[] = [
+    "items",
+    "icon",
+    "socketedItems"
+    // "icon"
+    // "socketedItems"
+    // "chaosValue",
+    // "exaltedValue",
+    // "icon",
+    // "explicitModifiers"
+  ];
+
   // Sorters
   @ViewChild("MatSortcurrency", { static: false }) sortcurrency: MatSort;
   @ViewChild("MatSortfrag", { static: false }) sortfrag: MatSort;
@@ -401,173 +569,6 @@ export class DisplaylistComponent implements OnInit {
       }
     }, 100);
   }
-
-  displayedColumnstester: string[];
-  currencyDataResponse;
-  fragmentsDataResponse;
-  oilsDataResponse;
-  fossilsDataResponse;
-  scarabsDataResponse;
-  divsDataResponse;
-  resonatorsDataResponse;
-  propheciesDataResponse;
-  uniqueweaponsDataResponse;
-  uniquearmoursDataResponse;
-  uniqueaccessoriesDataResponse;
-  uniquejewelDataResponse;
-  uniqueflaskDataResponse;
-  essenceDataResponse;
-  incubatorDataResponse;
-  giantpoeninjaarray;
-  public POESESSID;
-  public accountName;
-  public characterName;
-  public acountNameForString = "qqazraelz";
-  public poessForString = "Null";
-  public characterNameForString = "ZomboTD";
-  public restcolumns: string[];
-  public poeninjaData: any;
-  public stashItems: any;
-  public stashItems2: any;
-  public characterItems: any;
-  public charactersRequest: any;
-  public images;
-  public stashdata2;
-  public stashdatarequest: RootObject[];
-  public inter2: poeNinjaFullResponseInterface[];
-  fullPoeNinjaResponse = new MatTableDataSource();
-  fullPoeNinjaResponseTableSourceFossil = new MatTableDataSource(); //fossils
-  fullPoeNinjaResponseTableSourceCurrency = new MatTableDataSource(); //currency
-  fragmentsDataResponseTableSource = new MatTableDataSource(); //frag
-  oilsDataResponseTableSource = new MatTableDataSource(); //oils
-  fossilsDataResponseTableSource = new MatTableDataSource(); //fossil
-  resonatorsDataResponseTableSource = new MatTableDataSource(); //reso
-  scarabsDataResponseTableSource = new MatTableDataSource(); //scarab
-  divsDataResponseTableSource = new MatTableDataSource(); //divs
-  propheciesDataResponseTableSource = new MatTableDataSource(); //prop
-  uniquejewelDataResponseTableSource = new MatTableDataSource(); //jewels
-  uniqueweaponsDataResponseTableSource = new MatTableDataSource(); //wapons
-  uniquearmoursDataResponseTableSource = new MatTableDataSource(); //armor
-  uniqueaccessoriesDataResponseTableSource = new MatTableDataSource(); //access
-  uniqueflaskDataResponseTableSource = new MatTableDataSource(); //flask
-  essenceDataResponseTableSource = new MatTableDataSource(); //essence
-  incubatorDataResponseTableSource = new MatTableDataSource(); //essence
-  fullstashDataResponseSource = new MatTableDataSource();
-  currenttablesource = new MatTableDataSource(); // storage for filter test
-  // public itemlist:any;
-  sortedData: PoeNinjaItemData[];
-  dataSource2;
-  fullstashdataBigBoiArray;
-  accountinfo;
-  stashdatasource;
-  arrayOfKeys;
-  itemsdata3: any;
-  stashurl: string;
-  stashitemOBJ;
-  cookieValue = "UNKNOWN";
-  users2: CharacterData[];
-  tester3: CharacterData;
-  profileForm: FormGroup;
-  devstashurl;
-  publicstashurl;
-  usrNameChanges: string;
-  usrNameStatus: string;
-  requestOptions;
-  headerDict = {
-    POESESSID: "null"
-  };
-  devurl;
-  characteritemsurl;
-  formattedMessage;
-  fullPoeNinjaResponseTableSource;
-  itemsearchtest = new FormGroup({
-    itemsearchstring: new FormControl("Enter Item", Validators.maxLength(100))
-  });
-  userForm = new FormGroup({
-    POESESSID: new FormControl("***Replace***", Validators.maxLength(32)),
-    accountName: new FormControl("qqazraelz", Validators.required),
-    characterName: new FormControl("ZomboTD", Validators.maxLength(20))
-  });
-  accform = new FormControl(20, Validators.required);
-  characterform = new FormControl();
-
-  // fetch = require("node-fetch");
-
-  itemheaders: string[] = ["id", "name"];
-  currencyHeaders: string[] = [
-    "icon",
-    "chaosEquivalent",
-    "currencyTypeName",
-    "detailsId",
-    // "lowConfidencePaySparkLine",
-    // "lowConfidenceReceiveSparkLine",
-    "pay",
-    // "paySparkLine",
-    "receive"
-
-    // "receiveSparkLine"
-  ];
-
-  itemheadersTest: string[] = [
-    // "artFilename",
-    // "baseType",
-    "icon",
-    "name",
-    "chaosValue",
-    // "corrupted",
-    // "count",
-    // "detailsId",
-    "exaltedValue",
-
-    // "flavourText",
-    // "gemLevel",
-    // "gemQuality",
-    // "explicitModifiers",
-    "id"
-
-    // "implicitModifiers",
-    // "itemClass",
-    // "itemType",
-    // "levelRequired",
-    // "links",
-    // "lowConfidenceSparkline",
-    // "mapTier",
-
-    // "prophecyText",
-    // "sparkline",
-    // "stackSize",
-    // "variant"
-  ];
-  itemheadersTest2: string[];
-  derpcolums: string[] = ["items", "tabs", "quadLayout", "numTabs"];
-  disptest: string[] = ["name", "stackSize", "icon", "inventoryId", "worth"];
-  displayedColumns: string[] = [
-    "name",
-    "chaosValue",
-    "exaltedValue",
-    "icon",
-    "explicitModifiers"
-  ];
-  displayedColumnsUser: string[] = [
-    "name",
-    "icon",
-    "socketedItems"
-    // "chaosValue",
-    // "exaltedValue",
-    // "icon",
-    // "explicitModifiers"
-  ];
-  displayedColumnsUser2: string[] = [
-    "items",
-    "icon",
-    "socketedItems"
-    // "icon"
-    // "socketedItems"
-    // "chaosValue",
-    // "exaltedValue",
-    // "icon",
-    // "explicitModifiers"
-  ];
 
   ngAfterViewInit() {
     this.fullPoeNinjaResponseTableSourceFossil.paginator = this.paginatorcurrency;
