@@ -288,7 +288,7 @@ ipcMain.on("ping-async", (event, message) => {
       ]; //Changedd to .data
     })
     .catch(e => {
-      console.log("Error: ", e.response.data);
+      console.log("Error:  POE NINJA GET ERROR", e.response.data);
     });
 
   // .then(

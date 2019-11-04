@@ -11,6 +11,10 @@
 <img src="https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyDuplicate.png?scale=1&w=1&h=1" />
 
 </button> -->
+
+<!-- <button (click)="worthfinder()" mat-flat-button color="primary">
+  stashpricer
+</button> -->
 <script> $().tooltip({ container: 'body' }), $().popover({ container: 'body' })</script>
 
 <form [formGroup]="userForm" (ngSubmit)="onFormSubmit()">
@@ -25,12 +29,19 @@
 </mat-form-field>
   <button type="submit"  mat-mini-fab color="primary">Send</button>
 </form>
+
 <button (click)="openModal()"  mat-flat-button color="primary">
   Force Refresh
 </button>
 <!-- STASH ITEM TABLE -->
+<!-- <form [formGroup]="itemsearchtest" (ngSubmit)="worthfinder()">
+  <mat-form-field color="primary">
+    <input formControlName="itemsearchstring" matInput placeholder="Enter Item" />
+  </mat-form-field>
+  <button type="submit" mat-mini-fab color="primary">Send2</button>
+</form> -->
 
-  
+
  
 <mat-tab-group>
   <mat-tab label="Stash">
@@ -72,6 +83,13 @@
         <td mat-cell *matCellDef="let element">
           {{ element.inventoryId }}
         </td>
+      </ng-container>
+      <ng-container matColumnDef="worth">
+<th mat-header-cell *matHeaderCellDef mat-sort-header>Worth</th>
+<td mat-cell *matCellDef="let element">
+{{worthfinder(element)}}
+</td>
+        
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="disptest; sticky: true"></tr>
