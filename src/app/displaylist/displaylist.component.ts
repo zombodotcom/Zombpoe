@@ -608,7 +608,7 @@ export class DisplaylistComponent implements OnInit {
   // NINJA FIND
 
   worthfinder2(item) {
-    console.log(item, "items");
+    console.log(item, "item");
     // let namecompare;
     // if (item.name != null) {
     //   namecompare = item.name;
@@ -624,30 +624,34 @@ export class DisplaylistComponent implements OnInit {
     let comparething;
     for (var i = 0; i < this.giantpoeninjaarray.length; i++) {
       // look for the entry with a matching `code` value
-      // console.log(this.giantpoeninjaarray[i]);
+      // console.log(this.giantpoeninjaarray[i],item,"ninja and item");
 
       if (this.giantpoeninjaarray[i].name) {
-        comparething = this.giantpoeninjaarray.name;
+        comparething = this.giantpoeninjaarray[i].name;
       }
       if (this.giantpoeninjaarray[i].currencyTypeName) {
         comparething = this.giantpoeninjaarray[i].currencyTypeName;
       }
+      let linkscompare = this.giantpoeninjaarray[i].links
+        ? this.giantpoeninjaarray[i].links
+        : 0;
       // console.log(comparething, "comparething");
-      // console.log(
-      //   this.giantpoeninjaarray[i].name,
-      //   this.giantpoeninjaarray[i].currencyTypeName,
-      //   "name and type"
-      // );
+      // console.log(this.giantpoeninjaarray[i], "giantindex", item);
       if (comparething == item.typeLine || comparething == item.name) {
         console.log(
-          this.giantpoeninjaarray[i].name,
-          this.giantpoeninjaarray[i].currencyTypeName,
-          this.giantpoeninjaarray[i].chaosEquivalent,
-          this.giantpoeninjaarray[i].chaosValue
+          [this.giantpoeninjaarray[i].name, "name"],
+          [this.giantpoeninjaarray[i].currencyTypeName, "typename"],
+          [this.giantpoeninjaarray[i].chaosEquivalent, "cequiv"],
+          [this.giantpoeninjaarray[i].chaosValue, "cval"],
+          [item.stackSize, "stacksize"],
+          [linkscompare, "Links"]
         );
+        // if(item.stackSize=)
         return this.giantpoeninjaarray[i].chaosValue
-          ? this.giantpoeninjaarray[i].chaosValue * item.stackSize
-          : this.giantpoeninjaarray[i].chaosEquivalent * item.stackSize;
+          ? this.giantpoeninjaarray[i].chaosValue *
+              (item.stackSize ? item.stackSize : 1)
+          : this.giantpoeninjaarray[i].chaosEquivalent *
+              (item.stackSize ? item.stackSize : 1);
       }
 
       // if (comparething === this.itemsearchtest.get("itemsearchstring").value) {
@@ -836,7 +840,7 @@ export class DisplaylistComponent implements OnInit {
         console.log(biggestpoeninjarrayever, "biggestpoeninjarrayever");
         console.log(this.fullstashdataBigBoiArray, "Big Boi");
         for (let x = 0; x < this.fullstashdataBigBoiArray.length; x++) {
-          console.log(this.fullstashdataBigBoiArray[x]);
+          console.log(this.fullstashdataBigBoiArray[x], "before push");
           this.fullstashdataBigBoiArray[x].worth = this.worthfinder2(
             this.fullstashdataBigBoiArray[x]
           );
