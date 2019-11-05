@@ -1,6 +1,6 @@
 {
   "name": "zombpoe",
-  "version": "11.0.0",
+  "version": "0.0.2",
   "description": "Path of exile poe.ninja and stash program Angular 8 with Electron (Typescript + SASS + Hot Reload)",
   "homepage": "https://github.com/zombodotcom/Zombpoe",
   "author": {

@@ -172,6 +172,175 @@ interface Colour {
   styleUrls: ["./displaylist.component.scss"]
 })
 export class DisplaylistComponent implements OnInit {
+  displayedColumnstester: string[];
+  currencyDataResponse;
+  fragmentsDataResponse;
+  oilsDataResponse;
+  fossilsDataResponse;
+  scarabsDataResponse;
+  divsDataResponse;
+  resonatorsDataResponse;
+  propheciesDataResponse;
+  uniqueweaponsDataResponse;
+  uniquearmoursDataResponse;
+  uniqueaccessoriesDataResponse;
+  uniquejewelDataResponse;
+  uniqueflaskDataResponse;
+  essenceDataResponse;
+  incubatorDataResponse;
+  giantpoeninjaarray;
+  hide = true;
+  public POESESSID;
+  public accountName;
+  public characterName;
+  public acountNameForString = "qqazraelz";
+  public poessForString = "Null";
+  public characterNameForString = "ZomboTD";
+  public restcolumns: string[];
+  public poeninjaData: any;
+  public stashItems: any;
+  public stashItems2: any;
+  public characterItems: any;
+  public charactersRequest: any;
+  public images;
+  public stashdata2;
+  public stashdatarequest: RootObject[];
+  public inter2: poeNinjaFullResponseInterface[];
+  fullPoeNinjaResponse = new MatTableDataSource();
+  fullPoeNinjaResponseTableSourceFossil = new MatTableDataSource(); //fossils
+  fullPoeNinjaResponseTableSourceCurrency = new MatTableDataSource(); //currency
+  fragmentsDataResponseTableSource = new MatTableDataSource(); //frag
+  oilsDataResponseTableSource = new MatTableDataSource(); //oils
+  fossilsDataResponseTableSource = new MatTableDataSource(); //fossil
+  resonatorsDataResponseTableSource = new MatTableDataSource(); //reso
+  scarabsDataResponseTableSource = new MatTableDataSource(); //scarab
+  divsDataResponseTableSource = new MatTableDataSource(); //divs
+  propheciesDataResponseTableSource = new MatTableDataSource(); //prop
+  uniquejewelDataResponseTableSource = new MatTableDataSource(); //jewels
+  uniqueweaponsDataResponseTableSource = new MatTableDataSource(); //wapons
+  uniquearmoursDataResponseTableSource = new MatTableDataSource(); //armor
+  uniqueaccessoriesDataResponseTableSource = new MatTableDataSource(); //access
+  uniqueflaskDataResponseTableSource = new MatTableDataSource(); //flask
+  essenceDataResponseTableSource = new MatTableDataSource(); //essence
+  incubatorDataResponseTableSource = new MatTableDataSource(); //essence
+  fullstashDataResponseSource = new MatTableDataSource();
+  currenttablesource = new MatTableDataSource(); // storage for filter test
+  // public itemlist:any;
+  sortedData: PoeNinjaItemData[];
+  dataSource2;
+  fullstashdataBigBoiArray;
+  accountinfo;
+  stashdatasource;
+  arrayOfKeys;
+  itemsdata3: any;
+  stashurl: string;
+  stashitemOBJ;
+  cookieValue = "UNKNOWN";
+  users2: CharacterData[];
+  tester3: CharacterData;
+  profileForm: FormGroup;
+  devstashurl;
+  publicstashurl;
+  usrNameChanges: string;
+  usrNameStatus: string;
+  requestOptions;
+  headerDict = {
+    POESESSID: "null"
+  };
+  devurl;
+  characteritemsurl;
+  formattedMessage;
+  fullPoeNinjaResponseTableSource;
+  itemsearchtest = new FormGroup({
+    itemsearchstring: new FormControl("Enter Item", Validators.maxLength(100))
+  });
+  userForm = new FormGroup({
+    POESESSID: new FormControl("***Replace***", Validators.maxLength(32)),
+    accountName: new FormControl("qqazraelz", Validators.required),
+    characterName: new FormControl("ZomboTD", Validators.maxLength(20))
+  });
+  accform = new FormControl(20, Validators.required);
+  characterform = new FormControl();
+
+  // fetch = require("node-fetch");
+
+  itemheaders: string[] = ["id", "name"];
+  currencyHeaders: string[] = [
+    "icon",
+    "chaosEquivalent",
+    "currencyTypeName",
+    "detailsId",
+    // "lowConfidencePaySparkLine",
+    // "lowConfidenceReceiveSparkLine",
+    "pay",
+    // "paySparkLine",
+    "receive"
+
+    // "receiveSparkLine"
+  ];
+
+  itemheadersTest: string[] = [
+    // "artFilename",
+    // "baseType",
+    "icon",
+    "name",
+    "chaosValue",
+    // "corrupted",
+    // "count",
+    // "detailsId",
+    "exaltedValue",
+
+    // "flavourText",
+    // "gemLevel",
+    // "gemQuality",
+    // "explicitModifiers",
+    "id"
+
+    // "implicitModifiers",
+    // "itemClass",
+    // "itemType",
+    // "levelRequired",
+    // "links",
+    // "lowConfidenceSparkline",
+    // "mapTier",
+
+    // "prophecyText",
+    // "sparkline",
+    // "stackSize",
+    // "variant"
+  ];
+  itemheadersTest2: string[];
+  derpcolums: string[] = ["items", "tabs", "quadLayout", "numTabs"];
+  disptest: string[] = ["name", "stackSize", "icon", "inventoryId", "worth"];
+  displayedColumns: string[] = [
+    "name",
+    "chaosValue",
+    "exaltedValue",
+    "icon",
+    "explicitModifiers"
+  ];
+  displayedColumnsUser: string[] = [
+    "name",
+    "icon",
+    "socketedItems"
+    // "chaosValue",
+    // "exaltedValue",
+    // "icon",
+    // "explicitModifiers"
+  ];
+  displayedColumnsUser2: string[] = [
+    "items",
+    "icon",
+    "socketedItems"
+    // "icon"
+    // "socketedItems"
+    // "chaosValue",
+    // "exaltedValue",
+    // "icon",
+    // "explicitModifiers"
+  ];
+
+  // Sorters
   @ViewChild("MatSortcurrency", { static: false }) sortcurrency: MatSort;
   @ViewChild("MatSortfrag", { static: false }) sortfrag: MatSort;
   @ViewChild("MatSortoil", { static: false }) sortoil: MatSort;
@@ -187,6 +356,35 @@ export class DisplaylistComponent implements OnInit {
   @ViewChild("MatSortaccess", { static: false }) sortaccess: MatSort;
   @ViewChild("MatSortflask", { static: false }) sortflask: MatSort;
   @ViewChild("MatSortincubator", { static: false }) sortincubator: MatSort;
+  @ViewChild("MatSortstash", { static: false }) sortstash: MatSort;
+  // Paginators
+  @ViewChild("paginatorcurrency", { static: false })
+  paginatorcurrency: MatPaginator;
+  @ViewChild("paginatorfragment", { static: false })
+  paginatorfragment: MatPaginator;
+  @ViewChild("paginatorarmour", { static: false })
+  paginatorarmour: MatPaginator;
+  @ViewChild("paginatorweapons", { static: false })
+  paginatorweapons: MatPaginator;
+  @ViewChild("paginatorfossil", { static: false })
+  paginatorfossil: MatPaginator;
+  @ViewChild("paginatoroils", { static: false }) paginatoroils: MatPaginator;
+  @ViewChild("paginatorfrag", { static: false }) paginatorfrag: MatPaginator;
+  @ViewChild("paginatorreso", { static: false }) paginatorreso: MatPaginator;
+  @ViewChild("paginatorscarabs", { static: false })
+  paginatorscarabs: MatPaginator;
+  @ViewChild("paginatoraccess", { static: false })
+  paginatoraccess: MatPaginator;
+  @ViewChild("paginatordivs", { static: false }) paginatordivs: MatPaginator;
+  @ViewChild("paginatorproph", { static: false }) paginatorproph: MatPaginator;
+  @ViewChild("paginatorjewel", { static: false }) paginatorjewel: MatPaginator;
+  @ViewChild("paginatorflask", { static: false }) paginatorflask: MatPaginator;
+  @ViewChild("paginatoressence", { static: false })
+  paginatoressence: MatPaginator;
+  @ViewChild("paginatorincubator", { static: false })
+  paginatorincubator: MatPaginator;
+  @ViewChild("paginatorstash", { static: false })
+  paginatorstash: MatPaginator;
 
   onLinkClick(event: MatTabChangeEvent) {
     // console.log("event => ", event);
@@ -372,109 +570,6 @@ export class DisplaylistComponent implements OnInit {
     }, 100);
   }
 
-  @ViewChild("paginatorcurrency", { static: false })
-  paginatorcurrency: MatPaginator;
-  @ViewChild("paginatorfragment", { static: false })
-  paginatorfragment: MatPaginator;
-  @ViewChild("paginatorarmour", { static: false })
-  paginatorarmour: MatPaginator;
-  @ViewChild("paginatorweapons", { static: false })
-  paginatorweapons: MatPaginator;
-  @ViewChild("paginatorfossil", { static: false })
-  paginatorfossil: MatPaginator;
-  @ViewChild("paginatoroils", { static: false }) paginatoroils: MatPaginator;
-  @ViewChild("paginatorfrag", { static: false }) paginatorfrag: MatPaginator;
-  @ViewChild("paginatorreso", { static: false }) paginatorreso: MatPaginator;
-  @ViewChild("paginatorscarabs", { static: false })
-  paginatorscarabs: MatPaginator;
-  @ViewChild("paginatoraccess", { static: false })
-  paginatoraccess: MatPaginator;
-  @ViewChild("paginatordivs", { static: false }) paginatordivs: MatPaginator;
-  @ViewChild("paginatorproph", { static: false }) paginatorproph: MatPaginator;
-  @ViewChild("paginatorjewel", { static: false }) paginatorjewel: MatPaginator;
-  @ViewChild("paginatorflask", { static: false }) paginatorflask: MatPaginator;
-  @ViewChild("paginatoressence", { static: false })
-  paginatoressence: MatPaginator;
-  @ViewChild("paginatorincubator", { static: false })
-  paginatorincubator: MatPaginator;
-
-  displayedColumnstester: string[];
-  currencyDataResponse;
-  fragmentsDataResponse;
-  oilsDataResponse;
-  fossilsDataResponse;
-  scarabsDataResponse;
-  divsDataResponse;
-  resonatorsDataResponse;
-  propheciesDataResponse;
-  uniqueweaponsDataResponse;
-  uniquearmoursDataResponse;
-  uniqueaccessoriesDataResponse;
-  uniquejewelDataResponse;
-  uniqueflaskDataResponse;
-  essenceDataResponse;
-  incubatorDataResponse;
-  public POESESSID;
-  public accountName;
-  public characterName;
-  public acountNameForString = "qqazraelz";
-  public poessForString = "Null";
-  public characterNameForString = "ZomboTD";
-  public restcolumns: string[];
-  public poeninjaData: any;
-  public stashItems: any;
-  public stashItems2: any;
-  public characterItems: any;
-  public charactersRequest: any;
-  public images;
-  public stashdata2;
-  public stashdatarequest: RootObject[];
-  public inter2: poeNinjaFullResponseInterface[];
-  fullPoeNinjaResponse = new MatTableDataSource();
-  fullPoeNinjaResponseTableSourceFossil = new MatTableDataSource(); //fossils
-  fullPoeNinjaResponseTableSourceCurrency = new MatTableDataSource(); //currency
-  fragmentsDataResponseTableSource = new MatTableDataSource(); //frag
-  oilsDataResponseTableSource = new MatTableDataSource(); //oils
-  fossilsDataResponseTableSource = new MatTableDataSource(); //fossil
-  resonatorsDataResponseTableSource = new MatTableDataSource(); //reso
-  scarabsDataResponseTableSource = new MatTableDataSource(); //scarab
-  divsDataResponseTableSource = new MatTableDataSource(); //divs
-  propheciesDataResponseTableSource = new MatTableDataSource(); //prop
-  uniquejewelDataResponseTableSource = new MatTableDataSource(); //jewels
-  uniqueweaponsDataResponseTableSource = new MatTableDataSource(); //wapons
-  uniquearmoursDataResponseTableSource = new MatTableDataSource(); //armor
-  uniqueaccessoriesDataResponseTableSource = new MatTableDataSource(); //access
-  uniqueflaskDataResponseTableSource = new MatTableDataSource(); //flask
-  essenceDataResponseTableSource = new MatTableDataSource(); //essence
-  incubatorDataResponseTableSource = new MatTableDataSource(); //essence
-  currenttablesource = new MatTableDataSource(); // storage for filter test
-  // public itemlist:any;
-  sortedData: PoeNinjaItemData[];
-  dataSource2;
-  stashdatasource;
-  cookieValue = "UNKNOWN";
-  users2: CharacterData[];
-  tester3: CharacterData;
-  profileForm: FormGroup;
-  devstashurl;
-  publicstashurl;
-  usrNameChanges: string;
-  usrNameStatus: string;
-  requestOptions;
-  headerDict = {
-    POESESSID: "null"
-  };
-  devurl;
-  characteritemsurl;
-  formattedMessage;
-  fullPoeNinjaResponseTableSource;
-  userForm = new FormGroup({
-    POESESSID: new FormControl("***Replace***", Validators.maxLength(32)),
-    accountName: new FormControl("qqazraelz", Validators.required),
-    characterName: new FormControl("ZomboTD", Validators.maxLength(20))
-  });
-  accform = new FormControl(20, Validators.required);
-  characterform = new FormControl();
   ngAfterViewInit() {
     this.fullPoeNinjaResponseTableSourceFossil.paginator = this.paginatorcurrency;
     this.fullPoeNinjaResponseTableSourceCurrency.paginator = this.paginatorfragment;
@@ -495,89 +590,6 @@ export class DisplaylistComponent implements OnInit {
     this.incubatorDataResponseTableSource.paginator = this.paginatorincubator; //essence
   }
 
-  // fetch = require("node-fetch");
-
-  itemheaders: string[] = ["id", "name"];
-  currencyHeaders: string[] = [
-    "icon",
-    "chaosEquivalent",
-    "currencyTypeName",
-    "detailsId",
-    // "lowConfidencePaySparkLine",
-    // "lowConfidenceReceiveSparkLine",
-    "pay",
-    // "paySparkLine",
-    "receive"
-
-    // "receiveSparkLine"
-  ];
-  openWindowCustomClass(content) {
-    this.modalService.open(content, { windowClass: "dark-modal" });
-  }
-  itemheadersTest: string[] = [
-    // "artFilename",
-    // "baseType",
-    "icon",
-    "name",
-    "chaosValue",
-    // "corrupted",
-    // "count",
-    // "detailsId",
-    "exaltedValue",
-
-    // "flavourText",
-    // "gemLevel",
-    // "gemQuality",
-    // "explicitModifiers",
-    "id"
-
-    // "implicitModifiers",
-    // "itemClass",
-    // "itemType",
-    // "levelRequired",
-    // "links",
-    // "lowConfidenceSparkline",
-    // "mapTier",
-
-    // "prophecyText",
-    // "sparkline",
-    // "stackSize",
-    // "variant"
-  ];
-  itemheadersTest2: string[];
-  derpcolums: string[] = ["items", "tabs", "quadLayout", "numTabs"];
-  disptest: string[] = ["name", "icon", "inventoryId"];
-  displayedColumns: string[] = [
-    "name",
-    "chaosValue",
-    "exaltedValue",
-    "icon",
-    "explicitModifiers"
-  ];
-  displayedColumnsUser: string[] = [
-    "name",
-    "icon",
-    "socketedItems"
-    // "chaosValue",
-    // "exaltedValue",
-    // "icon",
-    // "explicitModifiers"
-  ];
-  displayedColumnsUser2: string[] = [
-    "items",
-    "icon",
-    "socketedItems"
-    // "icon"
-    // "socketedItems"
-    // "chaosValue",
-    // "exaltedValue",
-    // "icon",
-    // "explicitModifiers"
-  ];
-  arrayOfKeys;
-  itemsdata3: any;
-  stashurl: string;
-  stashitemOBJ;
   constructor(
     private svc: PoeninjaapiService,
     private http: HttpClient,
@@ -589,19 +601,156 @@ export class DisplaylistComponent implements OnInit {
   ) {}
   versions = { node: "", chrome: "", electron: "" };
 
-  // public playPingPong() {
-  //   if (this._electronService.isElectronApp) {
-  //     let pong: string = this._electronService.ipcRenderer.sendSync("ping");
-  //     console.log(pong);
-  //   }
-  // }
+  openWindowCustomClass(content) {
+    this.modalService.open(content, { windowClass: "dark-modal" });
+  }
 
-  // formattedMessage: string;
-  // onChanges(): void {
-  //   this.profileForm.valueChanges.subscribe(val => {
-  //     console.log(val.POESESSID, val.accountName, val.characterName);
-  //   });
-  // }
+  // NINJA FIND
+
+  worthfinder2(item) {
+    console.log(item, "items");
+    // let namecompare;
+    // if (item.name != null) {
+    //   namecompare = item.name;
+    // }
+    // if (item.currencyTypeName != null) {
+    //   namecompare = item.currencyTypeName;
+    // }
+    // console.log(namecompare, "namecompare");
+    // if (this.giantpoeninjaarray[i].currencyTypeName) {
+    //   comparething = this.giantpoeninjaarray[i].currencyTypeName;
+    // }
+    // iterate over each element in the array
+    let comparething;
+    for (var i = 0; i < this.giantpoeninjaarray.length; i++) {
+      // look for the entry with a matching `code` value
+      // console.log(this.giantpoeninjaarray[i]);
+
+      if (this.giantpoeninjaarray[i].name) {
+        comparething = this.giantpoeninjaarray.name;
+      }
+      if (this.giantpoeninjaarray[i].currencyTypeName) {
+        comparething = this.giantpoeninjaarray[i].currencyTypeName;
+      }
+      // console.log(comparething, "comparething");
+      // console.log(
+      //   this.giantpoeninjaarray[i].name,
+      //   this.giantpoeninjaarray[i].currencyTypeName,
+      //   "name and type"
+      // );
+      if (comparething == item.typeLine || comparething == item.name) {
+        console.log(
+          this.giantpoeninjaarray[i].name,
+          this.giantpoeninjaarray[i].currencyTypeName,
+          this.giantpoeninjaarray[i].chaosEquivalent,
+          this.giantpoeninjaarray[i].chaosValue
+        );
+        return this.giantpoeninjaarray[i].chaosValue
+          ? this.giantpoeninjaarray[i].chaosValue * item.stackSize
+          : this.giantpoeninjaarray[i].chaosEquivalent * item.stackSize;
+      }
+
+      // if (comparething === this.itemsearchtest.get("itemsearchstring").value) {
+      //   // we found it
+      //   // console.log(comparething);
+      // }
+      // // }
+    }
+
+    // this.giantpoeninjaarray.find((o, i) => {
+    //   // console.log(o);
+    //   // console.log(o.lines);
+    //   // o.find((z, i) => {
+
+    //   // if (
+    //   //   o.name === this.itemsearchtest.get("itemsearchstring").value ||
+    //   //   o.currencyTypeName === this.itemsearchtest.get("itemsearchstring").value
+    //   // ) {
+    //     console.log(o);
+    //     console.log(
+    //       o.chaosValue + "chaos",
+    //       o.exaltedValue + "ex",
+    //       o.links + "links"
+    //     );
+    //   }
+    //   // });
+    // });
+    return 0;
+  }
+
+  worthfinder(item) {
+    console.log(item);
+    // let namecompare;
+    // if (item.name != null) {
+    //   namecompare = item.name;
+    // }
+    // if (item.currencyTypeName != null) {
+    //   namecompare = item.currencyTypeName;
+    // }
+    // console.log(namecompare, "namecompare");
+    // if (this.giantpoeninjaarray[i].currencyTypeName) {
+    //   comparething = this.giantpoeninjaarray[i].currencyTypeName;
+    // }
+    // iterate over each element in the array
+    let comparething;
+    for (var i = 0; i < this.giantpoeninjaarray.length; i++) {
+      // look for the entry with a matching `code` value
+      // console.log(this.giantpoeninjaarray[i]);
+
+      if (this.giantpoeninjaarray[i].name) {
+        comparething = this.giantpoeninjaarray.name;
+      }
+      if (this.giantpoeninjaarray[i].currencyTypeName) {
+        comparething = this.giantpoeninjaarray[i].currencyTypeName;
+      }
+      // console.log(comparething, "comparething");
+      // console.log(
+      //   this.giantpoeninjaarray[i].name,
+      //   this.giantpoeninjaarray[i].currencyTypeName,
+      //   "name and type"
+      // );
+      if (comparething == item.typeLine || comparething == item.name) {
+        console.log(
+          this.giantpoeninjaarray[i].name,
+          this.giantpoeninjaarray[i].currencyTypeName,
+          this.giantpoeninjaarray[i].chaosEquivalent,
+          this.giantpoeninjaarray[i].chaosValue
+        );
+        return this.giantpoeninjaarray[i].chaosValue
+          ? this.giantpoeninjaarray[i].chaosValue * item.stackSize
+          : this.giantpoeninjaarray[i].chaosEquivalent * item.stackSize;
+      }
+
+      // if (comparething === this.itemsearchtest.get("itemsearchstring").value) {
+      //   // we found it
+      //   // console.log(comparething);
+      // }
+      // // }
+    }
+
+    // this.giantpoeninjaarray.find((o, i) => {
+    //   // console.log(o);
+    //   // console.log(o.lines);
+    //   // o.find((z, i) => {
+
+    //   // if (
+    //   //   o.name === this.itemsearchtest.get("itemsearchstring").value ||
+    //   //   o.currencyTypeName === this.itemsearchtest.get("itemsearchstring").value
+    //   // ) {
+    //     console.log(o);
+    //     console.log(
+    //       o.chaosValue + "chaos",
+    //       o.exaltedValue + "ex",
+    //       o.links + "links"
+    //     );
+    //   }
+    //   // });
+    // });
+    return 0;
+  }
+
+  // console.log("done")
+
   isDev = require("electron-is-dev");
   //isDevMode = process.execPath.match(/dist[\\/]electron/i);
   getClass(item) {
@@ -627,8 +776,13 @@ export class DisplaylistComponent implements OnInit {
     this.currenttablesource.filter = filterValue.trim().toLowerCase();
     // console.log(this.currenttablesource);
   }
+  applyFilterStash(filterValue: string) {
+    this.fullstashDataResponseSource.filter = filterValue.trim().toLowerCase();
+    // console.log(this.currenttablesource);
+  }
   openModal() {
     console.log("Play");
+
     if (this._electronService.isElectronApp) {
       // We have access to node process.
       this.versions.node = this._electronService.process.versions.node;
@@ -637,147 +791,167 @@ export class DisplaylistComponent implements OnInit {
       console.log(this.versions, "versions");
     }
 
-    this._electronService.ipcRenderer.on("ping-async", (event, resp, resp2) => {
-      // prints "pong"
-      console.log(resp);
-      console.log(resp2, "resp2");
-      this.stashdatarequest = resp;
+    this._electronService.ipcRenderer.on(
+      "ping-async",
+      (event, resp, resp2, resp3) => {
+        // prints "pong"
+        console.log(resp);
+        console.log(resp2, "resp2");
+        console.log(resp3, "resp3");
+        let bigboyarray2 = [];
+        if (resp3) {
+          for (let x = 0; x < resp3.length; x++) {
+            console.log(resp3[x].data.items);
+            if (resp3[x].data.items) {
+              bigboyarray2.push(resp3[x].data.items);
+            }
+          }
+        }
 
-      this.currencyDataResponse = resp2[0].data; // currency
-      this.fragmentsDataResponse = resp2[1].data; //frag
-      this.oilsDataResponse = resp2[2].data; //oils
-      this.fossilsDataResponse = resp2[3].data; //fossil
-      this.resonatorsDataResponse = resp2[4].data; //reso
-      this.scarabsDataResponse = resp2[5].data; //scarab
-      this.essenceDataResponse = resp2[6].data; //essence
-      this.divsDataResponse = resp2[7].data; //divs
-      this.propheciesDataResponse = resp2[8].data; //prop]
-      this.uniquejewelDataResponse = resp2[9].data; //jewels
-      this.uniqueweaponsDataResponse = resp2[10].data; //wapons
-      this.uniquearmoursDataResponse = resp2[11].data; //armor
-      this.uniqueaccessoriesDataResponse = resp2[12].data; //access
-      this.uniqueflaskDataResponse = resp2[13].data; //flask
-      this.uniqueflaskDataResponse = resp2[14].data; //incubator
+        let bigarrayconcat = [].concat(bigboyarray2);
+        let biggestitemarrayever = [];
+        for (var i = 0; i < bigarrayconcat.length; ++i) {
+          for (var j = 0; j < bigarrayconcat[i].length; ++j)
+            biggestitemarrayever.push(bigarrayconcat[i][j]);
+        }
+        this.fullstashdataBigBoiArray = biggestitemarrayever;
 
-      this.fullPoeNinjaResponseTableSourceCurrency = new MatTableDataSource(
-        resp2[0].lines
-      ); // currency
-      this.fragmentsDataResponseTableSource = new MatTableDataSource(
-        resp2[1].lines
-      ); //frag
-      this.oilsDataResponseTableSource = new MatTableDataSource(resp2[2].lines); //oils
-      this.fullPoeNinjaResponseTableSourceFossil = new MatTableDataSource(
-        resp2[3].lines
-      ); // fossils
-      this.resonatorsDataResponseTableSource = new MatTableDataSource(
-        resp2[4].lines
-      ); //reso
-      this.scarabsDataResponseTableSource = new MatTableDataSource(
-        resp2[5].lines
-      ); //scarab
-      this.essenceDataResponseTableSource = new MatTableDataSource(
-        resp2[6].lines
-      ); //essence
-      this.divsDataResponseTableSource = new MatTableDataSource(resp2[7].lines); //divs
-      this.propheciesDataResponseTableSource = new MatTableDataSource(
-        resp2[8].lines
-      ); //prop
-      this.uniquejewelDataResponseTableSource = new MatTableDataSource(
-        resp2[9].lines
-      ); //jewels
-      this.uniqueweaponsDataResponseTableSource = new MatTableDataSource(
-        resp2[10].lines
-      ); //wapons
-      this.uniquearmoursDataResponseTableSource = new MatTableDataSource(
-        resp2[11].lines
-      ); //armor
-      this.uniqueaccessoriesDataResponseTableSource = new MatTableDataSource(
-        resp2[12].lines
-      ); //access
-      this.uniqueflaskDataResponseTableSource = new MatTableDataSource(
-        resp2[13].lines
-      ); //flask
-      this.incubatorDataResponseTableSource = new MatTableDataSource(
-        resp2[14].lines
-      ); //flask
+        let poefullarray = [];
+        for (let x = 0; x < resp2.length; x++) {
+          console.log(resp2[x].lines);
+          if (resp2[x].lines) {
+            poefullarray.push(resp2[x].lines);
+          }
+        }
+        console.log(poefullarray, "FullArray");
+        let bigconcatpoefullarray = [].concat(poefullarray);
+        let biggestpoeninjarrayever = [];
+        for (var i = 0; i < bigconcatpoefullarray.length; ++i) {
+          for (var j = 0; j < bigconcatpoefullarray[i].length; ++j)
+            biggestpoeninjarrayever.push(bigconcatpoefullarray[i][j]);
+        }
 
-      console.log(resp2[3], "fossil Response");
-      this.fullPoeNinjaResponse = resp2;
-      this.fullPoeNinjaResponseTableSource = new MatTableDataSource(resp2);
+        this.giantpoeninjaarray = biggestpoeninjarrayever;
 
-      this.itemheadersTest2 = Object.keys(resp2[3].lines[0]); // get all headers
-      console.log(this.itemheadersTest2);
-      for (let entry of this.stashdatarequest) {
-        console.log(entry, "items");
+        console.log(biggestpoeninjarrayever, "biggestpoeninjarrayever");
+        console.log(this.fullstashdataBigBoiArray, "Big Boi");
+        for (let x = 0; x < this.fullstashdataBigBoiArray.length; x++) {
+          console.log(this.fullstashdataBigBoiArray[x]);
+          this.fullstashdataBigBoiArray[x].worth = this.worthfinder2(
+            this.fullstashdataBigBoiArray[x]
+          );
+          console.log(this.fullstashdataBigBoiArray[x], "afterpush");
+        }
+        this.fullstashDataResponseSource = new MatTableDataSource(
+          this.fullstashdataBigBoiArray
+        );
+
+        this.fullstashDataResponseSource.paginator = this.paginatorstash;
+        this.fullstashDataResponseSource.sort = this.sortstash;
+        this.stashdatarequest = resp;
+        this.currencyDataResponse = resp2[0].data; // currency
+        this.fragmentsDataResponse = resp2[1].data; //frag
+        this.oilsDataResponse = resp2[2].data; //oils
+        this.fossilsDataResponse = resp2[3].data; //fossil
+        this.resonatorsDataResponse = resp2[4].data; //reso
+        this.scarabsDataResponse = resp2[5].data; //scarab
+        this.essenceDataResponse = resp2[6].data; //essence
+        this.divsDataResponse = resp2[7].data; //divs
+        this.propheciesDataResponse = resp2[8].data; //prop]
+        this.uniquejewelDataResponse = resp2[9].data; //jewels
+        this.uniqueweaponsDataResponse = resp2[10].data; //wapons
+        this.uniquearmoursDataResponse = resp2[11].data; //armor
+        this.uniqueaccessoriesDataResponse = resp2[12].data; //access
+        this.uniqueflaskDataResponse = resp2[13].data; //flask
+        this.uniqueflaskDataResponse = resp2[14].data; //incubator
+
+        this.fullPoeNinjaResponseTableSourceCurrency = new MatTableDataSource(
+          resp2[0].lines
+        ); // currency
+        this.fragmentsDataResponseTableSource = new MatTableDataSource(
+          resp2[1].lines
+        ); //frag
+        this.oilsDataResponseTableSource = new MatTableDataSource(
+          resp2[2].lines
+        ); //oils
+        this.fullPoeNinjaResponseTableSourceFossil = new MatTableDataSource(
+          resp2[3].lines
+        ); // fossils
+        this.resonatorsDataResponseTableSource = new MatTableDataSource(
+          resp2[4].lines
+        ); //reso
+        this.scarabsDataResponseTableSource = new MatTableDataSource(
+          resp2[5].lines
+        ); //scarab
+        this.essenceDataResponseTableSource = new MatTableDataSource(
+          resp2[6].lines
+        ); //essence
+        this.divsDataResponseTableSource = new MatTableDataSource(
+          resp2[7].lines
+        ); //divs
+        this.propheciesDataResponseTableSource = new MatTableDataSource(
+          resp2[8].lines
+        ); //prop
+        this.uniquejewelDataResponseTableSource = new MatTableDataSource(
+          resp2[9].lines
+        ); //jewels
+        this.uniqueweaponsDataResponseTableSource = new MatTableDataSource(
+          resp2[10].lines
+        ); //wapons
+        this.uniquearmoursDataResponseTableSource = new MatTableDataSource(
+          resp2[11].lines
+        ); //armor
+        this.uniqueaccessoriesDataResponseTableSource = new MatTableDataSource(
+          resp2[12].lines
+        ); //access
+        this.uniqueflaskDataResponseTableSource = new MatTableDataSource(
+          resp2[13].lines
+        ); //flask
+        this.incubatorDataResponseTableSource = new MatTableDataSource(
+          resp2[14].lines
+        ); //flask
+
+        console.log(resp2[3], "fossil Response");
+        this.fullPoeNinjaResponse = resp2;
+        this.fullPoeNinjaResponseTableSource = new MatTableDataSource(resp2);
+
+        this.itemheadersTest2 = Object.keys(resp2[3].lines[0]); // get all headers
+        console.log(this.itemheadersTest2);
+        for (let entry of this.stashdatarequest) {
+          console.log(entry, "items");
+        }
+        // console.log(resp2[0].lines, "Currency?");
+        console.log(this.stashdatarequest, "stashData Request");
+        // this.derpcolums = Object.keys(resp[3].data);
+        console.log(this.derpcolums);
+        // console.log(resp2);
+        console.log(this.fullPoeNinjaResponse, "Full Response");
+
+        let stashdatasourceitems = resp.items;
+        this.stashdatasource = new MatTableDataSource(resp);
+        this.stashItems2 = new MatTableDataSource(stashdatasourceitems);
+        this.arrayOfKeys = Object.keys(this.stashdatarequest);
+        this.stashitemOBJ = Object;
+        this.stashitemOBJ = this.stashdatarequest;
+        this.refresh(); // makes the display look for changes aka our new data
       }
-      // console.log(resp2[0].lines, "Currency?");
-      console.log(this.stashdatarequest, "stashData Request");
-      // this.derpcolums = Object.keys(resp[3].data);
-      console.log(this.derpcolums);
-      // console.log(resp2);
-      console.log(this.fullPoeNinjaResponse, "Full Response");
+    );
 
-      let stashdatasourceitems = resp.items;
-      this.stashdatasource = new MatTableDataSource(resp);
-      this.stashItems2 = new MatTableDataSource(stashdatasourceitems);
-      this.arrayOfKeys = Object.keys(this.stashdatarequest);
-      this.stashitemOBJ = Object;
-      this.stashitemOBJ = this.stashdatarequest;
-      this.refresh(); // makes the display look for changes aka our new data
-    });
+    let localstorageAccountData = JSON.parse(
+      localStorage.getItem("AccountData")
+    );
 
     this._electronService.ipcRenderer.send("ping-async", [
-      this.userForm.get("POESESSID").value,
-      this.userForm.get("accountName").value
+      localStorage.length > 0
+        ? localstorageAccountData.POESESSID
+        : this.userForm.get("POESESSID").value,
+      localStorage.length > 0
+        ? localstorageAccountData.accountName
+        : this.userForm.get("accountName").value
     ]); // get us data
   }
 
-  onFormSubmit(): void {
-    // if (this.isDev) {
-    //   console.log("IS IT DEV MODE?");
-    //   this.devurl =
-    //     "https://cors-anywhere.herokuapp.com/https://poe.ninja/api/data/ItemOverview?league=Blight&type=Fossil";
-    //   this.characteritemsurl =
-    //     "https://cors-anywhere.herokuapp.com/https://www.pathofexile.com/character-window/get-items?accountName=" +
-    //     encodeURIComponent(this.userForm.get("accountName").value) +
-    //     "&character=" +
-    //     encodeURIComponent(this.userForm.get("characterName").value);
-    //   // let privatetesturl =
-    //   //   "https://poe.ninja/api/data/ItemOverview?league=Blight&type=Fossil";
-    //   this.stashurl =
-    //     "https://cors-anywhere.herokuapp.com/https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=qqazraelz&tabs=1&tabIndex=1";
-    // } else {
-    //   this.characteritemsurl =
-    //     "https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=qqazraelz&tabs=1&tabIndex=1";
-    //   "https://www.pathofexile.com/character-window/get-items?accountName=" +
-    //     encodeURIComponent(this.userForm.get("accountName").value) +
-    //     "&character=" +
-    //     encodeURIComponent(this.userForm.get("characterName").value);
-    //   this.stashItems =
-    //     "https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=qqazraelz&tabs=1&tabIndex=1";
-    // }
-    // this.http.get<CharacterData>(this.characteritemsurl).subscribe(
-    //   data => {
-    //     this.tester3 = data;
-    //     this.itemsdata3 = data.items;
-    //     // console.log("Items: " + data.items, "derp", typeof data.items);
-    //     this.dataSource2 = new MatTableDataSource(data.items);
-    //     console.log("Items: " + data.items);
-    //     for (let entry of data.items) {
-    //       console.log(entry);
-    //     }
-    //   },
-    //   (err: HttpErrorResponse) => {
-    //     if (err.error instanceof Error) {
-    //       console.log("Client-side error occured.");
-    //     } else {
-    //       console.log("Server-side error occured.");
-    //     }
-    //   }
-    // );
-  }
-
-  // end of on submit
+  onFormSubmit(): void {}
 
   getuserName(): any {
     return this.userForm.get("name");
@@ -805,82 +979,9 @@ export class DisplaylistComponent implements OnInit {
   ngOnInit() {
     this.openModal(); // run the button
 
-    let testurl =
-      "https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=qqazraelz&tabs=1&tabIndex=1";
-    let testurl2 = "https://cors-anywhere.herokuapp.com/" + testurl;
-    // this.onChanges();
-
-    // // let isDevMode = process.execPath.match(/dist[\\/]electron/i);
-    // if (this.isDev) {
-    //   console.log("IS IT DEV MODE?");
-    //   this.devurl =
-    //     "https://cors-anywhere.herokuapp.com/https://poe.ninja/api/data/ItemOverview?league=Blight&type=Fossil";
-    //   this.characteritemsurl =
-    //     "https://cors-anywhere.herokuapp.com/https://www.pathofexile.com/character-window/get-items?accountName=" +
-    //     encodeURIComponent(this.userForm.get("accountName").value) +
-    //     "&character=" +
-    //     encodeURIComponent(this.userForm.get("characterName").value);
-    //   // let privatetesturl =
-    //   //   "https://poe.ninja/api/data/ItemOverview?league=Blight&type=Fossil";
-    // } else {
-    //   this.devurl =
-    //     "https://poe.ninja/api/data/ItemOverview?league=Blight&type=Fossil";
-    //   this.characteritemsurl =
-    //     "https://www.pathofexile.com/character-window/get-items?accountName=" +
-    //     encodeURIComponent(this.userForm.get("accountName").value) +
-    //     "&character=" +
-    //     encodeURIComponent(this.userForm.get("characterName").value);
-    // }
-
-    // get initial fossil data
-    // this.svc.getPoeNinjaData(this.devurl).subscribe(data => {
-    //   this.poeninjaData = data;
-    //   this.sortedData = this.poeninjaData;
-    //   // add console output here and add to main data
-    //   console.log(this.poeninjaData);
-    // });
-
     console.log("Before");
 
     let derplist;
-
-    // get initial character data
-    // this.http.get<CharacterData>(this.characteritemsurl).subscribe(
-    //   data => {
-    //     this.tester3 = data;
-    //     this.itemsdata3 = data.items;
-    //     // console.log("Items: " + data.items, "derp", typeof data.items);
-    //     this.dataSource2 = new MatTableDataSource(data.items);
-    //     console.log("Items: " + data.items);
-    //     for (let entry of data.items) {
-    //       console.log(entry);
-    //     }
-
-    //     // EXTRACT VALUE FOR HTML HEADER.
-    //     // ('Book ID', 'Book Name', 'Category' and 'Price')
-    //     var col = [];
-    //     let temptable = data.items;
-    //     for (var i = 0; i < temptable.length; i++) {
-    //       // console.log(temptable);
-    //       for (var key in temptable[i]) {
-    //         if (col.indexOf(key) === -1) {
-    //           col.push(key);
-    //           // console.log(col, key, "hi");
-    //         }
-    //       }
-    //     }
-    //     // CREATE DYNAMIC TABLE.
-    //     this.restcolumns = col;
-    //     console.log(this.restcolumns, "rest Columns");
-    //   },
-    //   (err: HttpErrorResponse) => {
-    //     if (err.error instanceof Error) {
-    //       console.log("Client-side error occured.");
-    //     } else {
-    //       console.log("Server-side error occured.");
-    //     }
-    //   }
-    // );
 
     ///end of on init
     this.refresh();
