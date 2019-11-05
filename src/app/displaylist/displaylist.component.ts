@@ -607,6 +607,77 @@ export class DisplaylistComponent implements OnInit {
 
   // NINJA FIND
 
+  worthfinder2(item) {
+    console.log(item, "items");
+    // let namecompare;
+    // if (item.name != null) {
+    //   namecompare = item.name;
+    // }
+    // if (item.currencyTypeName != null) {
+    //   namecompare = item.currencyTypeName;
+    // }
+    // console.log(namecompare, "namecompare");
+    // if (this.giantpoeninjaarray[i].currencyTypeName) {
+    //   comparething = this.giantpoeninjaarray[i].currencyTypeName;
+    // }
+    // iterate over each element in the array
+    let comparething;
+    for (var i = 0; i < this.giantpoeninjaarray.length; i++) {
+      // look for the entry with a matching `code` value
+      // console.log(this.giantpoeninjaarray[i]);
+
+      if (this.giantpoeninjaarray[i].name) {
+        comparething = this.giantpoeninjaarray.name;
+      }
+      if (this.giantpoeninjaarray[i].currencyTypeName) {
+        comparething = this.giantpoeninjaarray[i].currencyTypeName;
+      }
+      // console.log(comparething, "comparething");
+      // console.log(
+      //   this.giantpoeninjaarray[i].name,
+      //   this.giantpoeninjaarray[i].currencyTypeName,
+      //   "name and type"
+      // );
+      if (comparething == item.typeLine || comparething == item.name) {
+        console.log(
+          this.giantpoeninjaarray[i].name,
+          this.giantpoeninjaarray[i].currencyTypeName,
+          this.giantpoeninjaarray[i].chaosEquivalent,
+          this.giantpoeninjaarray[i].chaosValue
+        );
+        return this.giantpoeninjaarray[i].chaosValue
+          ? this.giantpoeninjaarray[i].chaosValue * item.stackSize
+          : this.giantpoeninjaarray[i].chaosEquivalent * item.stackSize;
+      }
+
+      // if (comparething === this.itemsearchtest.get("itemsearchstring").value) {
+      //   // we found it
+      //   // console.log(comparething);
+      // }
+      // // }
+    }
+
+    // this.giantpoeninjaarray.find((o, i) => {
+    //   // console.log(o);
+    //   // console.log(o.lines);
+    //   // o.find((z, i) => {
+
+    //   // if (
+    //   //   o.name === this.itemsearchtest.get("itemsearchstring").value ||
+    //   //   o.currencyTypeName === this.itemsearchtest.get("itemsearchstring").value
+    //   // ) {
+    //     console.log(o);
+    //     console.log(
+    //       o.chaosValue + "chaos",
+    //       o.exaltedValue + "ex",
+    //       o.links + "links"
+    //     );
+    //   }
+    //   // });
+    // });
+    return 0;
+  }
+
   worthfinder(item) {
     console.log(item);
     // let namecompare;
@@ -761,11 +832,20 @@ export class DisplaylistComponent implements OnInit {
         }
 
         this.giantpoeninjaarray = biggestpoeninjarrayever;
+
         console.log(biggestpoeninjarrayever, "biggestpoeninjarrayever");
         console.log(this.fullstashdataBigBoiArray, "Big Boi");
+        for (let x = 0; x < this.fullstashdataBigBoiArray.length; x++) {
+          console.log(this.fullstashdataBigBoiArray[x]);
+          this.fullstashdataBigBoiArray[x].worth = this.worthfinder2(
+            this.fullstashdataBigBoiArray[x]
+          );
+          console.log(this.fullstashdataBigBoiArray[x], "afterpush");
+        }
         this.fullstashDataResponseSource = new MatTableDataSource(
           this.fullstashdataBigBoiArray
         );
+
         this.fullstashDataResponseSource.paginator = this.paginatorstash;
         this.fullstashDataResponseSource.sort = this.sortstash;
         this.stashdatarequest = resp;
