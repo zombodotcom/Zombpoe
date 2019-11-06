@@ -13,24 +13,6 @@
 //   flex: 0 0 30%;
 // }
 
-* {
-  transition: none;
-}
-.popover {
-  pointer-events: none !important;
-}
-.tooltip {
-  pointer-events: none !important;
-}
-
-.mat-column-explicitModifiers {
-  width: 100px;
-}
-::ng-deep .tooltip-inner {
-  background-color: #000000;
-  // opacity: 0.6;
-}
-
 // mat-cell:nth-child(1),
 // mat-header-cell:nth-child(1) {
 //   flex: 0 0 30%;
@@ -64,13 +46,31 @@
 
 .mat-cell:nth-child(1),
 .mat-header-cell:nth-child(1) {
-  flex: 0 0 5%;
+  flex: 0 0 10%;
 }
 .mat-cell:nth-child(5),
 .mat-header-cell:nth-child(5) {
-  flex: 0 0 10%;
+  flex: 0 0 20%;
 }
 
-.mat-column-stash2 {
-  flex: 0 0 300px;
+// .mat-column-stash2 {
+//   flex: 0 0 300px;
+// }
+
+* {
+  transition: none;
+}
+.popover {
+  pointer-events: none !important;
+}
+.tooltip {
+  pointer-events: none !important;
+}
+
+// .mat-column {
+//   width: 100px;
+// }
+::ng-deep .tooltip-inner {
+  background-color: #000000;
+  // opacity: 0.6;
 }

@@ -269,8 +269,9 @@ export class DisplaylistComponent implements OnInit {
   itemheaders: string[] = ["id", "name"];
   currencyHeaders: string[] = [
     "icon",
-    "chaosEquivalent",
     "currencyTypeName",
+    "chaosEquivalent",
+
     "detailsId",
     // "lowConfidencePaySparkLine",
     // "lowConfidenceReceiveSparkLine",
