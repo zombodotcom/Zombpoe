@@ -945,7 +945,11 @@ export class DisplaylistComponent implements OnInit {
           this.fullstashdataBigBoiArray[x].worth = this.worthfinder2(
             this.fullstashdataBigBoiArray[x]
           );
-          this.networth += Number(this.fullstashdataBigBoiArray[x].worth);
+          this.networth += Number(
+            parseFloat(
+              this.fullstashdataBigBoiArray[x].worth.toString()
+            ).toFixed(3)
+          );
           // console.log(this.fullstashdataBigBoiArray[x], "afterpush");
         }
 
