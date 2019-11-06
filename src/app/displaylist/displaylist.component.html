@@ -45,24 +45,89 @@
 </form> -->
 
 <!-- <div> -->
+<!-- <mat-tab label="tester">
+  <div class="example-container mat-elevation-z8">
+    <ng-container *ngIf="fullstashdataBigBoiArray">
 
+      {{networth}} <img src="https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyRerollRare.png?scale=1&w=1&h=1"
+        style="height:-200%;" /> Net Worth
+      <br>
+      <mat-form-field>
+        <input matInput (keyup)="applyFilterStash($event.target.value)" placeholder="Filter">
+      </mat-form-field>
+
+      <table mat-table [dataSource]="fullstashDataResponseSource" #MatSortstash="matSort" matSort>
+
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+          <td mat-cell *matCellDef="let element">
+            <ng-container *ngIf="element.name || element.typeLine">
+              {{element.name ? element.name : element.typeLine}}
+            </ng-container>
+
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="stackSize">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Count</th>
+          <td mat-cell *matCellDef="let element">
+            {{element.stackSize}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="icon">
+          <th mat-header-cell *matHeaderCellDef>Icon</th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-button placement="right" ngbTooltip="Tooltip on right">
+              <img [src]="element.icon" />
+            </button>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="inventoryId">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Stash</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.inventoryId }} :
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="worth">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Worth</th>
+          <td mat-cell *matCellDef="let element">
+  
+            {{element.worth}} <img
+              src="https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyRerollRare.png?scale=1&w=1&h=1"
+              style="height:100%;" />
+          </td>
+
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="disptest; sticky: true "></tr>
+        <tr mat-row *matRowDef="let row; columns: disptest"></tr>
+      </table>
+
+
+    </ng-container>
+  </div>
+</mat-tab> -->
 
 
 
  
 <mat-tab-group [animationDuration]="'0ms'">
   <mat-tab label="Stash">
-
+<div class="example-container1 mat-elevation-z8">
 <ng-container *ngIf="fullstashdataBigBoiArray" >
-
-    {{networth}} <img src="https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyRerollRare.png?scale=1&w=1&h=1"  style="height:-80%;"/> Net Worth 
+  <div>{{networth}} <img class="img-responsive smaller"
+    src="https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyRerollRare.png" /> Net Worth</div>
+   
 <br>
 <mat-form-field>
   <input matInput (keyup)="applyFilterStash($event.target.value)" placeholder="Filter">
 </mat-form-field>
 
-  <div class="example-container mat-elevation-z8">
-    <mat-table [dataSource]="fullstashDataResponseSource" #MatSortstash="matSort" matSort>
+ 
+    <table mat-table [dataSource]="fullstashDataResponseSource" #MatSortstash="matSort" matSort  class="w-100">
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef mat-sort-header >Name</th>
         <td mat-cell *matCellDef="let element">
@@ -92,28 +157,32 @@
       <ng-container matColumnDef="inventoryId">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Stash</th>
         <td mat-cell *matCellDef="let element" >
-          {{ element.inventoryId }}   : 
+          {{ element.inventoryId }}
         </td>
       </ng-container>
       <ng-container matColumnDef="worth">
 <th mat-header-cell *matHeaderCellDef mat-sort-header>Worth</th>
 <td mat-cell *matCellDef="let element">
 <!-- {{worthfinder(element)}} -->
-   {{element.worth}}  <img src="https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyRerollRare.png?scale=1&w=1&h=1"  style="height:50%;" />
+   <!-- {{element.worth}}  <img  src="https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyRerollRare.png?scale=1&w=1&h=1"  style="height:10%;" /> -->
+    {{element.worth}} <img class="img-responsive smaller"
+      src="https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyRerollRare.png?scale=1&w=1&h=1" />
 </td>
         
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="disptest; sticky: true "></tr>
       <tr mat-row *matRowDef="let row; columns: disptest"></tr>
-    </mat-table>
+    </table>
         <mat-paginator #paginatorstash [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
         </mat-paginator>
+
+  </ng-container>
   </div>
-
-</ng-container>
-
 </mat-tab>
+
+
+
 <!-- <div>
   <ng-container *ngIf="fullPoeNinjaResponse">
     Hi

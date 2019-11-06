@@ -614,7 +614,7 @@ export class DisplaylistComponent implements OnInit {
     if (item.worth) {
       return item.worth;
     }
-    console.log(item, "item");
+    // console.log(item, "item");
 
     let comparething;
     for (var i = 0; i < this.giantpoeninjaarray.length; i++) {
@@ -632,40 +632,75 @@ export class DisplaylistComponent implements OnInit {
         : 0;
       // console.log(comparething, "comparething");
       // console.log(this.giantpoeninjaarray[i], "giantindex", item);
-      // if (item.explicitMods) {
-      //   if (
-      //     item.explicitMods[0] !=
-      //     this.giantpoeninjaarray[i].explicitModifiers[0]
-      //   ) {
-      //     console.log("explicit mods dont match");
-      //     console.log(
-      //       [item, "item"],
-      //       [item.explicitMods, this.giantpoeninjaarray[i].explicitModifiers]
-      //     );
-      //     continue;
+      // if (item.explicitMods && this.giantpoeninjaarray[i].explicitModifiers) {
+      //   let keepit = false;
+
+      //   for (let x = 0; x < item.explicitMods.length; x++) {
+      //     if (item.explicitMods[i] == "Has 2 Abyssal Sockets") {
+      //       keepit = true;
+      //     }
       //   }
+      //   for (
+      //     let x = 0;
+      //     x < this.giantpoeninjaarray[i].explicitModifiers.length;
+      //     x++
+      //   ) {
+      //     if (
+      //       this.giantpoeninjaarray[i].explicitModifiers[i] ==
+      //       "Has 2 Abyssal Sockets"
+      //     ) {
+      //       keepit = true;
+      //     }
+      //   }
+
+      //   for (let x = 0; x < item.explicitMods.length; x++) {
+      //     if (item.explicitMods[i] == "Has 1 Abyssal Socket") {
+      //       keepit = true;
+      //     }
+      //   }
+      //   for (
+      //     let x = 0;
+      //     x < this.giantpoeninjaarray[i].explicitModifiers.length;
+      //     x++
+      //   ) {
+      //     if (
+      //       this.giantpoeninjaarray[i].explicitModifiers[i] ==
+      //       "Has 1 Abyssal Socket"
+      //     ) {
+      //       keepit = true;
+      //     }
+      //   }
+
+      //   console.log("explicit mods dont match");
+      //   console.log(
+      //     [item, "item"],
+      //     [item.explicitMods, this.giantpoeninjaarray[i].explicitModifiers]
+      //   );
+      //   // if (!keepit) {
+      //   //   continue;
+      //   // }
       // }
       if (comparething == item.typeLine || comparething == item.name) {
-        console.log(
-          [this.giantpoeninjaarray[i], "arr"],
-          [this.giantpoeninjaarray[i].name, "name"],
-          [this.giantpoeninjaarray[i].currencyTypeName, "typename"],
-          [this.giantpoeninjaarray[i].chaosEquivalent, "cequiv"],
-          [this.giantpoeninjaarray[i].chaosValue, "cval"],
-          [item.stackSize, "stacksize"],
-          [linkscompare, "Links"],
-          [item, "item"]
-        );
+        // console.log(
+        //   [this.giantpoeninjaarray[i], "arr"],
+        //   [this.giantpoeninjaarray[i].name, "name"],
+        //   [this.giantpoeninjaarray[i].currencyTypeName, "typename"],
+        //   [this.giantpoeninjaarray[i].chaosEquivalent, "cequiv"],
+        //   [this.giantpoeninjaarray[i].chaosValue, "cval"],
+        //   [item.stackSize, "stacksize"],
+        //   [linkscompare, "Links"],
+        //   [item, "item"]
+        // );
         if (item.sockets) {
           if (item.sockets.length < this.giantpoeninjaarray[i].links) {
-            console.log("continue");
+            // console.log("continue");
             continue;
           }
           let linkcounter;
           let grouparray = [];
 
           for (let x = 0; x < item.sockets.length; x++) {
-            console.log(item.sockets[x], "socket: " + x);
+            // console.log(item.sockets[x], "socket: " + x);
             grouparray.push(item.sockets[x].group);
           }
           let count = {};
@@ -681,21 +716,35 @@ export class DisplaylistComponent implements OnInit {
             linkcount = 0;
           }
           if (linkcount != this.giantpoeninjaarray[i].links) {
-            console.log("continue");
-            console.log([
-              linkcount + " linkcount",
-              this.giantpoeninjaarray[i].links,
-              " ppoeninja.links"
-            ]);
+            // console.log("continue");
+            // console.log([
+            //   linkcount + " linkcount",
+            //   this.giantpoeninjaarray[i].links,
+            //   " ppoeninja.links"
+            // ]);
             continue;
           }
-          console.log(
-            ["group " + maxlinks, "maxlinks"],
-            [grouparray, "grouparray"],
-            [count, "count"],
-            [linkcount, "count[maxlinks] < 5"]
-          );
+          // console.log(
+          //   ["group " + maxlinks, "maxlinks"],
+          //   [grouparray, "grouparray"],
+          //   [count, "count"],
+          //   [linkcount, "count[maxlinks] < 5"]
+          // );
           if (linkcount == this.giantpoeninjaarray[i].links) {
+            if (
+              item.explicitMods &&
+              this.giantpoeninjaarray[i].explicitModifiers
+            ) {
+              if (item.explicitMods.indexOf("Has 1 Abyssal Socket") !== -1) {
+                console.log("has1");
+
+                continue;
+              }
+              if (item.explicitMods.indexOf("Has 2 Abyssal Socket") !== -1) {
+                // continue;
+                console.log("has 2");
+              }
+            }
             return this.giantpoeninjaarray[i].chaosValue
               ? this.giantpoeninjaarray[i].chaosValue
               : this.giantpoeninjaarray[i].chaosEquivalent;
@@ -857,7 +906,7 @@ export class DisplaylistComponent implements OnInit {
         let bigboyarray2 = [];
         if (resp3) {
           for (let x = 0; x < resp3.length; x++) {
-            console.log(resp3[x].data.items);
+            // console.log(resp3[x].data.items);
             if (resp3[x].data.items) {
               bigboyarray2.push(resp3[x].data.items);
             }
@@ -874,7 +923,7 @@ export class DisplaylistComponent implements OnInit {
 
         let poefullarray = [];
         for (let x = 0; x < resp2.length; x++) {
-          console.log(resp2[x].lines);
+          // console.log(resp2[x].lines);
           if (resp2[x].lines) {
             poefullarray.push(resp2[x].lines);
           }
@@ -969,19 +1018,19 @@ export class DisplaylistComponent implements OnInit {
           resp2[14].lines
         ); //flask
 
-        console.log(resp2[3], "fossil Response");
+        // console.log(resp2[3], "fossil Response");
         this.fullPoeNinjaResponse = resp2;
         this.fullPoeNinjaResponseTableSource = new MatTableDataSource(resp2);
 
         this.itemheadersTest2 = Object.keys(resp2[3].lines[0]); // get all headers
-        console.log(this.itemheadersTest2);
+        // console.log(this.itemheadersTest2);
         for (let entry of this.stashdatarequest) {
           console.log(entry, "items");
         }
         // console.log(resp2[0].lines, "Currency?");
         console.log(this.stashdatarequest, "stashData Request");
         // this.derpcolums = Object.keys(resp[3].data);
-        console.log(this.derpcolums);
+        // console.log(this.derpcolums);
         // console.log(resp2);
         console.log(this.fullPoeNinjaResponse, "Full Response");
 

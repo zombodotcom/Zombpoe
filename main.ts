@@ -3,6 +3,7 @@ import * as path from "path";
 import * as url from "url";
 import { HttpHeaders, HttpClient, HttpParams } from "@angular/common/http";
 import { Observable, range } from "rxjs";
+
 interface RootObject {
   numTabs: number;
   tabs: Tab[];
@@ -459,6 +460,7 @@ function createWindow() {
     y: 0,
     width: size.width,
     height: size.height,
+    icon: path.join(__dirname, "assets/favicon.png"),
     webPreferences: {
       nodeIntegration: true
     }
