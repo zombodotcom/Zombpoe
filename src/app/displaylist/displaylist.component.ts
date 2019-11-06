@@ -190,6 +190,7 @@ export class DisplaylistComponent implements OnInit {
   essenceDataResponse;
   incubatorDataResponse;
   giantpoeninjaarray;
+  public networth = 0;
   hide = true;
   public POESESSID;
   public accountName;
@@ -630,6 +631,19 @@ export class DisplaylistComponent implements OnInit {
         : 0;
       // console.log(comparething, "comparething");
       // console.log(this.giantpoeninjaarray[i], "giantindex", item);
+      // if (item.explicitMods) {
+      //   if (
+      //     item.explicitMods[0] !=
+      //     this.giantpoeninjaarray[i].explicitModifiers[0]
+      //   ) {
+      //     console.log("explicit mods dont match");
+      //     console.log(
+      //       [item, "item"],
+      //       [item.explicitMods, this.giantpoeninjaarray[i].explicitModifiers]
+      //     );
+      //     continue;
+      //   }
+      // }
       if (comparething == item.typeLine || comparething == item.name) {
         console.log(
           [this.giantpoeninjaarray[i], "arr"],
@@ -642,7 +656,7 @@ export class DisplaylistComponent implements OnInit {
           [item, "item"]
         );
         if (item.sockets) {
-          if (item.sockets.length != this.giantpoeninjaarray[i].links) {
+          if (item.sockets.length < this.giantpoeninjaarray[i].links) {
             console.log("continue");
             continue;
           }
@@ -661,20 +675,45 @@ export class DisplaylistComponent implements OnInit {
             return count[a] > count[b] ? a : b;
           });
 
+          let linkcount = count[maxlinks];
+          if (linkcount < 5) {
+            linkcount = 0;
+          }
+          if (linkcount != this.giantpoeninjaarray[i].links) {
+            console.log("continue");
+            console.log([
+              linkcount + " linkcount",
+              this.giantpoeninjaarray[i].links,
+              " ppoeninja.links"
+            ]);
+            continue;
+          }
           console.log(
-            [maxlinks, "maxlinks"],
+            ["group " + maxlinks, "maxlinks"],
             [grouparray, "grouparray"],
             [count, "count"],
-            [count[maxlinks], "count[maxlinks]"]
+            [linkcount, "count[maxlinks] < 5"]
           );
-
-          if (count[maxlinks] >= 5) {
-            if (count[maxlinks] == this.giantpoeninjaarray[i].links) {
-              return this.giantpoeninjaarray[i].chaosValue
-                ? this.giantpoeninjaarray[i].chaosValue
-                : this.giantpoeninjaarray[i].chaosEquivalent;
-            }
+          if (linkcount == this.giantpoeninjaarray[i].links) {
+            return this.giantpoeninjaarray[i].chaosValue
+              ? this.giantpoeninjaarray[i].chaosValue
+              : this.giantpoeninjaarray[i].chaosEquivalent;
           }
+          // if (count[maxlinks] >= 5) {
+          //   console.log("inside 5+");
+          //   if (count[maxlinks] == this.giantpoeninjaarray[i].links) {
+          //     return this.giantpoeninjaarray[i].chaosValue
+          //       ? this.giantpoeninjaarray[i].chaosValue
+          //       : this.giantpoeninjaarray[i].chaosEquivalent;
+          //   }
+          // }
+          // if (count[maxlinks] < 5) {
+          //   console.log("inside below 5");
+
+          //   return this.giantpoeninjaarray[i].chaosValue
+          //     ? this.giantpoeninjaarray[i].chaosValue
+          //     : this.giantpoeninjaarray[i].chaosEquivalent;
+          // }
         }
 
         return this.giantpoeninjaarray[i].chaosValue
@@ -856,8 +895,10 @@ export class DisplaylistComponent implements OnInit {
           this.fullstashdataBigBoiArray[x].worth = this.worthfinder2(
             this.fullstashdataBigBoiArray[x]
           );
+          this.networth += Number(this.fullstashdataBigBoiArray[x].worth);
           // console.log(this.fullstashdataBigBoiArray[x], "afterpush");
         }
+
         this.fullstashDataResponseSource = new MatTableDataSource(
           this.fullstashdataBigBoiArray
         );
