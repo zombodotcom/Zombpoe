@@ -1,10 +1,10 @@
 // table {
 //   width: 100%;
 // }
-// .example-container {
-//   height: 800px;
-//   overflow: auto;
-// }
+.example-container1 {
+  height: 800px;
+  overflow: auto;
+}
 // .mat-sort-header-container {
 //   align-items: center;
 // }
@@ -28,30 +28,34 @@
 //   width: 100% !important;
 // }
 
-// .mat-header-row {
-//   width: 100%;
-// }
+.mat-header-row {
+  width: 100% !important;
+}
 
 // .mat-row {
 //   width: 100%;
 // }
 
-// .mat-column {
-//   flex: 0 0 25% !important;
-//   min-width: 104px !important;
-// }
+.mat-column {
+  flex: 0 0 25% !important;
+  min-width: 104px !important;
+}
 // .customWidthClass{
 //    flex: 0 0 75px;
 // }
 
-.mat-cell:nth-child(1),
-.mat-header-cell:nth-child(1) {
-  flex: 0 0 10%;
-}
-.mat-cell:nth-child(5),
-.mat-header-cell:nth-child(5) {
-  flex: 0 0 20%;
-}
+// .mat-cell:nth-child(1),
+// .mat-header-cell:nth-child(1) {
+//   flex: 80%;
+// }
+// .mat-cell:nth-child(5),
+// .mat-header-cell:nth-child(5) {
+//   flex: 80%;
+// }
+// .mat-header-cell:first-child,
+// .mat-cell:first-child {
+//   flex: 80%;
+// }
 
 // .mat-column-stash2 {
 //   flex: 0 0 300px;
