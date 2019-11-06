@@ -377,9 +377,10 @@ ipcMain.on("ping-async", (event, message) => {
       // get all stash data
       let promisesurls = [];
       // ## CHANGE HERE FOR RATE LIMIT
-      // for (let x = 0; x < stashurlsFull.length; x++) { ## CHANGE HERE FOR RATE LIMIT
-      // ## CHANGE HERE FOR RATE LIMIT
-      for (let x = 0; x < 5; x++) {
+      for (let x = 0; x < stashurlsFull.length; x++) {
+        // CHANGE HERE FOR RATE LIMIT
+        // ## CHANGE HERE FOR RATE LIMIT
+        // for (let x = 0; x < 5; x++) {
         promisesurls.push(
           axios.get(stashurlsFull[x], {
             headers: {

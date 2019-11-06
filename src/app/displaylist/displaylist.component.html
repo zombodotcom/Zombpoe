@@ -44,19 +44,27 @@
   <button type="submit" mat-mini-fab color="primary">Send2</button>
 </form> -->
 
+<!-- <div> -->
+
+
+
 
  
 <mat-tab-group [animationDuration]="'0ms'">
   <mat-tab label="Stash">
 
-<ng-container *ngIf="fullstashdataBigBoiArray">
+<ng-container *ngIf="fullstashdataBigBoiArray" >
+
+    {{networth}} <img src="https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyRerollRare.png?scale=1&w=1&h=1"  style="height:-80%;"/> Net Worth 
+<br>
 <mat-form-field>
   <input matInput (keyup)="applyFilterStash($event.target.value)" placeholder="Filter">
 </mat-form-field>
-  <div class="mat-elevation-z8" style="float: left">
-    <table mat-table [dataSource]="fullstashDataResponseSource" #MatSortstash="matSort" matSort>
+
+  <div class="example-container mat-elevation-z8">
+    <mat-table [dataSource]="fullstashDataResponseSource" #MatSortstash="matSort" matSort>
       <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header >Name</th>
         <td mat-cell *matCellDef="let element">
           <ng-container *ngIf="element.name || element.typeLine">
 {{element.name ? element.name : element.typeLine}}
@@ -66,8 +74,8 @@
       </ng-container>
 
       <ng-container matColumnDef="stackSize">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Count</th>
-        <td mat-cell *matCellDef="let element">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header >Count</th>
+        <td mat-cell *matCellDef="let element" >
             {{element.stackSize}}
         </td>
       </ng-container>
@@ -83,22 +91,22 @@
 
       <ng-container matColumnDef="inventoryId">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Stash</th>
-        <td mat-cell *matCellDef="let element">
-          {{ element.inventoryId }}
+        <td mat-cell *matCellDef="let element" >
+          {{ element.inventoryId }}   : 
         </td>
       </ng-container>
       <ng-container matColumnDef="worth">
 <th mat-header-cell *matHeaderCellDef mat-sort-header>Worth</th>
 <td mat-cell *matCellDef="let element">
 <!-- {{worthfinder(element)}} -->
-{{element.worth}}
+   {{element.worth}}  <img src="https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyRerollRare.png?scale=1&w=1&h=1"  style="height:50%;" />
 </td>
         
       </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="disptest; sticky: true"></tr>
+      <tr mat-header-row *matHeaderRowDef="disptest; sticky: true "></tr>
       <tr mat-row *matRowDef="let row; columns: disptest"></tr>
-    </table>
+    </mat-table>
         <mat-paginator #paginatorstash [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
         </mat-paginator>
   </div>

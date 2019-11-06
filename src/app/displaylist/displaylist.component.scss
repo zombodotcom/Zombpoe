@@ -13,6 +13,50 @@
 //   flex: 0 0 30%;
 // }
 
+// mat-cell:nth-child(1),
+// mat-header-cell:nth-child(1) {
+//   flex: 0 0 30%;
+// }
+
+// mat-cell:nth-child(5),
+// mat-header-cell:nth-child(5) {
+//   flex: 0 0 30%;
+// }
+
+// .mat-table__wrapper .mat-table {
+//   min-width: auto !important;
+//   width: 100% !important;
+// }
+
+// .mat-header-row {
+//   width: 100%;
+// }
+
+// .mat-row {
+//   width: 100%;
+// }
+
+// .mat-column {
+//   flex: 0 0 25% !important;
+//   min-width: 104px !important;
+// }
+// .customWidthClass{
+//    flex: 0 0 75px;
+// }
+
+.mat-cell:nth-child(1),
+.mat-header-cell:nth-child(1) {
+  flex: 0 0 10%;
+}
+.mat-cell:nth-child(5),
+.mat-header-cell:nth-child(5) {
+  flex: 0 0 20%;
+}
+
+// .mat-column-stash2 {
+//   flex: 0 0 300px;
+// }
+
 * {
   transition: none;
 }
@@ -23,9 +67,9 @@
   pointer-events: none !important;
 }
 
-.mat-column-explicitModifiers {
-  width: 100px;
-}
+// .mat-column {
+//   width: 100px;
+// }
 ::ng-deep .tooltip-inner {
   background-color: #000000;
   // opacity: 0.6;
