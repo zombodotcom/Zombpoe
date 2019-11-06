@@ -46,7 +46,7 @@
 
 
  
-<mat-tab-group>
+<mat-tab-group [animationDuration]="'0ms'">
   <mat-tab label="Stash">
 
 <ng-container *ngIf="fullstashdataBigBoiArray">
@@ -188,7 +188,7 @@
   <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" >
 </mat-form-field>
   <!-- <br> -->
-  <mat-tab-group #tabGroup (selectedIndexChange)="_setDataSource($event)" (selectedTabChange)="onLinkClick($event)"color="primary" >
+  <mat-tab-group [animationDuration]="'0ms'" #tabGroup (selectedIndexChange)="_setDataSource($event)" (selectedTabChange)="onLinkClick($event)"color="primary" >
      
     
     <mat-tab label="Currency">
