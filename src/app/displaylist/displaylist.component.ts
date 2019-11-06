@@ -41,6 +41,7 @@ import { JsonPipe } from "@angular/common";
 import { async } from "@angular/core/testing";
 import { spawn } from "child_process";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { group } from "@angular/animations";
 export interface PoeNinjaItemData {
   name: string;
   chaosValue: number;
@@ -608,19 +609,11 @@ export class DisplaylistComponent implements OnInit {
   // NINJA FIND
 
   worthfinder2(item) {
+    if (item.worth) {
+      return item.worth;
+    }
     console.log(item, "item");
-    // let namecompare;
-    // if (item.name != null) {
-    //   namecompare = item.name;
-    // }
-    // if (item.currencyTypeName != null) {
-    //   namecompare = item.currencyTypeName;
-    // }
-    // console.log(namecompare, "namecompare");
-    // if (this.giantpoeninjaarray[i].currencyTypeName) {
-    //   comparething = this.giantpoeninjaarray[i].currencyTypeName;
-    // }
-    // iterate over each element in the array
+
     let comparething;
     for (var i = 0; i < this.giantpoeninjaarray.length; i++) {
       // look for the entry with a matching `code` value
@@ -639,14 +632,51 @@ export class DisplaylistComponent implements OnInit {
       // console.log(this.giantpoeninjaarray[i], "giantindex", item);
       if (comparething == item.typeLine || comparething == item.name) {
         console.log(
+          [this.giantpoeninjaarray[i], "arr"],
           [this.giantpoeninjaarray[i].name, "name"],
           [this.giantpoeninjaarray[i].currencyTypeName, "typename"],
           [this.giantpoeninjaarray[i].chaosEquivalent, "cequiv"],
           [this.giantpoeninjaarray[i].chaosValue, "cval"],
           [item.stackSize, "stacksize"],
-          [linkscompare, "Links"]
+          [linkscompare, "Links"],
+          [item, "item"]
         );
-        // if(item.stackSize=)
+        if (item.sockets) {
+          if (item.sockets.length != this.giantpoeninjaarray[i].links) {
+            console.log("continue");
+            continue;
+          }
+          let linkcounter;
+          let grouparray = [];
+
+          for (let x = 0; x < item.sockets.length; x++) {
+            console.log(item.sockets[x], "socket: " + x);
+            grouparray.push(item.sockets[x].group);
+          }
+          let count = {};
+          grouparray.forEach(function(i) {
+            count[i] = (count[i] || 0) + 1;
+          });
+          var maxlinks = Object.keys(count).reduce(function(a, b) {
+            return count[a] > count[b] ? a : b;
+          });
+
+          console.log(
+            [maxlinks, "maxlinks"],
+            [grouparray, "grouparray"],
+            [count, "count"],
+            [count[maxlinks], "count[maxlinks]"]
+          );
+
+          if (count[maxlinks] >= 5) {
+            if (count[maxlinks] == this.giantpoeninjaarray[i].links) {
+              return this.giantpoeninjaarray[i].chaosValue
+                ? this.giantpoeninjaarray[i].chaosValue
+                : this.giantpoeninjaarray[i].chaosEquivalent;
+            }
+          }
+        }
+
         return this.giantpoeninjaarray[i].chaosValue
           ? this.giantpoeninjaarray[i].chaosValue *
               (item.stackSize ? item.stackSize : 1)
@@ -661,24 +691,6 @@ export class DisplaylistComponent implements OnInit {
       // // }
     }
 
-    // this.giantpoeninjaarray.find((o, i) => {
-    //   // console.log(o);
-    //   // console.log(o.lines);
-    //   // o.find((z, i) => {
-
-    //   // if (
-    //   //   o.name === this.itemsearchtest.get("itemsearchstring").value ||
-    //   //   o.currencyTypeName === this.itemsearchtest.get("itemsearchstring").value
-    //   // ) {
-    //     console.log(o);
-    //     console.log(
-    //       o.chaosValue + "chaos",
-    //       o.exaltedValue + "ex",
-    //       o.links + "links"
-    //     );
-    //   }
-    //   // });
-    // });
     return 0;
   }
 
@@ -840,11 +852,11 @@ export class DisplaylistComponent implements OnInit {
         console.log(biggestpoeninjarrayever, "biggestpoeninjarrayever");
         console.log(this.fullstashdataBigBoiArray, "Big Boi");
         for (let x = 0; x < this.fullstashdataBigBoiArray.length; x++) {
-          console.log(this.fullstashdataBigBoiArray[x], "before push");
+          // console.log(this.fullstashdataBigBoiArray[x], "before push");
           this.fullstashdataBigBoiArray[x].worth = this.worthfinder2(
             this.fullstashdataBigBoiArray[x]
           );
-          console.log(this.fullstashdataBigBoiArray[x], "afterpush");
+          // console.log(this.fullstashdataBigBoiArray[x], "afterpush");
         }
         this.fullstashDataResponseSource = new MatTableDataSource(
           this.fullstashdataBigBoiArray
