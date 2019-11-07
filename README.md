@@ -4,7 +4,7 @@
 
 [![Angular Logo](https://www.vectorlogo.zone/logos/angular/angular-icon.svg)](https://angular.io/) [![Electron Logo](https://www.vectorlogo.zone/logos/electronjs/electronjs-icon.svg)](https://electronjs.org/)
 # Introduction
-
+Zombpoe is a stash indexer for Path of Exile. it uses Poe.Ninja to get the current worth of items and your POESESSID to get stash data.
 Welcome to Zombpoe
 This is Zombpoe
 You can do anything with Zombpoe,
