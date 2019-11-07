@@ -109,81 +109,28 @@ const { session } = require("electron");
 let responsedata;
 ipcMain.on("ping-async", (event, message) => {
   console.log("hello");
-  // console.log(message, "Message");
-  // session.defaultSession.cookies.set(cookie, error => {
-  //   if (error) console.error(error);
-  // });
-  // session.defaultSession.cookies.get({}, (error, cookies) => {
-  //   console.log(error, cookies);
-  // });
-  // function getRaceById(id): Observable <RootObject> {
-  //   return this._http.get(`/api/races/${id}`)
-  //     .map(response => response.json());
-  // }
-  // let options = {
-  //   headers: {
-  //     cookie: "POESESSID=asdasdasda" //the token is a variable which holds the token
-  //   }
-  // };
-  // var numTabs = axios
-  //   .get(
-  //     "https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=qqazraelz&tabs=0",
-  //     options
-  //   )
-  //   .catch(e => {
-  //     console.log("Error: ", e.response.data);
-  //   })
-  //   .then(response => console.log(response));
 
-  // console.log(numTabs);
+  console.log(message);
   //TODO
   // get the number of tabs, concat the response data
   let urls: string[] = [
-    "https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=qqazraelz&tabs=1&tabIndex=1",
-    "https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=qqazraelz&tabs=1&tabIndex=2"
+    "https://www.pathofexile.com/character-window/get-stash-items?league=" +
+      message[2] +
+      "&accountName=qqazraelz&tabs=1&tabIndex=1",
+    "https://www.pathofexile.com/character-window/get-stash-items?league=" +
+      message[2] +
+      "&accountName=qqazraelz&tabs=1&tabIndex=2"
   ];
 
-  // async function getAllData(URLs) {
-  //   let networkRequestPromises = URLs.map(fetchData);
-  //   return await Promise.all(networkRequestPromises);
-  // }
-
-  // function fetchData(URL) {
-  //   return axios
-  //     .get(URL)
-  //     .then(function(response) {
-  //       return {
-  //         success: true,
-  //         data: response.data
-  //       };
-  //     })
-  //     .catch(function(error) {
-  //       return { success: false };
-  //     });
-  // }
-  // var getItems = () =>
-  //   urls.map(url =>
-  //     axios
-  //       .get(url, {
-  //         headers: {
-  //           cookie: "POESESSID=asdasdasd" //the token is a variable which holds the token
-  //         }
-  //       })
-  //       .catch(e => {
-  //         console.log("Error: ", e.response.data);
-  //       })
-  //   );
-
-  // console.log(getItems);
-  // https://stackoverflow.com/questions/48324792/passing-axios-get-urls-into-axios-all-based-on-options
-
-  // var getVideos = () => urls.map(url => axios.get(url))
   // https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=qqazraelz&tabs=0
   // {"numTabs":39}
-  let baseURL = "https://poe.ninja/api/data/ItemOverview?league=Blight&type=";
+  let baseURL =
+    "https://poe.ninja/api/data/ItemOverview?league=" + message[2] + "&type=";
   let urlendings: string[] = [
     "Currency", // currency has currencyoveriew and Itemoveriew updated
-    "https://poe.ninja/api/data/currencyoverview?league=Blight&type=Fragment", //currency is different url
+    "https://poe.ninja/api/data/currencyoverview?league=" +
+      message[2] +
+      "&type=Fragment", //currency is different url
     "Oil",
     "Fossil",
     "Resonator",
@@ -299,10 +246,10 @@ ipcMain.on("ping-async", (event, message) => {
   //     // console.log("Repositories", reposResponse.data);
   //   })
   // );
-  let downloadurl = (a, b) =>
-    `https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=${a}&tabIndex=0&tabs=${b}`;
-  let stashurl2 =
-    "https://www.pathofexile.com/character-window/get-stash-items?league={}&accountName={}&tabs={}";
+  // let downloadurl = (a, b) =>
+  //   `https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=${a}&tabIndex=0&tabs=${b}`;
+  // let stashurl2 =
+  //   "https://www.pathofexile.com/character-window/get-stash-items?league={}&accountName={}&tabs={}";
   let addinURL = "&tabIndex=";
   let stashTabWhiteList = [
     "DivinationCardStash",
@@ -347,9 +294,11 @@ ipcMain.on("ping-async", (event, message) => {
 
   axios
     .get(
-      "https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=" +
+      "https://www.pathofexile.com/character-window/get-stash-items?league=" +
+        message[2] +
+        "&accountName=" +
         message[1] +
-        "&tabs=1&tabIndex=1",
+        "&tabs=0&tabIndex=0",
       {
         headers: {
           cookie: "POESESSID=" + message[0] //the token is a variable which holds the token
@@ -364,21 +313,35 @@ ipcMain.on("ping-async", (event, message) => {
 
       // get stash data
       let responseNumTabsTotal = response.data.numTabs;
-      console.log(responseNumTabsTotal);
+
       // let numTabsResponse =
       for (let x = 0; x < Number(responseNumTabsTotal); x++) {
         stashurlsFull.push(
-          "https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=" +
+          "https://www.pathofexile.com/character-window/get-stash-items?league=" +
+            message[2] +
+            "&accountName=" +
             message[1] +
             "&tabs=0&tabIndex=" +
             x
         );
       }
+      let stashtotaltoget = stashurlsFull.length;
+      // if (message[2] == "Standard") {
+      //   stashtotaltoget = 10;
+      //   responseNumTabsTotal = 10;
+      // }
+      if (Number(responseNumTabsTotal) > 40) {
+        stashtotaltoget = 40;
+        responseNumTabsTotal = 40;
+      }
+      console.log(responseNumTabsTotal, stashtotaltoget);
       console.log(stashurlsFull);
       // get all stash data
       let promisesurls = [];
       // ## CHANGE HERE FOR RATE LIMIT
-      for (let x = 0; x < stashurlsFull.length; x++) {
+
+      // Currently just setting to 48 for testing.
+      for (let x = 0; x < stashtotaltoget; x++) {
         // CHANGE HERE FOR RATE LIMIT
         // ## CHANGE HERE FOR RATE LIMIT
         // for (let x = 0; x < 5; x++) {
@@ -403,7 +366,7 @@ ipcMain.on("ping-async", (event, message) => {
           //this will be executed only when all requests are complete
           // console.log("Currency: ", responseArr[0].data);
           this.fullstashdata = responseArr; // currency
-          // console.log(responseArr.data)
+          // console.log(responseArr);
           // console.log(responseArr[0].data)
           // for (let x = 0; x < stashurlsFull.length; x++) {
           //   console.log(this.fullstashdata[x].data);

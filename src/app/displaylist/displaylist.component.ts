@@ -259,7 +259,8 @@ export class DisplaylistComponent implements OnInit {
   userForm = new FormGroup({
     POESESSID: new FormControl("***Replace***", Validators.maxLength(32)),
     accountName: new FormControl("qqazraelz", Validators.required),
-    characterName: new FormControl("ZomboTD", Validators.maxLength(20))
+    characterName: new FormControl("ZomboTD", Validators.maxLength(20)),
+    league: new FormControl("***Replace***", Validators.maxLength(20))
   });
   accform = new FormControl(20, Validators.required);
   characterform = new FormControl();
@@ -1053,12 +1054,16 @@ export class DisplaylistComponent implements OnInit {
     );
 
     this._electronService.ipcRenderer.send("ping-async", [
-      localStorage.length > 0
-        ? localstorageAccountData.POESESSID
-        : this.userForm.get("POESESSID").value,
-      localStorage.length > 0
-        ? localstorageAccountData.accountName
-        : this.userForm.get("accountName").value
+      // localStorage.length > 0
+      //   ? localstorageAccountData.POESESSID
+      this.userForm.get("POESESSID").value,
+      // localStorage.length > 0
+      //   ? localstorageAccountData.accountName
+      this.userForm.get("accountName").value,
+      // localStorage.length > 0
+      //   ? localstorageAccountData.accountName
+      this.userForm.get("league").value
+      //   this.userForm.get("league").value
     ]); // get us data
   }
 
