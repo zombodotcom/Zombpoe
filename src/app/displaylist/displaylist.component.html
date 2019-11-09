@@ -17,7 +17,7 @@
 </button> -->
 <script> $().tooltip({ container: 'body' }), $().popover({ container: 'body' })</script>
 
-<form [formGroup]="userForm" (ngSubmit)="onFormSubmit()">
+<form [formGroup]="userForm" (ngSubmit)="onStashesOnlySubmit()">
   <mat-form-field color="primary" >
   <input formControlName="POESESSID" matInput placeholder="Your POESESSID" [type]="hide ? 'password' : 'text'"/>
   <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
@@ -33,10 +33,13 @@
   <mat-form-field>
     <input formControlName="league" matInput placeholder="League" />
   </mat-form-field>
+    <mat-form-field>
+      <input formControlName="worthCutoff" matInput placeholder="worthCutoff" />
+    </mat-form-field>
   <button type="submit"  mat-mini-fab color="primary">Send</button>
 </form>
 
-<button (click)="openModal()"  mat-flat-button color="primary">
+<button (click)="forceRefresh()"  mat-flat-button color="primary">
   Force Refresh
 </button>
 <!-- STASH ITEM TABLE -->
@@ -129,6 +132,9 @@
   <input matInput (keyup)="applyFilterStash($event.target.value)" placeholder="Filter">
 </mat-form-field>
 
+<mat-form-field>
+  <input matInput (keyup)="applyFilterCurrencyCuttoff($event.target.value)" placeholder="Currency Cuttoff">
+</mat-form-field>
  
     <table mat-table [dataSource]="fullstashDataResponseSource" #MatSortstash="matSort" matSort  class="w-100">
       <ng-container matColumnDef="name">

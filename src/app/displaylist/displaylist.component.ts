@@ -260,7 +260,8 @@ export class DisplaylistComponent implements OnInit {
     POESESSID: new FormControl("***Replace***", Validators.maxLength(32)),
     accountName: new FormControl("qqazraelz", Validators.required),
     characterName: new FormControl("ZomboTD", Validators.maxLength(20)),
-    league: new FormControl("Blight", Validators.maxLength(20))
+    league: new FormControl("Blight", Validators.maxLength(20)),
+    worthCutoff: new FormControl("none", Validators.maxLength(20))
   });
   accform = new FormControl(20, Validators.required);
   characterform = new FormControl();
@@ -909,7 +910,22 @@ export class DisplaylistComponent implements OnInit {
     this.fullstashDataResponseSource.filter = filterValue.trim().toLowerCase();
     // console.log(this.currenttablesource);
   }
-  openModal() {
+  applyFilterCurrencyCuttoff(filterValue: string) {
+    this.fullstashDataResponseSource.filterPredicate = function(
+      data,
+      filter: string
+    ): boolean {
+      // return data.name.toLowerCase().includes(filter) || data.symbol.toLowerCase().includes(filter) || data.position.toString().includes(filter);
+      console.log(data[0], "wut");
+      return data[0].toLowerCase().includes(filter);
+      // data.worth.toLowerCase().includes(filter) ||
+      // data.explicitMods.toString().includes(filter)
+    };
+    // this.fullstashDataResponseSource.filter = filterValue.trim().toLowerCase();
+    // console.log(this.currenttablesource);
+  }
+
+  forceRefresh() {
     console.log("Play");
 
     if (this._electronService.isElectronApp) {
@@ -969,9 +985,15 @@ export class DisplaylistComponent implements OnInit {
         console.log(this.fullstashdataBigBoiArray, "Big Boi");
         for (let x = 0; x < this.fullstashdataBigBoiArray.length; x++) {
           // console.log(this.fullstashdataBigBoiArray[x], "before push");
-          this.fullstashdataBigBoiArray[x].worth = this.worthfinder2(
-            this.fullstashdataBigBoiArray[x]
-          );
+          let worthpush = this.worthfinder2(this.fullstashdataBigBoiArray[x]);
+          // if (this.userForm.get("worthCutoff").value == "none") {
+          //   this.fullstashdataBigBoiArray[x].worth = worthpush
+          // }
+          this.fullstashdataBigBoiArray[x].worth = worthpush;
+          // if (this.userForm.get("worthCutoff").value > worthpush) {
+          //   delete this.fullstashdataBigBoiArray[x]
+          // }
+
           this.networth += Number(
             parseFloat(
               this.fullstashdataBigBoiArray[x].worth.toString()
@@ -1055,9 +1077,9 @@ export class DisplaylistComponent implements OnInit {
 
         // this.itemheadersTest2 = Object.keys(resp2[3].lines[0]); // get all headers
         // console.log(this.itemheadersTest2);
-        for (let entry of this.stashdatarequest) {
-          console.log(entry, "items");
-        }
+        // for (let entry of this.stashdatarequest) {
+        //   console.log(entry, "items");
+        // }
         // console.log(resp2[0].lines, "Currency?");
         console.log(this.stashdatarequest, "stashData Request");
         // this.derpcolums = Object.keys(resp[3].data);
@@ -1089,11 +1111,74 @@ export class DisplaylistComponent implements OnInit {
       // localStorage.length > 0
       //   ? localstorageAccountData.accountName
       this.userForm.get("league").value
+      // this.userForm.get("worthCutoff").value
+
       //   this.userForm.get("league").value
     ]); // get us data
   }
 
-  onFormSubmit(): void {}
+  onStashesOnlySubmit(): void {
+    if (this._electronService.isElectronApp) {
+      // We have access to node process.
+      this.versions.node = this._electronService.process.versions.node;
+      this.versions.chrome = this._electronService.process.versions.chrome;
+      this.versions.electron = this._electronService.process.versions.electron;
+      console.log(this.versions, "versions");
+    }
+    this._electronService.ipcRenderer.on("ping-async-stash", (event, resp) => {
+      console.log(resp);
+    });
+
+    this._electronService.ipcRenderer.send("only-character-data", [
+      // localStorage.length > 0
+      //   ? localstorageAccountData.POESESSID
+      this.userForm.get("POESESSID").value,
+      // localStorage.length > 0
+      //   ? localstorageAccountData.accountName
+      this.userForm.get("accountName").value,
+      // localStorage.length > 0
+      //   ? localstorageAccountData.accountName
+      this.userForm.get("league").value
+      //   this.userForm.get("league").value
+      //add new values here like tab # or a list of user specified tabs
+    ]); // get us data
+
+    this._electronService.ipcRenderer.on("ping-async", (event, resp, resp2) => {
+      // prints "pong"
+      console.log(resp, resp2);
+
+      let bigboyarray2 = [];
+      if (resp2) {
+        for (let x = 0; x < resp2.length; x++) {
+          // console.log(resp3[x].data.items);
+          if (resp2[x].data.items) {
+            bigboyarray2.push(resp2[x].data.items);
+          }
+        }
+      }
+      let bigarrayconcat = [].concat(bigboyarray2);
+      let biggestitemarrayever = [];
+      for (var i = 0; i < bigarrayconcat.length; ++i) {
+        for (var j = 0; j < bigarrayconcat[i].length; ++j)
+          biggestitemarrayever.push(bigarrayconcat[i][j]);
+      }
+      this.fullstashdataBigBoiArray = biggestitemarrayever;
+
+      // this.itemheadersTest2 = Object.keys(resp2[3].lines[0]); // get all headers
+      // console.log(this.itemheadersTest2);
+      // for (let entry of this.stashdatarequest) {
+      //   console.log(entry, "items");
+      // }
+      // console.log(resp2[0].lines, "Currency?");
+      console.log(this.stashdatarequest, "stashData Request");
+
+      let stashdatasourceitems = resp.items;
+      this.stashdatasource = new MatTableDataSource(resp);
+      this.stashItems2 = new MatTableDataSource(stashdatasourceitems);
+
+      this.refresh(); // makes the display look for changes aka our new data
+    });
+  }
 
   getuserName(): any {
     return this.userForm.get("name");
@@ -1119,7 +1204,7 @@ export class DisplaylistComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.openModal(); // run the button
+    // this.forceRefresh(); // run the button
 
     console.log("Before");
 
