@@ -112,6 +112,11 @@ ipcMain.on("ping-async", async (event, message) => {
   let sessionid = message[0];
   let accountName = message[1];
   let league = message[2];
+  event.sender.send("ping-async-stash", [
+    "got poeninja data, starting stash",
+    accountName,
+    league
+  ]);
   // const { net } = require("electron");
   // let request = net.request(
   //   "https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=qqazraelz&tabs=0&tabIndex=1"
@@ -214,6 +219,7 @@ ipcMain.on("ping-async", async (event, message) => {
     .then(responseArr => {
       //this will be executed only when all requests are complete
       // console.log("Currency: ", responseArr[0].data);
+
       this.currencyDataResponse = responseArr[0].data; // currency
       this.fragmentsDataResponse = responseArr[1].data; //frag
       this.oilsDataResponse = responseArr[2].data; //oils
@@ -264,7 +270,12 @@ ipcMain.on("ping-async", async (event, message) => {
     .catch(e => {
       console.log("Error:  POE NINJA GET ERROR", e.response.data);
     });
-  await sleep(20000);
+  event.sender.send(
+    "ping-async-stash",
+    "backend poedata going to sleep for 2 seconds now",
+    this.poeNinjaResponseArray
+  );
+  await sleep(2000);
   // .then(
   //   axios.spread(function(resp2, reposResponse) {
   //     //... but this callback will be executed only when both requests are complete.
@@ -321,6 +332,7 @@ ipcMain.on("ping-async", async (event, message) => {
 
   // console.log("hello after sleep");
   // await sleep(10000);
+  event.sender.send("ping-async-stash", "starting stash");
   await axios
     .get(
       "https://www.pathofexile.com/character-window/get-stash-items?league=" +
@@ -340,7 +352,10 @@ ipcMain.on("ping-async", async (event, message) => {
       // message = response.data as RootObject;
       let stashdatatemp = [];
       this.stashdata = response.data;
-      event.sender.send("ping-async-stash", [response]);
+      event.sender.send("ping-async-stash", [
+        response,
+        "got stash data" + "tab count " + Number(response.data.numTabs)
+      ]);
       await sleep(10000);
       // get stash data
       let responseNumTabsTotal = response.data.numTabs;
