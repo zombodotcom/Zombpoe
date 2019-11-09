@@ -120,7 +120,7 @@
 <mat-tab-group [animationDuration]="'0ms'">
   <mat-tab label="Stash">
 <div class="example-container1 mat-elevation-z8">
-<ng-container *ngIf="fullstashdataBigBoiArray" >
+<ng-container *ngIf="fullstashDataResponseSource" >
   <div>{{networth}} <img class="img-responsive smaller"
     src="https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyRerollRare.png" /> Net Worth</div>
    
@@ -151,9 +151,12 @@
       <ng-container matColumnDef="icon">
         <th mat-header-cell *matHeaderCellDef >Icon</th>
         <td mat-cell *matCellDef="let element">
-            <button mat-button placement="right" ngbTooltip="Tooltip on right">
-                                  <img [src]="element.icon" />
-                                  </button>
+            <ng-template #testtooltip3>
+              <ul *ngFor="let item of element.explicitMods"> {{item}}</ul>
+            </ng-template>
+            <button mat-button [ngbTooltip]="testtooltip3">
+                <img [src]="element.icon" />
+              </button>
         </td>
       </ng-container>
 
@@ -309,7 +312,7 @@
             <mat-header-cell *matHeaderCellDef> icon</mat-header-cell>
             <mat-cell *matCellDef="let element; index as i">
               <button mat-button placement="right" ngbTooltip="Tooltip on right">
-              <img [src]="getClass(element.currencyTypeName)" />
+              <img [src]="getClassDerpo(element.currencyTypeName)" />
               </button>
             </mat-cell>
           </ng-container>
@@ -379,7 +382,7 @@
             <mat-header-cell *matHeaderCellDef > icon</mat-header-cell>
             <mat-cell *matCellDef="let element; index as i">
               <button mat-button placement="right" ngbTooltip="Tooltip on right">
-              <img [src]="getClass(element.currencyTypeName)" />
+              <img [src]="getClassDerpo(element.currencyTypeName)" />
               </button>
             </mat-cell>
           </ng-container>

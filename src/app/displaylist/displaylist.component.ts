@@ -260,7 +260,7 @@ export class DisplaylistComponent implements OnInit {
     POESESSID: new FormControl("***Replace***", Validators.maxLength(32)),
     accountName: new FormControl("qqazraelz", Validators.required),
     characterName: new FormControl("ZomboTD", Validators.maxLength(20)),
-    league: new FormControl("***Replace***", Validators.maxLength(20))
+    league: new FormControl("Blight", Validators.maxLength(20))
   });
   accform = new FormControl(20, Validators.required);
   characterform = new FormControl();
@@ -859,7 +859,7 @@ export class DisplaylistComponent implements OnInit {
 
   isDev = require("electron-is-dev");
   //isDevMode = process.execPath.match(/dist[\\/]electron/i);
-  getClass(item) {
+  getClassDerpo(item) {
     let iconstring;
     // console.log(item);
     this.fullPoeNinjaResponse[0].currencyDetails.find((o, i) => {
@@ -870,6 +870,7 @@ export class DisplaylistComponent implements OnInit {
         // return iconstring; // stop searching
       }
     });
+
     // let obj = this.fullPoeNinjaResponse[0].currencyDetails.find((o, i) => {
     //   if (o.name == item) {
     //     console.log("here", i);
@@ -878,6 +879,28 @@ export class DisplaylistComponent implements OnInit {
     // });
     return iconstring;
   }
+
+  getClassgetStashTooltip(item) {
+    let iconstring;
+    // console.log(item);
+    this.fullstashdataBigBoiArray.find((o, i) => {
+      // console.log("here", o);
+      if (o.name == item) {
+        // console.log("here", o.icon);
+        iconstring = o.icon;
+        // return iconstring; // stop searching
+      }
+    });
+
+    // let obj = this.fullPoeNinjaResponse[0].currencyDetails.find((o, i) => {
+    //   if (o.name == item) {
+    //     console.log("here", i);
+    //     return i; // stop searching
+    //   }
+    // });
+    return iconstring;
+  }
+
   applyFilter(filterValue: string) {
     this.currenttablesource.filter = filterValue.trim().toLowerCase();
     // console.log(this.currenttablesource);
@@ -896,6 +919,9 @@ export class DisplaylistComponent implements OnInit {
       this.versions.electron = this._electronService.process.versions.electron;
       console.log(this.versions, "versions");
     }
+    this._electronService.ipcRenderer.on("ping-async-stash", (event, resp) => {
+      console.log(resp);
+    });
 
     this._electronService.ipcRenderer.on(
       "ping-async",
@@ -1027,7 +1053,7 @@ export class DisplaylistComponent implements OnInit {
         this.fullPoeNinjaResponse = resp2;
         this.fullPoeNinjaResponseTableSource = new MatTableDataSource(resp2);
 
-        this.itemheadersTest2 = Object.keys(resp2[3].lines[0]); // get all headers
+        // this.itemheadersTest2 = Object.keys(resp2[3].lines[0]); // get all headers
         // console.log(this.itemheadersTest2);
         for (let entry of this.stashdatarequest) {
           console.log(entry, "items");
@@ -1093,7 +1119,7 @@ export class DisplaylistComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.openModal(); // run the button
+    // this.openModal(); // run the button
 
     console.log("Before");
 

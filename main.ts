@@ -107,10 +107,36 @@ interface Colour {
 const ipcMain = require("electron").ipcMain;
 const { session } = require("electron");
 let responsedata;
-ipcMain.on("ping-async", (event, message) => {
+ipcMain.on("ping-async", async (event, message) => {
   console.log("hello");
+  let sessionid = message[0];
+  let accountName = message[1];
+  let league = message[2];
+  // const { net } = require("electron");
+  // let request = net.request(
+  //   "https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=qqazraelz&tabs=0&tabIndex=1"
+  // );
 
-  console.log(message);
+  // request.setHeader("Cookie", "POESESSID=" + message[0]);
+
+  // const cookie = {
+  //   url: "https://www.pathofexile.com/",
+  //   name: "POESESSID",
+  //   value: message[0]
+  // };
+
+  // request.on("response", response => {
+  //   console.log(`STATUS: ${response.statusCode}`);
+  //   console.log(`HEADERS: ${JSON.stringify(response.headers)}`);
+  //   response.on("data", chunk => {
+  //     console.log(`BODY: ${chunk}`);
+  //   });
+  //   response.on("end", () => {
+  //     console.log("No more data in response.");
+  //   });
+  // });
+  // request.end();
+  // console.log(message);
   //TODO
   // get the number of tabs, concat the response data
   let urls: string[] = [
@@ -164,7 +190,7 @@ ipcMain.on("ping-async", (event, message) => {
   let essenceDataResponse;
   let stashdata;
 
-  axios
+  await axios
     .all([
       axios.get(baseURL + urlendings[0]), //Currency
       axios.get(urlendings[1]), //fragments
@@ -238,7 +264,7 @@ ipcMain.on("ping-async", (event, message) => {
     .catch(e => {
       console.log("Error:  POE NINJA GET ERROR", e.response.data);
     });
-
+  await sleep(20000);
   // .then(
   //   axios.spread(function(resp2, reposResponse) {
   //     //... but this callback will be executed only when both requests are complete.
@@ -291,36 +317,45 @@ ipcMain.on("ping-async", (event, message) => {
   //     // });
   //   // getter();
   // });
+  // await sleep(10000);
 
-  axios
+  // console.log("hello after sleep");
+  // await sleep(10000);
+  await axios
     .get(
       "https://www.pathofexile.com/character-window/get-stash-items?league=" +
-        message[2] +
+        league +
         "&accountName=" +
-        message[1] +
+        accountName +
         "&tabs=0&tabIndex=0",
       {
         headers: {
-          cookie: "POESESSID=" + message[0] //the token is a variable which holds the token
+          cookie: "POESESSID=" + sessionid //the token is a variable which holds the token
         }
       }
     )
-    .then(response => {
+    .then(async response => {
       // var finalObj = finalObj.concat(response); // should concat the data
-      // console.log(response.data);
+      console.log(response.headers);
       // message = response.data as RootObject;
+      let stashdatatemp = [];
       this.stashdata = response.data;
-
+      event.sender.send("ping-async-stash", [response]);
+      await sleep(10000);
       // get stash data
       let responseNumTabsTotal = response.data.numTabs;
-
+      // event.returnValue = [
+      //   ["Stash " + x],
+      //   ["Left! total-index= " + (stashurlsFull.length - x)]
+      // ];
+      event.returnValue = ["hi"];
       // let numTabsResponse =
       for (let x = 0; x < Number(responseNumTabsTotal); x++) {
         stashurlsFull.push(
           "https://www.pathofexile.com/character-window/get-stash-items?league=" +
-            message[2] +
+            league +
             "&accountName=" +
-            message[1] +
+            accountName +
             "&tabs=0&tabIndex=" +
             x
         );
@@ -341,18 +376,18 @@ ipcMain.on("ping-async", (event, message) => {
       // ## CHANGE HERE FOR RATE LIMIT
 
       // Currently just setting to 48 for testing.
-      for (let x = 0; x < stashtotaltoget; x++) {
-        // CHANGE HERE FOR RATE LIMIT
-        // ## CHANGE HERE FOR RATE LIMIT
-        // for (let x = 0; x < 5; x++) {
-        promisesurls.push(
-          axios.get(stashurlsFull[x], {
-            headers: {
-              cookie: "POESESSID=" + message[0] //the token is a variable which holds the token
-            }
-          })
-        );
-      }
+      // for (let x = 0; x < stashtotaltoget; x++) {
+      //   // CHANGE HERE FOR RATE LIMIT
+      //   // ## CHANGE HERE FOR RATE LIMIT
+      //   // for (let x = 0; x < 5; x++) {
+      //   promisesurls.push(
+      //     axios.get(stashurlsFull[x], {
+      //       headers: {
+      //         cookie: "POESESSID=" + sessionid //the token is a variable which holds the token
+      //       }
+      //     })
+      //   );
+      // }
 
       // event.sender.send(
       //   "ping-async",
@@ -360,30 +395,80 @@ ipcMain.on("ping-async", (event, message) => {
       //   this.poeNinjaResponseArray,
       //   this.fullstashdata
       // );
-      axios
-        .all(promisesurls)
-        .then(responseArr => {
-          //this will be executed only when all requests are complete
-          // console.log("Currency: ", responseArr[0].data);
-          this.fullstashdata = responseArr; // currency
-          // console.log(responseArr);
-          // console.log(responseArr[0].data)
-          // for (let x = 0; x < stashurlsFull.length; x++) {
-          //   console.log(this.fullstashdata[x].data);
-          // }
-          // this.poeNinjaResponseArray = [
-          //   responseArr[0].data,
-          // ]; //Changedd to .data
-          event.sender.send(
-            "ping-async",
-            this.stashdata,
-            this.poeNinjaResponseArray,
-            this.fullstashdata
-          );
-        })
-        .catch(e => {
-          console.log("Error: in stash responses", e.response.data);
-        });
+      // let stashdatawhy=[]
+      for (let x = 0; x < stashurlsFull.length; x++) {
+        await axios
+          .get(stashurlsFull[x], {
+            headers: {
+              cookie: "POESESSID=" + sessionid //the token is a variable which holds the token
+            }
+          })
+          .then(response => {
+            //this will be executed only when all requests are complete
+            // console.log("Currency: ", responseArr[0].data);
+            this.fullstashdata = response; // currency
+            // console.log(response.data);
+            stashdatatemp.push(response);
+            console.log(
+              response.headers["x-rate-limit-account"],
+              "x-rate-limit-account"
+            );
+            console.log(
+              response.headers["x-rate-limit-account-state"],
+              "x-rate-limit-account-state"
+            );
+            console.log("Stash " + x);
+            console.log("Left! total-index= " + (stashurlsFull.length - x));
+            event.sender.send("ping-async-stash", [
+              "Stash " + x,
+              "Left! total-index= " + (stashurlsFull.length - x)
+            ]);
+            event.sender.send("ping-async-stash", response);
+            // console.log(response);
+            // console.log(responseArr[0].data)
+            // for (let x = 0; x < stashurlsFull.length; x++) {
+            //   console.log(this.fullstashdata[x].data);
+            // }
+            // this.poeNinjaResponseArray = [
+            //   responseArr[0].data,
+            // ]; //Changedd to .data
+          })
+          .catch(e => {
+            console.log("Error: in stash responses", e.response.data);
+          });
+        // console.log(stashdatatemp);
+        await sleep(1350);
+      }
+      event.sender.send(
+        "ping-async",
+        this.stashdata,
+        this.poeNinjaResponseArray,
+        stashdatatemp
+      );
+      // axios
+      //   .all(promisesurls)
+      //   .then(responseArr => {
+      //     //this will be executed only when all requests are complete
+      //     // console.log("Currency: ", responseArr[0].data);
+      //     this.fullstashdata = responseArr; // currency
+      //     // console.log(responseArr);
+      //     // console.log(responseArr[0].data)
+      //     // for (let x = 0; x < stashurlsFull.length; x++) {
+      //     //   console.log(this.fullstashdata[x].data);
+      //     // }
+      //     // this.poeNinjaResponseArray = [
+      //     //   responseArr[0].data,
+      //     // ]; //Changedd to .data
+      //     event.sender.send(
+      //       "ping-async",
+      //       this.stashdata,
+      //       this.poeNinjaResponseArray,
+      //       this.fullstashdata
+      //     );
+      //   })
+      //   .catch(e => {
+      //     console.log("Error: in stash responses", e.response.data);
+      //   });
 
       // event.sender.send(
       //   "ping-async",
@@ -398,6 +483,23 @@ ipcMain.on("ping-async", (event, message) => {
       event.sender.send("ping-async", null, this.poeNinjaResponseArray, null);
     });
   // getter();
+  // let giantstasharray = [];
+  // if (this.fullstashdata) {
+  //   for (let x = 0; x < this.fullstashdata; x++) {
+  //     // console.log(resp3[x].data.items);
+  //     if (this.fullstashdata[x].data.items) {
+  //       giantstasharray.push(this.fullstashdata[x].data.items);
+  //     }
+  //   }
+  // }
+
+  // let bigarrayconcat = [].concat(giantstasharray);
+  // let biggestitemarrayever = [];
+  // for (var i = 0; i < bigarrayconcat.length; ++i) {
+  //   for (var j = 0; j < bigarrayconcat[i].length; ++j)
+  //     biggestitemarrayever.push(bigarrayconcat[i][j]);
+  // }
+  // this.fullstashdata = biggestitemarrayever;
 });
 const axios = require("axios").default;
 
@@ -488,4 +590,9 @@ try {
 } catch (e) {
   // Catch Error
   // throw e;
+}
+function sleep(ms) {
+  console.log("Time: " + new Date());
+  console.log("waiting : ", ms, "Seconds");
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
