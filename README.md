@@ -31,7 +31,7 @@ Log in with your account.
 
 ### 4. INPUT
 
-Enter the SessionID to the Procurement.
+Enter the POESESSID into Zombpoe
 
 ---
 
