@@ -4,6 +4,7 @@ import "../polyfills";
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
+import { MatTableExporterModule } from "mat-table-exporter";
 import {
   HttpClientModule,
   HttpClient,
@@ -139,6 +140,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatFormFieldModule,
     MatInputModule,
     NgbModule,
+    MatTableExporterModule,
     // HttpXhrBackend,
     // HttpClientXsrfModule.withOptions({
     //   cookieName: "POESESSID"

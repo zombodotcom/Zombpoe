@@ -7,6 +7,7 @@ import {
   ChangeDetectorRef
 } from "@angular/core";
 import { PoeninjaapiService, CharacterData } from "../poeninjaapi.service";
+import {MatProgressBarModule} from '@angular/material'
 import { DataSource } from "@angular/cdk/table";
 import { Sort, MatSort } from "@angular/material/sort";
 import { NgForm, FormBuilder } from "@angular/forms";
@@ -174,6 +175,8 @@ interface Colour {
 })
 export class DisplaylistComponent implements OnInit {
   displayedColumnstester: string[];
+  public progressdownload=0;
+  public progressleft;
   currencyDataResponse;
   fragmentsDataResponse;
   oilsDataResponse;
@@ -256,12 +259,23 @@ export class DisplaylistComponent implements OnInit {
   itemsearchtest = new FormGroup({
     itemsearchstring: new FormControl("Enter Item", Validators.maxLength(100))
   });
+  // leagues: string[] = [
+  //   "Standard",
+  //   "Hardcore",
+  //   "SSF Standard",
+  //   "SSF Hardcore",
+  //   "Hardcore Blight",
+  //   "SSF Blight",
+  //   "SSF Blight HC"
+  // ];
+  default: string = "Blight";
   userForm = new FormGroup({
     POESESSID: new FormControl("***Replace***", Validators.maxLength(32)),
     accountName: new FormControl("qqazraelz", Validators.required),
-    characterName: new FormControl("ZomboTD", Validators.maxLength(20)),
-    league: new FormControl("Blight", Validators.maxLength(20)),
-    worthCutoff: new FormControl("none", Validators.maxLength(20))
+    characterName: new FormControl("Not Used Yet", Validators.maxLength(25)),
+    league: new FormControl("Blight")
+    // league2: new FormControl("Blight")
+    // worthCutoff: new FormControl("none", Validators.maxLength(20))
   });
   accform = new FormControl(20, Validators.required);
   characterform = new FormControl();
@@ -738,13 +752,25 @@ export class DisplaylistComponent implements OnInit {
               this.giantpoeninjaarray[i].explicitModifiers
             ) {
               if (item.explicitMods.indexOf("Has 1 Abyssal Socket") !== -1) {
-                console.log("has1");
+                console.log("Has 1 Abyssal Socket");
 
                 continue;
               }
               if (item.explicitMods.indexOf("Has 2 Abyssal Socket") !== -1) {
                 // continue;
-                console.log("has 2");
+                if (
+                  this.giantpoeninjaarray[i].explicitModifiers.indexOf(
+                    "Has 2 Abyssal Socket"
+                  ) !== -1
+                ) {
+                  console.log("Has 2 Abyssal Socket inside both! Pricing?");
+                  return this.giantpoeninjaarray[i].chaosValue
+                    ? this.giantpoeninjaarray[i].chaosValue
+                    : this.giantpoeninjaarray[i].chaosEquivalent;
+                }
+                console.log(
+                  "Has 2 Abyssal Socket this item might be worth something"
+                );
               }
             }
             return this.giantpoeninjaarray[i].chaosValue
@@ -937,7 +963,11 @@ export class DisplaylistComponent implements OnInit {
     }
     this._electronService.ipcRenderer.on("ping-async-stash", (event, resp) => {
       console.log(resp);
+    
     });
+    //Update the progress bar
+    
+    
 
     this._electronService.ipcRenderer.on(
       "ping-async",
@@ -1089,7 +1119,7 @@ export class DisplaylistComponent implements OnInit {
 
         let stashdatasourceitems = resp.items;
         this.stashdatasource = new MatTableDataSource(resp);
-        this.stashItems2 = new MatTableDataSource(stashdatasourceitems);
+        // this.stashItems2 = new MatTableDataSource(stashdatasourceitems);
         this.arrayOfKeys = Object.keys(this.stashdatarequest);
         this.stashitemOBJ = Object;
         this.stashitemOBJ = this.stashdatarequest;
@@ -1172,9 +1202,9 @@ export class DisplaylistComponent implements OnInit {
       // console.log(resp2[0].lines, "Currency?");
       console.log(this.stashdatarequest, "stashData Request");
 
-      let stashdatasourceitems = resp.items;
+      // let stashdatasourceitems = resp.items;
       this.stashdatasource = new MatTableDataSource(resp);
-      this.stashItems2 = new MatTableDataSource(stashdatasourceitems);
+      // this.stashItems2 = new MatTableDataSource(stashdatasourceitems);
 
       this.refresh(); // makes the display look for changes aka our new data
     });
@@ -1202,6 +1232,13 @@ export class DisplaylistComponent implements OnInit {
     console.log(this.POESESSID.value);
     console.log(this.accountName.value);
   }
+//   stashprogressget(){
+//     return this.progressdownload;
+// }
+
+// stashprogressset(resp){
+//     this.progressdownload = !isNaN(Math.round((resp[0] / resp[1]) * 100))?Math.round((resp[0] / resp[1]) * 100):0;
+// }
 
   ngOnInit() {
     // this.forceRefresh(); // run the button
@@ -1209,9 +1246,22 @@ export class DisplaylistComponent implements OnInit {
     console.log("Before");
 
     let derplist;
-
+this._electronService.ipcRenderer.on("ping-async-stashprogressbar", (event, resp) => {
+      // console.log(resp,"ping-async-stashprogressbar");
+      // stashprogressset(resp);
+      // stashprogressget();
+      // let buffer=!isNaN(Math.round((resp[0] / resp[1]) * 100))?Math.round((resp[0] / resp[1]) * 100):0
+      // buffer=100-buffer
+      setTimeout(() => { this.progressdownload =!isNaN(Math.round((resp[0] / resp[1]) * 100))?Math.round((resp[0] / resp[1]) * 100):0;} , 100);
+      // setTimeout(() => { this.progressdownload =!isNaN((Math.round((resp[0] / resp[1]) * 100))?Math.round((resp[0] / resp[1]) * 100):0); }, 100);
+      
+          this.changeDetectorRefs.detectChanges();
+    });
     ///end of on init
     this.refresh();
+ 
+    console.log(this.userForm.get("league").value);
+    
   }
 
   refresh() {

@@ -235,6 +235,7 @@ ipcMain.on("only-character-data", async (event, message) => {
               "Left! total-index= " + (stashurlsFull.length - x)
             ]);
             event.sender.send("ping-async-stash", response);
+            event.sender.send("ping-async-stashprogressbar",[ x, stashurlsFull.length]);
             // console.log(response);
             // console.log(responseArr[0].data)
             // for (let x = 0; x < stashurlsFull.length; x++) {
@@ -246,6 +247,10 @@ ipcMain.on("only-character-data", async (event, message) => {
           })
           .catch(e => {
             console.log("Error: in stash responses", e.response.data);
+            event.sender.send("ping-async-stash", [
+              e.response.data,
+              "error in stash responses"
+            ]);
           });
         // console.log(stashdatatemp);
         await sleep(1350);
@@ -287,6 +292,7 @@ ipcMain.on("only-character-data", async (event, message) => {
     .catch(e => {
       console.log("Error: ", e.response.data);
       console.log("pathofexile.com Probably Down....");
+      event.sender.send("ping-async-stash", e.response.data);
       event.sender.send("ping-async", this.stashdata, null, stashdatatemp2);
     });
   // getter();
@@ -309,6 +315,9 @@ ipcMain.on("only-character-data", async (event, message) => {
   // this.fullstashdata = biggestitemarrayever;
 });
 
+
+
+
 // force refresh are and others
 ipcMain.on("ping-async", async (event, message) => {
   console.log("hello");
@@ -317,7 +326,7 @@ ipcMain.on("ping-async", async (event, message) => {
   let league = message[2].split(" ").join("+");
   // let currencyCutoff = message[3];
   event.sender.send("ping-async-stash", [
-    "got poeninja data, starting stash",
+    "Starting",
     accountName,
     league
     // currencyCutoff
@@ -361,11 +370,13 @@ ipcMain.on("ping-async", async (event, message) => {
   // https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=qqazraelz&tabs=0
   // {"numTabs":39}
   let baseURL =
-    "https://poe.ninja/api/data/ItemOverview?league=" + message[2] + "&type=";
+    "https://poe.ninja/api/data/ItemOverview?league=" +
+    encodeURI(message[2]) +
+    "&type=";
   let urlendings: string[] = [
     "Currency", // currency has currencyoveriew and Itemoveriew updated
     "https://poe.ninja/api/data/currencyoverview?league=" +
-      message[2] +
+      encodeURI(message[2]) +
       "&type=Fragment", //currency is different url
     "Oil",
     "Fossil",
@@ -399,7 +410,12 @@ ipcMain.on("ping-async", async (event, message) => {
   let incubatorDataResponse;
   let essenceDataResponse;
   let stashdata;
-
+  event.sender.send("ping-async-stash", [
+    "getting poeninja data,",
+    accountName,
+    encodeURI(message[2])
+    // currencyCutoff
+  ]);
   await axios
     .all([
       axios.get(baseURL + urlendings[0]), //Currency
@@ -474,6 +490,10 @@ ipcMain.on("ping-async", async (event, message) => {
     })
     .catch(e => {
       console.log("Error:  POE NINJA GET ERROR", e.response.data);
+      event.sender.send("ping-async-stash", [
+        e.response.data,
+        "error in poeninja data"
+      ]);
     });
   event.sender.send(
     "ping-async-stash",
@@ -561,6 +581,7 @@ ipcMain.on("ping-async", async (event, message) => {
         response,
         "got stash data" + "tab count " + Number(response.data.numTabs)
       ]);
+      event.sender.send("ping-async-stashprogressbar",[ 0, stashurlsFull.length]);
       await sleep(10000);
       // get stash data
       let responseNumTabsTotal = response.data.numTabs;
@@ -644,6 +665,7 @@ ipcMain.on("ping-async", async (event, message) => {
               "Left! total-index= " + (stashurlsFull.length - x)
             ]);
             event.sender.send("ping-async-stash", response);
+            event.sender.send("ping-async-stashprogressbar",[ x, stashurlsFull.length]);
             // console.log(response);
             // console.log(responseArr[0].data)
             // for (let x = 0; x < stashurlsFull.length; x++) {
@@ -655,10 +677,15 @@ ipcMain.on("ping-async", async (event, message) => {
           })
           .catch(e => {
             console.log("Error: in stash responses", e.response.data);
+            event.sender.send("ping-async-stash", [
+              e.response.data,
+              "error in stash response"
+            ]);
           });
         // console.log(stashdatatemp);
         await sleep(1350);
       }
+      event.sender.send("ping-async-stashprogressbar",[ stashurlsFull.length, stashurlsFull.length]);
       event.sender.send(
         "ping-async",
         this.stashdata,
@@ -700,6 +727,10 @@ ipcMain.on("ping-async", async (event, message) => {
     .catch(e => {
       console.log("Error: ", e.response.data);
       console.log("pathofexile.com Probably Down....");
+      event.sender.send("ping-async-stash", [
+        e.response.data,
+        "error PoE might be down?"
+      ]);
       event.sender.send("ping-async", null, this.poeNinjaResponseArray, null);
     });
   // getter();
