@@ -1271,7 +1271,7 @@ export class DisplaylistComponent implements OnInit {
         this.networtharray = JSON.parse(localStorage.getItem("networtharray"));
 
         if (this.networtharray == null) {
-          this.networtharray = [{ data: [this.networth], label: Date() }];
+          this.networtharray = [{ data: [this.networth], label: "net Worth" }];
         } else {
           this.networtharray[0].data.push(this.networth);
           // this.networtharray[0].label.push(Date());
@@ -1280,9 +1280,9 @@ export class DisplaylistComponent implements OnInit {
           localStorage.getItem("networthlabels")
         );
         if (this.networthlabels == null) {
-          this.networthlabels = [this.networth];
+          this.networthlabels = [[this.networth]];
         } else {
-          this.networthlabels.push(this.networth);
+          this.networthlabels.push([this.networth]);
         }
 
         // this.lineChartLabels = [""];
@@ -1314,6 +1314,10 @@ export class DisplaylistComponent implements OnInit {
           "bigstasharray",
           JSON.stringify(this.fullstashdataBigBoiArray)
         );
+        //   localStorage.setItem(
+        //   "biggestpoeninjarrayever",
+        //     JSON.stringify(biggestpoeninjarrayever)
+        // );
         // localStorage.setItem(
         //   "stashpaginator",
         //   JSON.stringify(this.paginatorstash)
