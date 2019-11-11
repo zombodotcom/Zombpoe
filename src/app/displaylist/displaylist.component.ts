@@ -6,8 +6,11 @@ import {
   ViewChild,
   ChangeDetectorRef
 } from "@angular/core";
+import { ChartDataSets, ChartOptions } from "chart.js";
+import { Color, Label } from "ng2-charts";
+import { BaseChartDirective } from "ng2-charts/ng2-charts";
 import { PoeninjaapiService, CharacterData } from "../poeninjaapi.service";
-import {MatProgressBarModule} from '@angular/material'
+import { MatProgressBarModule } from "@angular/material";
 import { DataSource } from "@angular/cdk/table";
 import { Sort, MatSort } from "@angular/material/sort";
 import { NgForm, FormBuilder } from "@angular/forms";
@@ -174,15 +177,43 @@ interface Colour {
   styleUrls: ["./displaylist.component.scss"]
 })
 export class DisplaylistComponent implements OnInit {
+  lineChartData: ChartDataSets[] = JSON.parse(
+    localStorage.getItem("networtharray")
+  );
+
+  lineChartLabels: Label[] = [
+    JSON.parse(localStorage.getItem("networthlabels"))
+  ];
+
+  lineChartOptions = {
+    responsive: true
+  };
+
+  lineChartColors: Color[] = [
+    {
+      borderColor: "rgba(255,99,132,1)",
+      backgroundColor: "rgba(255,99,132,0.2)",
+      hoverBackgroundColor: "rgba(255,99,132,0.4)",
+      hoverBorderColor: "rgba(255,99,132,1)"
+    }
+  ];
+
+  lineChartLegend = true;
+  lineChartPlugins = [];
+  lineChartType = "line";
+
   displayedColumnstester: string[];
-  public progressdownload=0;
-  public progressleft;
+  public progressdownload = 0;
+  public progressleft = 99;
   currencyDataResponse;
   fragmentsDataResponse;
   oilsDataResponse;
   fossilsDataResponse;
   scarabsDataResponse;
   divsDataResponse;
+  chartArray;
+  networtharray = [];
+  networthlabels = [];
   resonatorsDataResponse;
   propheciesDataResponse;
   uniqueweaponsDataResponse;
@@ -228,7 +259,7 @@ export class DisplaylistComponent implements OnInit {
   uniqueflaskDataResponseTableSource = new MatTableDataSource(); //flask
   essenceDataResponseTableSource = new MatTableDataSource(); //essence
   incubatorDataResponseTableSource = new MatTableDataSource(); //essence
-  fullstashDataResponseSource = new MatTableDataSource();
+  fullstashDataResponseSource = new MatTableDataSource(); //stash
   currenttablesource = new MatTableDataSource(); // storage for filter test
   // public itemlist:any;
   sortedData: PoeNinjaItemData[];
@@ -270,7 +301,12 @@ export class DisplaylistComponent implements OnInit {
   // ];
   default: string = "Blight";
   userForm = new FormGroup({
-    POESESSID: new FormControl("***Replace***", Validators.maxLength(32)),
+    POESESSID: new FormControl(
+      localStorage.getItem("POESESSID") != null
+        ? localStorage.getItem("POESESSID")
+        : "***REPLACE***",
+      Validators.maxLength(32)
+    ),
     accountName: new FormControl("qqazraelz", Validators.required),
     characterName: new FormControl("Not Used Yet", Validators.maxLength(25)),
     league: new FormControl("Blight")
@@ -951,6 +987,27 @@ export class DisplaylistComponent implements OnInit {
     // console.log(this.currenttablesource);
   }
 
+  clearLocalStorage() {
+    console.log("clearing LocalStorage");
+    try {
+      localStorage.clear();
+      console.log("LocalStorage cleared");
+    } catch (err) {
+      console.log("couldnt clear? error:", err);
+    }
+  }
+  onloaddatabutton() {
+    if (JSON.parse(localStorage.getItem("bigstasharray"))) {
+      this.fullstashDataResponseSource = new MatTableDataSource(
+        JSON.parse(localStorage.getItem("bigstasharray"))
+          ? JSON.parse(localStorage.getItem("bigstasharray"))
+          : null
+      );
+      this.fullstashDataResponseSource.paginator = this.paginatorstash;
+      this.fullstashDataResponseSource.sort = this.sortstash;
+    }
+    this.changeDetectorRefs.detectChanges();
+  }
   forceRefresh() {
     console.log("Play");
 
@@ -963,174 +1020,13 @@ export class DisplaylistComponent implements OnInit {
     }
     this._electronService.ipcRenderer.on("ping-async-stash", (event, resp) => {
       console.log(resp);
-    
     });
     //Update the progress bar
-    
-    
-
-    this._electronService.ipcRenderer.on(
-      "ping-async",
-      (event, resp, resp2, resp3) => {
-        // prints "pong"
-        console.log(resp);
-        console.log(resp2, "resp2");
-        console.log(resp3, "resp3");
-        let bigboyarray2 = [];
-        if (resp3) {
-          for (let x = 0; x < resp3.length; x++) {
-            // console.log(resp3[x].data.items);
-            if (resp3[x].data.items) {
-              bigboyarray2.push(resp3[x].data.items);
-            }
-          }
-        }
-
-        let bigarrayconcat = [].concat(bigboyarray2);
-        let biggestitemarrayever = [];
-        for (var i = 0; i < bigarrayconcat.length; ++i) {
-          for (var j = 0; j < bigarrayconcat[i].length; ++j)
-            biggestitemarrayever.push(bigarrayconcat[i][j]);
-        }
-        this.fullstashdataBigBoiArray = biggestitemarrayever;
-
-        let poefullarray = [];
-        for (let x = 0; x < resp2.length; x++) {
-          // console.log(resp2[x].lines);
-          if (resp2[x].lines) {
-            poefullarray.push(resp2[x].lines);
-          }
-        }
-        console.log(poefullarray, "FullArray");
-        let bigconcatpoefullarray = [].concat(poefullarray);
-        let biggestpoeninjarrayever = [];
-        for (var i = 0; i < bigconcatpoefullarray.length; ++i) {
-          for (var j = 0; j < bigconcatpoefullarray[i].length; ++j)
-            biggestpoeninjarrayever.push(bigconcatpoefullarray[i][j]);
-        }
-
-        this.giantpoeninjaarray = biggestpoeninjarrayever;
-
-        console.log(biggestpoeninjarrayever, "biggestpoeninjarrayever");
-        console.log(this.fullstashdataBigBoiArray, "Big Boi");
-        for (let x = 0; x < this.fullstashdataBigBoiArray.length; x++) {
-          // console.log(this.fullstashdataBigBoiArray[x], "before push");
-          let worthpush = this.worthfinder2(this.fullstashdataBigBoiArray[x]);
-          // if (this.userForm.get("worthCutoff").value == "none") {
-          //   this.fullstashdataBigBoiArray[x].worth = worthpush
-          // }
-          this.fullstashdataBigBoiArray[x].worth = worthpush;
-          // if (this.userForm.get("worthCutoff").value > worthpush) {
-          //   delete this.fullstashdataBigBoiArray[x]
-          // }
-
-          this.networth += Number(
-            parseFloat(
-              this.fullstashdataBigBoiArray[x].worth.toString()
-            ).toFixed(3)
-          );
-          // console.log(this.fullstashdataBigBoiArray[x], "afterpush");
-        }
-
-        this.fullstashDataResponseSource = new MatTableDataSource(
-          this.fullstashdataBigBoiArray
-        );
-
-        this.fullstashDataResponseSource.paginator = this.paginatorstash;
-        this.fullstashDataResponseSource.sort = this.sortstash;
-        this.stashdatarequest = resp;
-        this.currencyDataResponse = resp2[0].data; // currency
-        this.fragmentsDataResponse = resp2[1].data; //frag
-        this.oilsDataResponse = resp2[2].data; //oils
-        this.fossilsDataResponse = resp2[3].data; //fossil
-        this.resonatorsDataResponse = resp2[4].data; //reso
-        this.scarabsDataResponse = resp2[5].data; //scarab
-        this.essenceDataResponse = resp2[6].data; //essence
-        this.divsDataResponse = resp2[7].data; //divs
-        this.propheciesDataResponse = resp2[8].data; //prop]
-        this.uniquejewelDataResponse = resp2[9].data; //jewels
-        this.uniqueweaponsDataResponse = resp2[10].data; //wapons
-        this.uniquearmoursDataResponse = resp2[11].data; //armor
-        this.uniqueaccessoriesDataResponse = resp2[12].data; //access
-        this.uniqueflaskDataResponse = resp2[13].data; //flask
-        this.uniqueflaskDataResponse = resp2[14].data; //incubator
-
-        this.fullPoeNinjaResponseTableSourceCurrency = new MatTableDataSource(
-          resp2[0].lines
-        ); // currency
-        this.fragmentsDataResponseTableSource = new MatTableDataSource(
-          resp2[1].lines
-        ); //frag
-        this.oilsDataResponseTableSource = new MatTableDataSource(
-          resp2[2].lines
-        ); //oils
-        this.fullPoeNinjaResponseTableSourceFossil = new MatTableDataSource(
-          resp2[3].lines
-        ); // fossils
-        this.resonatorsDataResponseTableSource = new MatTableDataSource(
-          resp2[4].lines
-        ); //reso
-        this.scarabsDataResponseTableSource = new MatTableDataSource(
-          resp2[5].lines
-        ); //scarab
-        this.essenceDataResponseTableSource = new MatTableDataSource(
-          resp2[6].lines
-        ); //essence
-        this.divsDataResponseTableSource = new MatTableDataSource(
-          resp2[7].lines
-        ); //divs
-        this.propheciesDataResponseTableSource = new MatTableDataSource(
-          resp2[8].lines
-        ); //prop
-        this.uniquejewelDataResponseTableSource = new MatTableDataSource(
-          resp2[9].lines
-        ); //jewels
-        this.uniqueweaponsDataResponseTableSource = new MatTableDataSource(
-          resp2[10].lines
-        ); //wapons
-        this.uniquearmoursDataResponseTableSource = new MatTableDataSource(
-          resp2[11].lines
-        ); //armor
-        this.uniqueaccessoriesDataResponseTableSource = new MatTableDataSource(
-          resp2[12].lines
-        ); //access
-        this.uniqueflaskDataResponseTableSource = new MatTableDataSource(
-          resp2[13].lines
-        ); //flask
-        this.incubatorDataResponseTableSource = new MatTableDataSource(
-          resp2[14].lines
-        ); //flask
-
-        // console.log(resp2[3], "fossil Response");
-        this.fullPoeNinjaResponse = resp2;
-        this.fullPoeNinjaResponseTableSource = new MatTableDataSource(resp2);
-
-        // this.itemheadersTest2 = Object.keys(resp2[3].lines[0]); // get all headers
-        // console.log(this.itemheadersTest2);
-        // for (let entry of this.stashdatarequest) {
-        //   console.log(entry, "items");
-        // }
-        // console.log(resp2[0].lines, "Currency?");
-        console.log(this.stashdatarequest, "stashData Request");
-        // this.derpcolums = Object.keys(resp[3].data);
-        // console.log(this.derpcolums);
-        // console.log(resp2);
-        console.log(this.fullPoeNinjaResponse, "Full Response");
-
-        let stashdatasourceitems = resp.items;
-        this.stashdatasource = new MatTableDataSource(resp);
-        // this.stashItems2 = new MatTableDataSource(stashdatasourceitems);
-        this.arrayOfKeys = Object.keys(this.stashdatarequest);
-        this.stashitemOBJ = Object;
-        this.stashitemOBJ = this.stashdatarequest;
-        this.refresh(); // makes the display look for changes aka our new data
-      }
-    );
 
     let localstorageAccountData = JSON.parse(
       localStorage.getItem("AccountData")
     );
-
+    localStorage.setItem("POESESSID", this.userForm.get("POESESSID").value);
     this._electronService.ipcRenderer.send("ping-async", [
       // localStorage.length > 0
       //   ? localstorageAccountData.POESESSID
@@ -1232,40 +1128,298 @@ export class DisplaylistComponent implements OnInit {
     console.log(this.POESESSID.value);
     console.log(this.accountName.value);
   }
-//   stashprogressget(){
-//     return this.progressdownload;
-// }
+  //   stashprogressget(){
+  //     return this.progressdownload;
+  // }
 
-// stashprogressset(resp){
-//     this.progressdownload = !isNaN(Math.round((resp[0] / resp[1]) * 100))?Math.round((resp[0] / resp[1]) * 100):0;
-// }
+  // stashprogressset(resp){
+  //     this.progressdownload = !isNaN(Math.round((resp[0] / resp[1]) * 100))?Math.round((resp[0] / resp[1]) * 100):0;
+  // }
 
   ngOnInit() {
+    // var storedLabels = JSON.parse(localStorage.getItem("networthlabels"));
+    // for (let i = storedLabels; i >= 0; i--) {
+    //   this.lineChartLabels.push(storedLabels[i]);
+    // }
+    // console.log(storedLabels);
+    // this.fullJSON.parse(localStorage.getItem("bigstasharray"));
+
+    let storedNetworth = JSON.parse(localStorage.getItem("networtharray"));
+    let storedLabels = JSON.parse(localStorage.getItem("networthlabels"));
+    console.log(storedNetworth, "networtharray");
+    console.log(storedLabels, "networthlabels");
+    this.networtharray = storedNetworth;
+    this.networthlabels = storedLabels;
+    // console.log(this.chartArray);
+    this.pingresponsesetter();
     // this.forceRefresh(); // run the button
+    // let testersss = [0, 10, 20, 30, 40, 50, 60, 70, 80];
+    // localStorage.setItem("tester", JSON.stringify(testersss));
 
-    console.log("Before");
+    // console.log("Before");
+    // console.log(
+    //   JSON.parse(localStorage.getItem("networtharray")),
+    //   "stored net worth"
+    // );
+    // console.log(
+    //   JSON.parse(localStorage.getItem("networthlabels")),
+    //   "stored net worth labels"
+    // );
 
+    // console.log(storedNetworth);
     let derplist;
-this._electronService.ipcRenderer.on("ping-async-stashprogressbar", (event, resp) => {
-      // console.log(resp,"ping-async-stashprogressbar");
-      // stashprogressset(resp);
-      // stashprogressget();
-      // let buffer=!isNaN(Math.round((resp[0] / resp[1]) * 100))?Math.round((resp[0] / resp[1]) * 100):0
-      // buffer=100-buffer
-      setTimeout(() => { this.progressdownload =!isNaN(Math.round((resp[0] / resp[1]) * 100))?Math.round((resp[0] / resp[1]) * 100):0;} , 100);
-      // setTimeout(() => { this.progressdownload =!isNaN((Math.round((resp[0] / resp[1]) * 100))?Math.round((resp[0] / resp[1]) * 100):0); }, 100);
-      
-          this.changeDetectorRefs.detectChanges();
-    });
+    this._electronService.ipcRenderer.on(
+      "ping-async-stashprogressbar",
+      (event, resp) => {
+        // console.log(resp,"ping-async-stashprogressbar");
+        // stashprogressset(resp);
+        // stashprogressget();
+        // let buffer = !isNaN(Math.round((resp[0] / resp[1]) * 100))
+        //   ? Math.round((resp[0] / resp[1]) * 100)
+        //   : 100;
+        // buffer = 100 - buffer;
+        // console.log(buffer);
+        setTimeout(() => {
+          this.progressdownload = !isNaN(Math.round((resp[0] / resp[1]) * 100))
+            ? Math.round((resp[0] / resp[1]) * 100)
+            : 0;
+          // this.progressleft = 99;
+        }, 100);
+        // setTimeout(() => { this.progressdownload =!isNaN((Math.round((resp[0] / resp[1]) * 100))?Math.round((resp[0] / resp[1]) * 100):0); }, 100);
+
+        this.changeDetectorRefs.detectChanges();
+      }
+    );
     ///end of on init
     this.refresh();
- 
+
     console.log(this.userForm.get("league").value);
-    
+    // this.changeDetectorRefs.detectChanges();
+    this.onloaddatabutton(); // loads the old stash data
   }
 
   refresh() {
     this.changeDetectorRefs.detectChanges();
+  }
+
+  pingresponsesetter() {
+    this._electronService.ipcRenderer.on(
+      "ping-async",
+      (event, resp, resp2, resp3) => {
+        // prints "pong"
+        console.log(resp);
+        console.log(resp2, "resp2");
+        console.log(resp3, "resp3");
+        let bigboyarray2 = [];
+        if (resp3) {
+          for (let x = 0; x < resp3.length; x++) {
+            // console.log(resp3[x].data.items);
+            if (resp3[x].data.items) {
+              bigboyarray2.push(resp3[x].data.items);
+            }
+          }
+        }
+
+        let bigarrayconcat = [].concat(bigboyarray2);
+        let biggestitemarrayever = [];
+        for (var i = 0; i < bigarrayconcat.length; ++i) {
+          for (var j = 0; j < bigarrayconcat[i].length; ++j)
+            biggestitemarrayever.push(bigarrayconcat[i][j]);
+        }
+        this.fullstashdataBigBoiArray = biggestitemarrayever;
+
+        let poefullarray = [];
+        for (let x = 0; x < resp2.length; x++) {
+          // console.log(resp2[x].lines);
+          if (resp2[x].lines) {
+            poefullarray.push(resp2[x].lines);
+          }
+        }
+        console.log(poefullarray, "FullArray");
+        let bigconcatpoefullarray = [].concat(poefullarray);
+        let biggestpoeninjarrayever = [];
+        for (var i = 0; i < bigconcatpoefullarray.length; ++i) {
+          for (var j = 0; j < bigconcatpoefullarray[i].length; ++j)
+            biggestpoeninjarrayever.push(bigconcatpoefullarray[i][j]);
+        }
+
+        this.giantpoeninjaarray = biggestpoeninjarrayever;
+
+        console.log(biggestpoeninjarrayever, "biggestpoeninjarrayever");
+        console.log(this.fullstashdataBigBoiArray, "Big Boi");
+        this.networth = 0;
+        for (let x = 0; x < this.fullstashdataBigBoiArray.length; x++) {
+          // console.log(this.fullstashdataBigBoiArray[x], "before push");
+          let worthpush = this.worthfinder2(this.fullstashdataBigBoiArray[x]);
+          // if (this.userForm.get("worthCutoff").value == "none") {
+          //   this.fullstashdataBigBoiArray[x].worth = worthpush
+          // }
+          this.fullstashdataBigBoiArray[x].worth = worthpush;
+          // if (this.userForm.get("worthCutoff").value > worthpush) {
+          //   delete this.fullstashdataBigBoiArray[x]
+          // }
+
+          this.networth += Number(
+            parseFloat(
+              this.fullstashdataBigBoiArray[x].worth.toString()
+            ).toFixed(3)
+          );
+
+          // console.log(this.fullstashdataBigBoiArray[x], "afterpush");
+        }
+        // let testersss = [0, 10, 20, 30, 40, 50, 60, 70, 80];
+        this.networtharray = JSON.parse(localStorage.getItem("networtharray"));
+
+        if (this.networtharray == null) {
+          this.networtharray = [{ data: [this.networth], label: Date() }];
+        } else {
+          this.networtharray[0].data.push(this.networth);
+          // this.networtharray[0].label.push(Date());
+        }
+        this.networthlabels = JSON.parse(
+          localStorage.getItem("networthlabels")
+        );
+        if (this.networthlabels == null) {
+          this.networthlabels = [this.networth];
+        } else {
+          this.networthlabels.push(this.networth);
+        }
+
+        // this.lineChartLabels = [""];
+
+        // for (let i = 0; i < this.networtharray[0].label.length; i++) {
+        //   this.lineChartLabels.push(this.networtharray[i].label);
+        // }
+        localStorage.setItem(
+          "networtharray",
+          JSON.stringify(this.networtharray)
+        );
+        localStorage.setItem(
+          "networthlabels",
+          JSON.stringify(this.networthlabels)
+        );
+        let storedNetworth = JSON.parse(localStorage.getItem("networtharray"));
+        let storedLabels = JSON.parse(localStorage.getItem("networthlabels"));
+        console.log(storedNetworth, "networtharray");
+        console.log(storedLabels, "networthlabels");
+        // this.networtharray = storedNetworth;
+        // this.networthlabels = storedLabels;
+
+        this.fullstashDataResponseSource = new MatTableDataSource(
+          this.fullstashdataBigBoiArray
+        );
+        this.fullstashDataResponseSource.paginator = this.paginatorstash;
+        this.fullstashDataResponseSource.sort = this.sortstash;
+        localStorage.setItem(
+          "bigstasharray",
+          JSON.stringify(this.fullstashdataBigBoiArray)
+        );
+        // localStorage.setItem(
+        //   "stashpaginator",
+        //   JSON.stringify(this.paginatorstash)
+        // );
+        // localStorage.setItem(
+        //   "stashsort",
+        //   JSON.stringify(this.sortstash)
+        // );
+        // localStorage.setItem(
+        //   "stashtablesource",
+        //   JSON.stringify(this.fullstashDataResponseSource)
+        // );
+        this.stashdatarequest = resp;
+        this.currencyDataResponse = resp2[0].data; // currency
+        this.fragmentsDataResponse = resp2[1].data; //frag
+        this.oilsDataResponse = resp2[2].data; //oils
+        this.fossilsDataResponse = resp2[3].data; //fossil
+        this.resonatorsDataResponse = resp2[4].data; //reso
+        this.scarabsDataResponse = resp2[5].data; //scarab
+        this.essenceDataResponse = resp2[6].data; //essence
+        this.divsDataResponse = resp2[7].data; //divs
+        this.propheciesDataResponse = resp2[8].data; //prop]
+        this.uniquejewelDataResponse = resp2[9].data; //jewels
+        this.uniqueweaponsDataResponse = resp2[10].data; //wapons
+        this.uniquearmoursDataResponse = resp2[11].data; //armor
+        this.uniqueaccessoriesDataResponse = resp2[12].data; //access
+        this.uniqueflaskDataResponse = resp2[13].data; //flask
+        this.uniqueflaskDataResponse = resp2[14].data; //incubator
+
+        this.fullPoeNinjaResponseTableSourceCurrency = new MatTableDataSource(
+          resp2[0].lines
+        ); // currency
+        this.fragmentsDataResponseTableSource = new MatTableDataSource(
+          resp2[1].lines
+        ); //frag
+        this.oilsDataResponseTableSource = new MatTableDataSource(
+          resp2[2].lines
+        ); //oils
+        this.fullPoeNinjaResponseTableSourceFossil = new MatTableDataSource(
+          resp2[3].lines
+        ); // fossils
+        this.resonatorsDataResponseTableSource = new MatTableDataSource(
+          resp2[4].lines
+        ); //reso
+        this.scarabsDataResponseTableSource = new MatTableDataSource(
+          resp2[5].lines
+        ); //scarab
+        this.essenceDataResponseTableSource = new MatTableDataSource(
+          resp2[6].lines
+        ); //essence
+        this.divsDataResponseTableSource = new MatTableDataSource(
+          resp2[7].lines
+        ); //divs
+        this.propheciesDataResponseTableSource = new MatTableDataSource(
+          resp2[8].lines
+        ); //prop
+        this.uniquejewelDataResponseTableSource = new MatTableDataSource(
+          resp2[9].lines
+        ); //jewels
+        this.uniqueweaponsDataResponseTableSource = new MatTableDataSource(
+          resp2[10].lines
+        ); //wapons
+        this.uniquearmoursDataResponseTableSource = new MatTableDataSource(
+          resp2[11].lines
+        ); //armor
+        this.uniqueaccessoriesDataResponseTableSource = new MatTableDataSource(
+          resp2[12].lines
+        ); //access
+        this.uniqueflaskDataResponseTableSource = new MatTableDataSource(
+          resp2[13].lines
+        ); //flask
+        this.incubatorDataResponseTableSource = new MatTableDataSource(
+          resp2[14].lines
+        ); //flask
+
+        // console.log(resp2[3], "fossil Response");
+        this.fullPoeNinjaResponse = resp2;
+        this.fullPoeNinjaResponseTableSource = new MatTableDataSource(resp2);
+
+        // this.itemheadersTest2 = Object.keys(resp2[3].lines[0]); // get all headers
+        // console.log(this.itemheadersTest2);
+        // for (let entry of this.stashdatarequest) {
+        //   console.log(entry, "items");
+        // }
+        // console.log(resp2[0].lines, "Currency?");
+        console.log(this.stashdatarequest, "stashData Request");
+        // this.derpcolums = Object.keys(resp[3].data);
+        // console.log(this.derpcolums);
+        // console.log(resp2);
+        console.log(this.fullPoeNinjaResponse, "Full Response");
+        // if (resp.items) {
+        //   let stashdatasourceitems = resp.items;
+        // }
+        if (resp) {
+          this.stashdatasource = new MatTableDataSource(resp);
+        } else {
+          console.warn("no Stash data");
+        }
+
+        // this.stashItems2 = new MatTableDataSource(stashdatasourceitems);
+        // this.arrayOfKeys = Object.keys(this.stashdatarequest);
+        // this.stashitemOBJ = Object;
+        // this.stashitemOBJ = this.stashdatarequest;
+        this.refresh(); // makes the display look for changes aka our new data
+      }
+    );
   }
 }
 interface poeNinjaFullResponseInterface {

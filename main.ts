@@ -235,7 +235,10 @@ ipcMain.on("only-character-data", async (event, message) => {
               "Left! total-index= " + (stashurlsFull.length - x)
             ]);
             event.sender.send("ping-async-stash", response);
-            event.sender.send("ping-async-stashprogressbar",[ x, stashurlsFull.length]);
+            event.sender.send("ping-async-stashprogressbar", [
+              x,
+              stashurlsFull.length
+            ]);
             // console.log(response);
             // console.log(responseArr[0].data)
             // for (let x = 0; x < stashurlsFull.length; x++) {
@@ -314,9 +317,6 @@ ipcMain.on("only-character-data", async (event, message) => {
   // }
   // this.fullstashdata = biggestitemarrayever;
 });
-
-
-
 
 // force refresh are and others
 ipcMain.on("ping-async", async (event, message) => {
@@ -581,7 +581,10 @@ ipcMain.on("ping-async", async (event, message) => {
         response,
         "got stash data" + "tab count " + Number(response.data.numTabs)
       ]);
-      event.sender.send("ping-async-stashprogressbar",[ 0, stashurlsFull.length]);
+      event.sender.send("ping-async-stashprogressbar", [
+        0,
+        stashurlsFull.length
+      ]);
       await sleep(10000);
       // get stash data
       let responseNumTabsTotal = response.data.numTabs;
@@ -665,7 +668,10 @@ ipcMain.on("ping-async", async (event, message) => {
               "Left! total-index= " + (stashurlsFull.length - x)
             ]);
             event.sender.send("ping-async-stash", response);
-            event.sender.send("ping-async-stashprogressbar",[ x, stashurlsFull.length]);
+            event.sender.send("ping-async-stashprogressbar", [
+              x,
+              stashurlsFull.length
+            ]);
             // console.log(response);
             // console.log(responseArr[0].data)
             // for (let x = 0; x < stashurlsFull.length; x++) {
@@ -685,7 +691,10 @@ ipcMain.on("ping-async", async (event, message) => {
         // console.log(stashdatatemp);
         await sleep(1350);
       }
-      event.sender.send("ping-async-stashprogressbar",[ stashurlsFull.length, stashurlsFull.length]);
+      event.sender.send("ping-async-stashprogressbar", [
+        stashurlsFull.length,
+        stashurlsFull.length
+      ]);
       event.sender.send(
         "ping-async",
         this.stashdata,

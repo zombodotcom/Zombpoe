@@ -45,6 +45,7 @@ import {
   MatTooltipModule,
   MatFormFieldModule
 } from "@angular/material";
+import { ChartsModule } from "ng2-charts";
 import { ReactiveFormsModule } from "@angular/forms";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 // NG Translate
@@ -94,6 +95,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ReactiveFormsModule,
     SharedModule,
     HomeModule,
+    ChartsModule,
     BrowserAnimationsModule,
     MatPaginatorModule,
     MatToolbarModule,

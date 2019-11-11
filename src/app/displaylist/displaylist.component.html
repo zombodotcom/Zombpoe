@@ -15,9 +15,12 @@
 <!-- <button (click)="worthfinder()" mat-flat-button color="primary">
   stashpricer
 </button> -->
+
 <script> $().tooltip({ container: 'body' }), $().popover({ container: 'body' })</script>
 
-<form [formGroup]="userForm" (ngSubmit)="onStashesOnlySubmit()">
+<!-- <form [formGroup]="userForm" (ngSubmit)="onStashesOnlySubmit()"> -->
+
+<form [formGroup]="userForm">
   <mat-form-field color="primary" >
   <input formControlName="POESESSID" matInput placeholder="Your POESESSID" [type]="hide ? 'password' : 'text'"/>
   <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
@@ -55,16 +58,34 @@
 <p>
 Stash Download Progress: {{progressdownload}} %
 </p>
-<mat-progress-bar mode="buffer" [value]="progressdownload" [bufferValue]="100-progressdownload" *ngIf="progressdownload">
+<mat-progress-bar mode="buffer" [value]="progressdownload" bufferValue=1 *ngIf="progressdownload">
 </mat-progress-bar>
+<br>
 <div>
-
-
 </div>
-
+<!-- 
+<button (click)="onloaddatabutton()" mat-flat-button color="primary">
+  reload Data
+</button> -->
 <button (click)="forceRefresh()"  mat-flat-button color="primary">
   Force Refresh
 </button>
+ <!-- {{lineChartData}} -->
+ <!-- <table class="table table-responsive table-condensed">
+  <tr>
+    <th *ngFor="let label of lineChartLabels">{{label}}</th>
+  </tr>
+  <tr *ngFor="let d of lineChartData; let i=index" [class]="'line-'+i">
+    <td *ngFor="let label of lineChartLabels; let j=index">{{d && d.data[j]}}</td>
+  </tr>
+</table> -->
+<div class="chart-container" *ngIf="lineChartData">
+
+  <canvas baseChart  [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions"
+    [colors]="lineChartColors" legend="Net Worth" [chartType]="lineChartType" [plugins]="lineChartPlugins">
+  </canvas>
+</div>
+<div><br></div>
   <!-- Progress Bar -->
 
 <!-- STASH ITEM TABLE -->
@@ -149,10 +170,15 @@ Stash Download Progress: {{progressdownload}} %
   <mat-tab label="Stash">
 <div class="example-container1 mat-elevation-z8">
 <ng-container *ngIf="fullstashDataResponseSource" >
-  <div>{{networth}} <img class="img-responsive smaller"
+  <ng-container *ngIf="networtharray">
+  <div>{{networtharray[0].data[networtharray[0].data.length-1]}} <img class="img-responsive smaller"
     src="https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyRerollRare.png" /> Net Worth</div>
-   
+  </ng-container>
+  <button (click)="clearLocalStorage()" mat-flat-button color="primary">
+    Clear Local Storage
+  </button>
 <br>
+
 <mat-form-field>
   <input matInput (keyup)="applyFilterStash($event.target.value)" placeholder="Filter">
 </mat-form-field>
