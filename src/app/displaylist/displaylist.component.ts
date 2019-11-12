@@ -8,7 +8,7 @@ import {
 } from "@angular/core";
 import { ChartDataSets, ChartOptions } from "chart.js";
 import { Color, Label } from "ng2-charts";
-import { BaseChartDirective } from "ng2-charts/ng2-charts";
+import { BaseChartDirective } from "ng2-charts";
 import { PoeninjaapiService, CharacterData } from "../poeninjaapi.service";
 import { MatProgressBarModule } from "@angular/material";
 import { DataSource } from "@angular/cdk/table";
@@ -290,6 +290,7 @@ export class DisplaylistComponent implements OnInit {
   itemsearchtest = new FormGroup({
     itemsearchstring: new FormControl("Enter Item", Validators.maxLength(100))
   });
+
   // leagues: string[] = [
   //   "Standard",
   //   "Hardcore",
@@ -396,6 +397,7 @@ export class DisplaylistComponent implements OnInit {
   ];
 
   // Sorters
+
   @ViewChild("MatSortcurrency", { static: false }) sortcurrency: MatSort;
   @ViewChild("MatSortfrag", { static: false }) sortfrag: MatSort;
   @ViewChild("MatSortoil", { static: false }) sortoil: MatSort;
@@ -434,6 +436,7 @@ export class DisplaylistComponent implements OnInit {
   @ViewChild("paginatorproph", { static: false }) paginatorproph: MatPaginator;
   @ViewChild("paginatorjewel", { static: false }) paginatorjewel: MatPaginator;
   @ViewChild("paginatorflask", { static: false }) paginatorflask: MatPaginator;
+
   @ViewChild("paginatoressence", { static: false })
   paginatoressence: MatPaginator;
   @ViewChild("paginatorincubator", { static: false })
@@ -538,6 +541,29 @@ export class DisplaylistComponent implements OnInit {
     // console.log('tab => ', event);
   }
 
+  @ViewChild(BaseChartDirective, { static: false }) chart: BaseChartDirective;
+
+  refresh_chart() {
+    // this.chart.ngOnChanges({});
+
+    // let storedNetworth = JSON.parse(localStorage.getItem("networtharray"));
+    // let storedLabels = JSON.parse(localStorage.getItem("networthlabels"));
+    // console.log(storedNetworth, "networtharray");
+    // console.log(storedLabels, "networthlabels");
+    // this.networtharray = storedNetworth;
+    // this.networthlabels = storedLabels;
+    if (this.chart) {
+      this.chart.chart.config.data.labels = this.networthlabels;
+      this.chart.chart.update();
+
+      setTimeout(() => {
+        if (this.chart && this.chart.chart && this.chart.chart.config) {
+          this.chart.chart.config.data.labels = this.networthlabels;
+          this.chart.chart.update();
+        }
+      }, 100);
+    }
+  }
   _setDataSource(indexNumber) {
     setTimeout(() => {
       switch (indexNumber) {
@@ -1155,7 +1181,7 @@ export class DisplaylistComponent implements OnInit {
     // this.forceRefresh(); // run the button
     // let testersss = [0, 10, 20, 30, 40, 50, 60, 70, 80];
     // localStorage.setItem("tester", JSON.stringify(testersss));
-
+    // this.refresh_chart();
     // console.log("Before");
     // console.log(
     //   JSON.parse(localStorage.getItem("networtharray")),
@@ -1200,6 +1226,7 @@ export class DisplaylistComponent implements OnInit {
 
   refresh() {
     this.changeDetectorRefs.detectChanges();
+    // this.refresh_chart();
   }
 
   pingresponsesetter() {
@@ -1273,16 +1300,19 @@ export class DisplaylistComponent implements OnInit {
         if (this.networtharray == null) {
           this.networtharray = [{ data: [this.networth], label: "net Worth" }];
         } else {
-          this.networtharray[0].data.push(this.networth);
+          this.networtharray[0].data.push({
+            data: [this.networth],
+            label: Date()
+          });
           // this.networtharray[0].label.push(Date());
         }
         this.networthlabels = JSON.parse(
           localStorage.getItem("networthlabels")
         );
         if (this.networthlabels == null) {
-          this.networthlabels = [[this.networth]];
+          this.networthlabels = [Date()];
         } else {
-          this.networthlabels.push([this.networth]);
+          this.networthlabels.push(Date());
         }
 
         // this.lineChartLabels = [""];
@@ -1411,6 +1441,7 @@ export class DisplaylistComponent implements OnInit {
         // if (resp.items) {
         //   let stashdatasourceitems = resp.items;
         // }
+        // this.refresh_chart();
         if (resp) {
           this.stashdatasource = new MatTableDataSource(resp);
         } else {
