@@ -6,7 +6,11 @@ import {
   ViewChild,
   ChangeDetectorRef
 } from "@angular/core";
+import { ChartDataSets, ChartOptions } from "chart.js";
+import { Color, Label } from "ng2-charts";
+import { BaseChartDirective } from "ng2-charts";
 import { PoeninjaapiService, CharacterData } from "../poeninjaapi.service";
+import { MatProgressBarModule } from "@angular/material";
 import { DataSource } from "@angular/cdk/table";
 import { Sort, MatSort } from "@angular/material/sort";
 import { NgForm, FormBuilder } from "@angular/forms";
@@ -173,13 +177,43 @@ interface Colour {
   styleUrls: ["./displaylist.component.scss"]
 })
 export class DisplaylistComponent implements OnInit {
+  lineChartData: ChartDataSets[] = JSON.parse(
+    localStorage.getItem("networtharray")
+  );
+
+  lineChartLabels: Label[] = [
+    JSON.parse(localStorage.getItem("networthlabels"))
+  ];
+
+  lineChartOptions = {
+    responsive: true
+  };
+
+  lineChartColors: Color[] = [
+    {
+      borderColor: "rgba(255,99,132,1)",
+      backgroundColor: "rgba(255,99,132,0.2)",
+      hoverBackgroundColor: "rgba(255,99,132,0.4)",
+      hoverBorderColor: "rgba(255,99,132,1)"
+    }
+  ];
+
+  lineChartLegend = true;
+  lineChartPlugins = [];
+  lineChartType = "line";
+
   displayedColumnstester: string[];
+  public progressdownload = 0;
+  public progressleft = 99;
   currencyDataResponse;
   fragmentsDataResponse;
   oilsDataResponse;
   fossilsDataResponse;
   scarabsDataResponse;
   divsDataResponse;
+  chartArray;
+  networtharray = [];
+  networthlabels = [];
   resonatorsDataResponse;
   propheciesDataResponse;
   uniqueweaponsDataResponse;
@@ -225,7 +259,7 @@ export class DisplaylistComponent implements OnInit {
   uniqueflaskDataResponseTableSource = new MatTableDataSource(); //flask
   essenceDataResponseTableSource = new MatTableDataSource(); //essence
   incubatorDataResponseTableSource = new MatTableDataSource(); //essence
-  fullstashDataResponseSource = new MatTableDataSource();
+  fullstashDataResponseSource = new MatTableDataSource(); //stash
   currenttablesource = new MatTableDataSource(); // storage for filter test
   // public itemlist:any;
   sortedData: PoeNinjaItemData[];
@@ -256,11 +290,29 @@ export class DisplaylistComponent implements OnInit {
   itemsearchtest = new FormGroup({
     itemsearchstring: new FormControl("Enter Item", Validators.maxLength(100))
   });
+
+  // leagues: string[] = [
+  //   "Standard",
+  //   "Hardcore",
+  //   "SSF Standard",
+  //   "SSF Hardcore",
+  //   "Hardcore Blight",
+  //   "SSF Blight",
+  //   "SSF Blight HC"
+  // ];
+  default: string = "Blight";
   userForm = new FormGroup({
-    POESESSID: new FormControl("***Replace***", Validators.maxLength(32)),
+    POESESSID: new FormControl(
+      localStorage.getItem("POESESSID") != null
+        ? localStorage.getItem("POESESSID")
+        : "***REPLACE***",
+      Validators.maxLength(32)
+    ),
     accountName: new FormControl("qqazraelz", Validators.required),
-    characterName: new FormControl("ZomboTD", Validators.maxLength(20)),
-    league: new FormControl("Blight", Validators.maxLength(20))
+    characterName: new FormControl("Not Used Yet", Validators.maxLength(25)),
+    league: new FormControl("Blight")
+    // league2: new FormControl("Blight")
+    // worthCutoff: new FormControl("none", Validators.maxLength(20))
   });
   accform = new FormControl(20, Validators.required);
   characterform = new FormControl();
@@ -345,6 +397,7 @@ export class DisplaylistComponent implements OnInit {
   ];
 
   // Sorters
+
   @ViewChild("MatSortcurrency", { static: false }) sortcurrency: MatSort;
   @ViewChild("MatSortfrag", { static: false }) sortfrag: MatSort;
   @ViewChild("MatSortoil", { static: false }) sortoil: MatSort;
@@ -383,6 +436,7 @@ export class DisplaylistComponent implements OnInit {
   @ViewChild("paginatorproph", { static: false }) paginatorproph: MatPaginator;
   @ViewChild("paginatorjewel", { static: false }) paginatorjewel: MatPaginator;
   @ViewChild("paginatorflask", { static: false }) paginatorflask: MatPaginator;
+
   @ViewChild("paginatoressence", { static: false })
   paginatoressence: MatPaginator;
   @ViewChild("paginatorincubator", { static: false })
@@ -487,6 +541,29 @@ export class DisplaylistComponent implements OnInit {
     // console.log('tab => ', event);
   }
 
+  @ViewChild(BaseChartDirective, { static: false }) chart: BaseChartDirective;
+
+  refresh_chart() {
+    // this.chart.ngOnChanges({});
+
+    // let storedNetworth = JSON.parse(localStorage.getItem("networtharray"));
+    // let storedLabels = JSON.parse(localStorage.getItem("networthlabels"));
+    // console.log(storedNetworth, "networtharray");
+    // console.log(storedLabels, "networthlabels");
+    // this.networtharray = storedNetworth;
+    // this.networthlabels = storedLabels;
+    if (this.chart) {
+      this.chart.chart.config.data.labels = this.networthlabels;
+      this.chart.chart.update();
+
+      setTimeout(() => {
+        if (this.chart && this.chart.chart && this.chart.chart.config) {
+          this.chart.chart.config.data.labels = this.networthlabels;
+          this.chart.chart.update();
+        }
+      }, 100);
+    }
+  }
   _setDataSource(indexNumber) {
     setTimeout(() => {
       switch (indexNumber) {
@@ -737,13 +814,25 @@ export class DisplaylistComponent implements OnInit {
               this.giantpoeninjaarray[i].explicitModifiers
             ) {
               if (item.explicitMods.indexOf("Has 1 Abyssal Socket") !== -1) {
-                console.log("has1");
+                console.log("Has 1 Abyssal Socket");
 
                 continue;
               }
               if (item.explicitMods.indexOf("Has 2 Abyssal Socket") !== -1) {
                 // continue;
-                console.log("has 2");
+                if (
+                  this.giantpoeninjaarray[i].explicitModifiers.indexOf(
+                    "Has 2 Abyssal Socket"
+                  ) !== -1
+                ) {
+                  console.log("Has 2 Abyssal Socket inside both! Pricing?");
+                  return this.giantpoeninjaarray[i].chaosValue
+                    ? this.giantpoeninjaarray[i].chaosValue
+                    : this.giantpoeninjaarray[i].chaosEquivalent;
+                }
+                console.log(
+                  "Has 2 Abyssal Socket this item might be worth something"
+                );
               }
             }
             return this.giantpoeninjaarray[i].chaosValue
@@ -909,7 +998,43 @@ export class DisplaylistComponent implements OnInit {
     this.fullstashDataResponseSource.filter = filterValue.trim().toLowerCase();
     // console.log(this.currenttablesource);
   }
-  openModal() {
+  applyFilterCurrencyCuttoff(filterValue: string) {
+    this.fullstashDataResponseSource.filterPredicate = function(
+      data,
+      filter: string
+    ): boolean {
+      // return data.name.toLowerCase().includes(filter) || data.symbol.toLowerCase().includes(filter) || data.position.toString().includes(filter);
+      console.log(data[0], "wut");
+      return data[0].toLowerCase().includes(filter);
+      // data.worth.toLowerCase().includes(filter) ||
+      // data.explicitMods.toString().includes(filter)
+    };
+    // this.fullstashDataResponseSource.filter = filterValue.trim().toLowerCase();
+    // console.log(this.currenttablesource);
+  }
+
+  clearLocalStorage() {
+    console.log("clearing LocalStorage");
+    try {
+      localStorage.clear();
+      console.log("LocalStorage cleared");
+    } catch (err) {
+      console.log("couldnt clear? error:", err);
+    }
+  }
+  onloaddatabutton() {
+    if (JSON.parse(localStorage.getItem("bigstasharray"))) {
+      this.fullstashDataResponseSource = new MatTableDataSource(
+        JSON.parse(localStorage.getItem("bigstasharray"))
+          ? JSON.parse(localStorage.getItem("bigstasharray"))
+          : null
+      );
+      this.fullstashDataResponseSource.paginator = this.paginatorstash;
+      this.fullstashDataResponseSource.sort = this.sortstash;
+    }
+    this.changeDetectorRefs.detectChanges();
+  }
+  forceRefresh() {
     console.log("Play");
 
     if (this._electronService.isElectronApp) {
@@ -922,7 +1047,189 @@ export class DisplaylistComponent implements OnInit {
     this._electronService.ipcRenderer.on("ping-async-stash", (event, resp) => {
       console.log(resp);
     });
+    //Update the progress bar
 
+    let localstorageAccountData = JSON.parse(
+      localStorage.getItem("AccountData")
+    );
+    localStorage.setItem("POESESSID", this.userForm.get("POESESSID").value);
+    this._electronService.ipcRenderer.send("ping-async", [
+      // localStorage.length > 0
+      //   ? localstorageAccountData.POESESSID
+      this.userForm.get("POESESSID").value,
+      // localStorage.length > 0
+      //   ? localstorageAccountData.accountName
+      this.userForm.get("accountName").value,
+      // localStorage.length > 0
+      //   ? localstorageAccountData.accountName
+      this.userForm.get("league").value
+      // this.userForm.get("worthCutoff").value
+
+      //   this.userForm.get("league").value
+    ]); // get us data
+  }
+
+  onStashesOnlySubmit(): void {
+    if (this._electronService.isElectronApp) {
+      // We have access to node process.
+      this.versions.node = this._electronService.process.versions.node;
+      this.versions.chrome = this._electronService.process.versions.chrome;
+      this.versions.electron = this._electronService.process.versions.electron;
+      console.log(this.versions, "versions");
+    }
+    this._electronService.ipcRenderer.on("ping-async-stash", (event, resp) => {
+      console.log(resp);
+    });
+
+    this._electronService.ipcRenderer.send("only-character-data", [
+      // localStorage.length > 0
+      //   ? localstorageAccountData.POESESSID
+      this.userForm.get("POESESSID").value,
+      // localStorage.length > 0
+      //   ? localstorageAccountData.accountName
+      this.userForm.get("accountName").value,
+      // localStorage.length > 0
+      //   ? localstorageAccountData.accountName
+      this.userForm.get("league").value
+      //   this.userForm.get("league").value
+      //add new values here like tab # or a list of user specified tabs
+    ]); // get us data
+
+    this._electronService.ipcRenderer.on("ping-async", (event, resp, resp2) => {
+      // prints "pong"
+      console.log(resp, resp2);
+
+      let bigboyarray2 = [];
+      if (resp2) {
+        for (let x = 0; x < resp2.length; x++) {
+          // console.log(resp3[x].data.items);
+          if (resp2[x].data.items) {
+            bigboyarray2.push(resp2[x].data.items);
+          }
+        }
+      }
+      let bigarrayconcat = [].concat(bigboyarray2);
+      let biggestitemarrayever = [];
+      for (var i = 0; i < bigarrayconcat.length; ++i) {
+        for (var j = 0; j < bigarrayconcat[i].length; ++j)
+          biggestitemarrayever.push(bigarrayconcat[i][j]);
+      }
+      this.fullstashdataBigBoiArray = biggestitemarrayever;
+
+      // this.itemheadersTest2 = Object.keys(resp2[3].lines[0]); // get all headers
+      // console.log(this.itemheadersTest2);
+      // for (let entry of this.stashdatarequest) {
+      //   console.log(entry, "items");
+      // }
+      // console.log(resp2[0].lines, "Currency?");
+      console.log(this.stashdatarequest, "stashData Request");
+
+      // let stashdatasourceitems = resp.items;
+      this.stashdatasource = new MatTableDataSource(resp);
+      // this.stashItems2 = new MatTableDataSource(stashdatasourceitems);
+
+      this.refresh(); // makes the display look for changes aka our new data
+    });
+  }
+
+  getuserName(): any {
+    return this.userForm.get("name");
+  }
+  setResetName() {
+    this.POESESSID.reset();
+    this.accountName.reset();
+    this.characterform.reset();
+  }
+  changeValue() {
+    console.log(this.POESESSID.value);
+    console.log(this.accountName.value);
+    console.log(this.characterform.value);
+
+    this.POESESSID = new FormControl(!this.POESESSID.value);
+    this.accountName = new FormControl(!this.accountName.value);
+    this.characterform = new FormControl(!this.characterform.value);
+  }
+
+  updateName() {
+    console.log(this.POESESSID.value);
+    console.log(this.accountName.value);
+  }
+  //   stashprogressget(){
+  //     return this.progressdownload;
+  // }
+
+  // stashprogressset(resp){
+  //     this.progressdownload = !isNaN(Math.round((resp[0] / resp[1]) * 100))?Math.round((resp[0] / resp[1]) * 100):0;
+  // }
+
+  ngOnInit() {
+    // var storedLabels = JSON.parse(localStorage.getItem("networthlabels"));
+    // for (let i = storedLabels; i >= 0; i--) {
+    //   this.lineChartLabels.push(storedLabels[i]);
+    // }
+    // console.log(storedLabels);
+    // this.fullJSON.parse(localStorage.getItem("bigstasharray"));
+
+    let storedNetworth = JSON.parse(localStorage.getItem("networtharray"));
+    let storedLabels = JSON.parse(localStorage.getItem("networthlabels"));
+    console.log(storedNetworth, "networtharray");
+    console.log(storedLabels, "networthlabels");
+    this.networtharray = storedNetworth;
+    this.networthlabels = storedLabels;
+    // console.log(this.chartArray);
+    this.pingresponsesetter();
+    // this.forceRefresh(); // run the button
+    // let testersss = [0, 10, 20, 30, 40, 50, 60, 70, 80];
+    // localStorage.setItem("tester", JSON.stringify(testersss));
+    // this.refresh_chart();
+    // console.log("Before");
+    // console.log(
+    //   JSON.parse(localStorage.getItem("networtharray")),
+    //   "stored net worth"
+    // );
+    // console.log(
+    //   JSON.parse(localStorage.getItem("networthlabels")),
+    //   "stored net worth labels"
+    // );
+
+    // console.log(storedNetworth);
+    let derplist;
+    this._electronService.ipcRenderer.on(
+      "ping-async-stashprogressbar",
+      (event, resp) => {
+        // console.log(resp,"ping-async-stashprogressbar");
+        // stashprogressset(resp);
+        // stashprogressget();
+        // let buffer = !isNaN(Math.round((resp[0] / resp[1]) * 100))
+        //   ? Math.round((resp[0] / resp[1]) * 100)
+        //   : 100;
+        // buffer = 100 - buffer;
+        // console.log(buffer);
+        setTimeout(() => {
+          this.progressdownload = !isNaN(Math.round((resp[0] / resp[1]) * 100))
+            ? Math.round((resp[0] / resp[1]) * 100)
+            : 0;
+          // this.progressleft = 99;
+        }, 100);
+        // setTimeout(() => { this.progressdownload =!isNaN((Math.round((resp[0] / resp[1]) * 100))?Math.round((resp[0] / resp[1]) * 100):0); }, 100);
+
+        this.changeDetectorRefs.detectChanges();
+      }
+    );
+    ///end of on init
+    this.refresh();
+
+    console.log(this.userForm.get("league").value);
+    // this.changeDetectorRefs.detectChanges();
+    this.onloaddatabutton(); // loads the old stash data
+  }
+
+  refresh() {
+    this.changeDetectorRefs.detectChanges();
+    // this.refresh_chart();
+  }
+
+  pingresponsesetter() {
     this._electronService.ipcRenderer.on(
       "ping-async",
       (event, resp, resp2, resp3) => {
@@ -967,25 +1274,92 @@ export class DisplaylistComponent implements OnInit {
 
         console.log(biggestpoeninjarrayever, "biggestpoeninjarrayever");
         console.log(this.fullstashdataBigBoiArray, "Big Boi");
+        this.networth = 0;
         for (let x = 0; x < this.fullstashdataBigBoiArray.length; x++) {
           // console.log(this.fullstashdataBigBoiArray[x], "before push");
-          this.fullstashdataBigBoiArray[x].worth = this.worthfinder2(
-            this.fullstashdataBigBoiArray[x]
-          );
+          let worthpush = this.worthfinder2(this.fullstashdataBigBoiArray[x]);
+          // if (this.userForm.get("worthCutoff").value == "none") {
+          //   this.fullstashdataBigBoiArray[x].worth = worthpush
+          // }
+          this.fullstashdataBigBoiArray[x].worth = worthpush;
+          // if (this.userForm.get("worthCutoff").value > worthpush) {
+          //   delete this.fullstashdataBigBoiArray[x]
+          // }
+
           this.networth += Number(
             parseFloat(
               this.fullstashdataBigBoiArray[x].worth.toString()
             ).toFixed(3)
           );
+
           // console.log(this.fullstashdataBigBoiArray[x], "afterpush");
         }
+        // let testersss = [0, 10, 20, 30, 40, 50, 60, 70, 80];
+        this.networtharray = JSON.parse(localStorage.getItem("networtharray"));
+
+        if (this.networtharray == null) {
+          this.networtharray = [{ data: [this.networth], label: "net Worth" }];
+        } else {
+          this.networtharray[0].data.push({
+            data: [this.networth],
+            label: Date()
+          });
+          // this.networtharray[0].label.push(Date());
+        }
+        this.networthlabels = JSON.parse(
+          localStorage.getItem("networthlabels")
+        );
+        if (this.networthlabels == null) {
+          this.networthlabels = [Date()];
+        } else {
+          this.networthlabels.push(Date());
+        }
+
+        // this.lineChartLabels = [""];
+
+        // for (let i = 0; i < this.networtharray[0].label.length; i++) {
+        //   this.lineChartLabels.push(this.networtharray[i].label);
+        // }
+        localStorage.setItem(
+          "networtharray",
+          JSON.stringify(this.networtharray)
+        );
+        localStorage.setItem(
+          "networthlabels",
+          JSON.stringify(this.networthlabels)
+        );
+        let storedNetworth = JSON.parse(localStorage.getItem("networtharray"));
+        let storedLabels = JSON.parse(localStorage.getItem("networthlabels"));
+        console.log(storedNetworth, "networtharray");
+        console.log(storedLabels, "networthlabels");
+        // this.networtharray = storedNetworth;
+        // this.networthlabels = storedLabels;
 
         this.fullstashDataResponseSource = new MatTableDataSource(
           this.fullstashdataBigBoiArray
         );
-
         this.fullstashDataResponseSource.paginator = this.paginatorstash;
         this.fullstashDataResponseSource.sort = this.sortstash;
+        localStorage.setItem(
+          "bigstasharray",
+          JSON.stringify(this.fullstashdataBigBoiArray)
+        );
+        //   localStorage.setItem(
+        //   "biggestpoeninjarrayever",
+        //     JSON.stringify(biggestpoeninjarrayever)
+        // );
+        // localStorage.setItem(
+        //   "stashpaginator",
+        //   JSON.stringify(this.paginatorstash)
+        // );
+        // localStorage.setItem(
+        //   "stashsort",
+        //   JSON.stringify(this.sortstash)
+        // );
+        // localStorage.setItem(
+        //   "stashtablesource",
+        //   JSON.stringify(this.fullstashDataResponseSource)
+        // );
         this.stashdatarequest = resp;
         this.currencyDataResponse = resp2[0].data; // currency
         this.fragmentsDataResponse = resp2[1].data; //frag
@@ -1055,82 +1429,32 @@ export class DisplaylistComponent implements OnInit {
 
         // this.itemheadersTest2 = Object.keys(resp2[3].lines[0]); // get all headers
         // console.log(this.itemheadersTest2);
-        for (let entry of this.stashdatarequest) {
-          console.log(entry, "items");
-        }
+        // for (let entry of this.stashdatarequest) {
+        //   console.log(entry, "items");
+        // }
         // console.log(resp2[0].lines, "Currency?");
         console.log(this.stashdatarequest, "stashData Request");
         // this.derpcolums = Object.keys(resp[3].data);
         // console.log(this.derpcolums);
         // console.log(resp2);
         console.log(this.fullPoeNinjaResponse, "Full Response");
+        // if (resp.items) {
+        //   let stashdatasourceitems = resp.items;
+        // }
+        // this.refresh_chart();
+        if (resp) {
+          this.stashdatasource = new MatTableDataSource(resp);
+        } else {
+          console.warn("no Stash data");
+        }
 
-        let stashdatasourceitems = resp.items;
-        this.stashdatasource = new MatTableDataSource(resp);
-        this.stashItems2 = new MatTableDataSource(stashdatasourceitems);
-        this.arrayOfKeys = Object.keys(this.stashdatarequest);
-        this.stashitemOBJ = Object;
-        this.stashitemOBJ = this.stashdatarequest;
+        // this.stashItems2 = new MatTableDataSource(stashdatasourceitems);
+        // this.arrayOfKeys = Object.keys(this.stashdatarequest);
+        // this.stashitemOBJ = Object;
+        // this.stashitemOBJ = this.stashdatarequest;
         this.refresh(); // makes the display look for changes aka our new data
       }
     );
-
-    let localstorageAccountData = JSON.parse(
-      localStorage.getItem("AccountData")
-    );
-
-    this._electronService.ipcRenderer.send("ping-async", [
-      // localStorage.length > 0
-      //   ? localstorageAccountData.POESESSID
-      this.userForm.get("POESESSID").value,
-      // localStorage.length > 0
-      //   ? localstorageAccountData.accountName
-      this.userForm.get("accountName").value,
-      // localStorage.length > 0
-      //   ? localstorageAccountData.accountName
-      this.userForm.get("league").value
-      //   this.userForm.get("league").value
-    ]); // get us data
-  }
-
-  onFormSubmit(): void {}
-
-  getuserName(): any {
-    return this.userForm.get("name");
-  }
-  setResetName() {
-    this.POESESSID.reset();
-    this.accountName.reset();
-    this.characterform.reset();
-  }
-  changeValue() {
-    console.log(this.POESESSID.value);
-    console.log(this.accountName.value);
-    console.log(this.characterform.value);
-
-    this.POESESSID = new FormControl(!this.POESESSID.value);
-    this.accountName = new FormControl(!this.accountName.value);
-    this.characterform = new FormControl(!this.characterform.value);
-  }
-
-  updateName() {
-    console.log(this.POESESSID.value);
-    console.log(this.accountName.value);
-  }
-
-  ngOnInit() {
-    // this.openModal(); // run the button
-
-    console.log("Before");
-
-    let derplist;
-
-    ///end of on init
-    this.refresh();
-  }
-
-  refresh() {
-    this.changeDetectorRefs.detectChanges();
   }
 }
 interface poeNinjaFullResponseInterface {

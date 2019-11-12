@@ -15,9 +15,12 @@
 <!-- <button (click)="worthfinder()" mat-flat-button color="primary">
   stashpricer
 </button> -->
+
 <script> $().tooltip({ container: 'body' }), $().popover({ container: 'body' })</script>
 
-<form [formGroup]="userForm" (ngSubmit)="onFormSubmit()">
+<!-- <form [formGroup]="userForm" (ngSubmit)="onStashesOnlySubmit()"> -->
+
+<form [formGroup]="userForm">
   <mat-form-field color="primary" >
   <input formControlName="POESESSID" matInput placeholder="Your POESESSID" [type]="hide ? 'password' : 'text'"/>
   <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
@@ -30,15 +33,66 @@
   <mat-form-field>
   <input formControlName="characterName" matInput placeholder="Your Character Name" />
 </mat-form-field>
-  <mat-form-field>
+  <!-- <mat-form-field>
     <input formControlName="league" matInput placeholder="League" />
-  </mat-form-field>
+  </mat-form-field> -->
+<mat-form-field>
+  <mat-label>League</mat-label>
+  <mat-select disableRipple formControlName="league" >
+  <mat-option value="Blight">Blight</mat-option>
+  <mat-option value="Standard">Standard</mat-option>
+  <mat-option value="Hardcore">Hardcore</mat-option>
+  <mat-option value="SSF Standard">SSF Standard</mat-option>
+  <mat-option value="SSF Hardcore">SSF Hardcore</mat-option>
+  <mat-option value="Hardcore Blight">Hardcore Blight</mat-option>
+  <mat-option value="SSF Blight">SSF Blight</mat-option>
+  <mat-option value="SSF Blight HC">SSF Blight HC</mat-option>
+  </mat-select>
+</mat-form-field>
+    <!-- <mat-form-field>
+      <input formControlName="worthCutoff" matInput placeholder="worthCutoff" />
+    </mat-form-field> -->
   <button type="submit"  mat-mini-fab color="primary">Send</button>
 </form>
+<!-- <ng-containter *ngIf="progressdownload"> -->
+<p>
+Stash Download Progress: {{progressdownload}} %
+</p>
+<mat-progress-bar mode="buffer" [value]="progressdownload" bufferValue=1 *ngIf="progressdownload">
+</mat-progress-bar>
+<br>
+<div>
+</div>
+<!-- 
+<button (click)="onloaddatabutton()" mat-flat-button color="primary">
+  reload Data
+</button> -->
 
-<button (click)="openModal()"  mat-flat-button color="primary">
+<!-- <button (click)="refresh_chart()" mat-flat-button color="primary">
+  refresh chart
+</button> -->
+
+<button (click)="forceRefresh()"  mat-flat-button color="primary">
   Force Refresh
 </button>
+ <!-- {{lineChartData}} -->
+ <!-- <table class="table table-responsive table-condensed">
+  <tr>
+    <th *ngFor="let label of lineChartLabels">{{label}}</th>
+  </tr>
+  <tr *ngFor="let d of lineChartData; let i=index" [class]="'line-'+i">
+    <td *ngFor="let label of lineChartLabels; let j=index">{{d && d.data[j]}}</td>
+  </tr>
+</table> -->
+<div class="chart-container" *ngIf="lineChartData">
+
+  <canvas baseChart  [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions"
+    [colors]="lineChartColors" legend="Net Worth" [chartType]="lineChartType" [plugins]="lineChartPlugins">
+  </canvas>
+</div>
+<div><br></div>
+  <!-- Progress Bar -->
+
 <!-- STASH ITEM TABLE -->
 <!-- <form [formGroup]="itemsearchtest" (ngSubmit)="worthfinder()">
   <mat-form-field color="primary">
@@ -121,16 +175,25 @@
   <mat-tab label="Stash">
 <div class="example-container1 mat-elevation-z8">
 <ng-container *ngIf="fullstashDataResponseSource" >
-  <div>{{networth}} <img class="img-responsive smaller"
+  <ng-container *ngIf="networtharray">
+  <div>{{networtharray[0].data[networtharray[0].data.length-1]}} <img class="img-responsive smaller"
     src="https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyRerollRare.png" /> Net Worth</div>
-   
+  </ng-container>
+  <button (click)="clearLocalStorage()" mat-flat-button color="primary">
+    Clear Local Storage
+  </button>
 <br>
+
 <mat-form-field>
   <input matInput (keyup)="applyFilterStash($event.target.value)" placeholder="Filter">
 </mat-form-field>
+<button mat-flat-button color="primary" (click)="exporterstash.exportTable('csv')">Download CSV</button>
 
- 
-    <table mat-table [dataSource]="fullstashDataResponseSource" #MatSortstash="matSort" matSort  class="w-100">
+<!-- <mat-form-field>
+  <input matInput (keyup)="applyFilterCurrencyCuttoff($event.target.value)" placeholder="Currency Cuttoff">
+</mat-form-field>
+  -->
+    <table mat-table matTableExporter [dataSource]="fullstashDataResponseSource" #MatSortstash="matSort" matSort  class="w-100" #exporterstash="matTableExporter">
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef mat-sort-header >Name</th>
         <td mat-cell *matCellDef="let element">
@@ -270,16 +333,18 @@
 <mat-form-field>
   <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" >
 </mat-form-field>
+<!-- <button mat-flat-button color="primary" (click)="exporterninja.exportTable('csv')">Download CSV Ninja</button> -->
   <!-- <br> -->
   <mat-tab-group [animationDuration]="'0ms'" #tabGroup (selectedIndexChange)="_setDataSource($event)" (selectedTabChange)="onLinkClick($event)"color="primary" >
      
-    
+   
+      class="w-100" >
     <mat-tab label="Currency">
       <div class="example-container mat-elevation-z8">
-        <mat-table
+        <mat-table matTableExporter
           #table
           #MatSortcurrency="matSort"
-          [dataSource]="fullPoeNinjaResponseTableSourceCurrency" matSort
+          [dataSource]="fullPoeNinjaResponseTableSourceCurrency" matSort #exporterninja="matTableExporter"
         >
           <ng-container matColumnDef="currencyTypeName">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>

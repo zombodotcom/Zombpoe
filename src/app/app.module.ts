@@ -4,6 +4,7 @@ import "../polyfills";
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
+import { MatTableExporterModule } from "mat-table-exporter";
 import {
   HttpClientModule,
   HttpClient,
@@ -44,6 +45,7 @@ import {
   MatTooltipModule,
   MatFormFieldModule
 } from "@angular/material";
+import { ChartsModule } from "ng2-charts";
 import { ReactiveFormsModule } from "@angular/forms";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 // NG Translate
@@ -93,6 +95,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ReactiveFormsModule,
     SharedModule,
     HomeModule,
+    ChartsModule,
     BrowserAnimationsModule,
     MatPaginatorModule,
     MatToolbarModule,
@@ -139,6 +142,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatFormFieldModule,
     MatInputModule,
     NgbModule,
+    MatTableExporterModule,
     // HttpXhrBackend,
     // HttpClientXsrfModule.withOptions({
     //   cookieName: "POESESSID"
