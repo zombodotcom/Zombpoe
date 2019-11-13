@@ -327,7 +327,12 @@ export class DisplaylistComponent implements OnInit {
         : "***REPLACE***",
       Validators.maxLength(32)
     ),
-    accountName: new FormControl("qqazraelz", Validators.required),
+    accountName: new FormControl(
+      localStorage.getItem("accountName") != null
+        ? localStorage.getItem("accountName")
+        : "***REPLACE***",
+      Validators.maxLength(32)
+    ),
     characterName: new FormControl("Not Used Yet", Validators.maxLength(25)),
     league: new FormControl("Blight")
     // league2: new FormControl("Blight")
@@ -1176,15 +1181,14 @@ export class DisplaylistComponent implements OnInit {
       this.versions.electron = this._electronService.process.versions.electron;
       console.log(this.versions, "versions");
     }
-    this._electronService.ipcRenderer.on("ping-async-stash", (event, resp) => {
-      console.log(resp);
-    });
+
     //Update the progress bar
 
     let localstorageAccountData = JSON.parse(
       localStorage.getItem("AccountData")
     );
     localStorage.setItem("POESESSID", this.userForm.get("POESESSID").value);
+    localStorage.setItem("accountName", this.userForm.get("accountName").value);
     this._electronService.ipcRenderer.send("ping-async", [
       // localStorage.length > 0
       //   ? localstorageAccountData.POESESSID
@@ -1364,6 +1368,10 @@ export class DisplaylistComponent implements OnInit {
   }
 
   pingresponsesetter() {
+    this._electronService.ipcRenderer.on("ping-async-stash", (event, resp) => {
+      console.log(resp);
+    });
+
     this._electronService.ipcRenderer.on(
       "ping-async",
       (event, resp, resp2, resp3) => {
