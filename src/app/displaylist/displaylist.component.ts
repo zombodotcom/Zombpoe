@@ -190,11 +190,11 @@ export class DisplaylistComponent implements OnInit {
     responsive: true,
     maintainAspectRatio: false
   };
-  public color: string = "rgba(255,99,132,1)";
+  public color: string = "rgba(233,32,233,0.2)";
   lineChartColors: Color[] = [
     {
       borderColor: this.color,
-      backgroundColor: "rgba(255,99,132,0.2)",
+      backgroundColor: "rgba(233,32,233,0.2)",
       hoverBackgroundColor: this.color,
       hoverBorderColor: "rgba(255,99,132,1)",
       pointBackgroundColor: "#000000",
@@ -205,7 +205,7 @@ export class DisplaylistComponent implements OnInit {
   lineChartLegend = true;
   lineChartPlugins = [];
   lineChartType = "line";
-
+  firstload: boolean = false;
   displayedColumnstester: string[];
   public progressdownload = 0;
   public progressleft = 99;
@@ -582,7 +582,7 @@ export class DisplaylistComponent implements OnInit {
     //     }
     //   }, 100);
     // }
-
+    Chart.defaults.global.defaultFontColor = "#fff";
     if (this.chart !== undefined) {
       this.chart.chart.destroy();
       this.chart.chart = null;
@@ -590,6 +590,7 @@ export class DisplaylistComponent implements OnInit {
       this.chart.datasets = this.networtharray;
       this.chart.labels = this.networthlabels;
       this.chart.ngOnInit();
+      // this.changeDetectorRefs.detectChanges();
     }
   }
 
@@ -1073,10 +1074,12 @@ export class DisplaylistComponent implements OnInit {
     }
     this.lineChartData = null;
     this.lineChartLabels = null;
+    this.firstload = true;
     this.refresh_chart(); // wont work because we havent technically cleared
   }
   onloaddatabutton() {
     if (JSON.parse(localStorage.getItem("bigstasharray"))) {
+      this.firstload = false;
       this.fullstashDataResponseSource = new MatTableDataSource(
         JSON.parse(localStorage.getItem("bigstasharray"))
           ? JSON.parse(localStorage.getItem("bigstasharray"))
@@ -1084,7 +1087,83 @@ export class DisplaylistComponent implements OnInit {
       );
       this.fullstashDataResponseSource.paginator = this.paginatorstash;
       this.fullstashDataResponseSource.sort = this.sortstash;
+    } else {
+      this.firstload = true;
     }
+
+    if (JSON.parse(localStorage.getItem("poeninjarray"))) {
+      this.firstload = false;
+      let resp2 = JSON.parse(localStorage.getItem("poeninjarray"));
+      // this.fullstashDataResponseSource = new MatTableDataSource(
+      //   JSON.parse(localStorage.getItem("bigstasharray"))
+      //     ? JSON.parse(localStorage.getItem("bigstasharray"))
+      //     : null
+      // );
+      this.currencyDataResponse = resp2[0].data; // currency
+      this.fragmentsDataResponse = resp2[1].data; //frag
+      this.oilsDataResponse = resp2[2].data; //oils
+      this.fossilsDataResponse = resp2[3].data; //fossil
+      this.resonatorsDataResponse = resp2[4].data; //reso
+      this.scarabsDataResponse = resp2[5].data; //scarab
+      this.essenceDataResponse = resp2[6].data; //essence
+      this.divsDataResponse = resp2[7].data; //divs
+      this.propheciesDataResponse = resp2[8].data; //prop]
+      this.uniquejewelDataResponse = resp2[9].data; //jewels
+      this.uniqueweaponsDataResponse = resp2[10].data; //wapons
+      this.uniquearmoursDataResponse = resp2[11].data; //armor
+      this.uniqueaccessoriesDataResponse = resp2[12].data; //access
+      this.uniqueflaskDataResponse = resp2[13].data; //flask
+      this.uniqueflaskDataResponse = resp2[14].data; //incubator
+
+      this.fullPoeNinjaResponseTableSourceCurrency = new MatTableDataSource(
+        resp2[0].lines
+      ); // currency
+      this.fragmentsDataResponseTableSource = new MatTableDataSource(
+        resp2[1].lines
+      ); //frag
+      this.oilsDataResponseTableSource = new MatTableDataSource(resp2[2].lines); //oils
+      this.fullPoeNinjaResponseTableSourceFossil = new MatTableDataSource(
+        resp2[3].lines
+      ); // fossils
+      this.resonatorsDataResponseTableSource = new MatTableDataSource(
+        resp2[4].lines
+      ); //reso
+      this.scarabsDataResponseTableSource = new MatTableDataSource(
+        resp2[5].lines
+      ); //scarab
+      this.essenceDataResponseTableSource = new MatTableDataSource(
+        resp2[6].lines
+      ); //essence
+      this.divsDataResponseTableSource = new MatTableDataSource(resp2[7].lines); //divs
+      this.propheciesDataResponseTableSource = new MatTableDataSource(
+        resp2[8].lines
+      ); //prop
+      this.uniquejewelDataResponseTableSource = new MatTableDataSource(
+        resp2[9].lines
+      ); //jewels
+      this.uniqueweaponsDataResponseTableSource = new MatTableDataSource(
+        resp2[10].lines
+      ); //wapons
+      this.uniquearmoursDataResponseTableSource = new MatTableDataSource(
+        resp2[11].lines
+      ); //armor
+      this.uniqueaccessoriesDataResponseTableSource = new MatTableDataSource(
+        resp2[12].lines
+      ); //access
+      this.uniqueflaskDataResponseTableSource = new MatTableDataSource(
+        resp2[13].lines
+      ); //flask
+      this.incubatorDataResponseTableSource = new MatTableDataSource(
+        resp2[14].lines
+      ); //flask
+
+      // console.log(resp2[3], "fossil Response");
+      this.fullPoeNinjaResponse = resp2;
+      this.fullPoeNinjaResponseTableSource = new MatTableDataSource(resp2);
+    } else {
+      this.firstload = true;
+    }
+
     this.changeDetectorRefs.detectChanges();
   }
   forceRefresh() {
@@ -1276,7 +1355,9 @@ export class DisplaylistComponent implements OnInit {
     // this.changeDetectorRefs.detectChanges();
     this.onloaddatabutton(); // loads the old stash data
   }
-
+  reloadWindowOnFirst() {
+    location.reload();
+  }
   refresh() {
     this.changeDetectorRefs.detectChanges();
     // this.refresh_chart();
@@ -1396,10 +1477,9 @@ export class DisplaylistComponent implements OnInit {
           "bigstasharray",
           JSON.stringify(this.fullstashdataBigBoiArray)
         );
-        //   localStorage.setItem(
-        //   "biggestpoeninjarrayever",
-        //     JSON.stringify(biggestpoeninjarrayever)
-        // );
+
+        // when we do
+        localStorage.setItem("poeninjarray", JSON.stringify(resp2));
         // localStorage.setItem(
         //   "stashpaginator",
         //   JSON.stringify(this.paginatorstash)

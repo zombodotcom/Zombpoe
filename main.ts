@@ -1,4 +1,11 @@
-import { app, BrowserWindow, autoUpdater, screen } from "electron";
+import {
+  app,
+  BrowserWindow,
+  autoUpdater,
+  screen,
+  Menu,
+  MenuItem
+} from "electron";
 import * as path from "path";
 import * as url from "url";
 import { HttpHeaders, HttpClient, HttpParams } from "@angular/common/http";
@@ -103,6 +110,22 @@ interface Colour {
   g: number;
   b: number;
 }
+// var menu = Menu.buildFromTemplate([
+//   {
+//     label: "Menu",
+//     submenu: [
+//       { label: "Adjust Notification Value" },
+//       { label: "Zombpoe" },
+//       {
+//         label: "Exit",
+//         click() {
+//           app.quit();
+//         }
+//       }
+//     ]
+//   }
+// ]);
+// Menu.setApplicationMenu(menu);
 
 const ipcMain = require("electron").ipcMain;
 const { session } = require("electron");
@@ -807,11 +830,26 @@ function createWindow() {
   }
 
   if (serve) {
+    // Menu.getApplicationMenu().append(
+    //   new MenuItem({
+    //     label: "File",
+    //     submenu: [
+    //       {
+    //         label: "hello ",
+    //         click() {
+    //           console.log("Oh, hi there!");
+    //         }
+    //       }
+    //     ]
+    //   })
+    // );
+    // console.log(Menu.getApplicationMenu().items, " menu items");
     // [25880: 1011 / 085007.559: ERROR: CONSOLE(109)]
     //  "Uncaught (in promise) Error: Could not instantiate: ProductRegistryImpl.Registry",
     // source: devtools://devtools/bundled/shell.js (109)
     // win.webContents.once("dom-ready", () => {
     win.webContents.openDevTools();
+
     // });
     // win.webContents.openDevTools();
   }
