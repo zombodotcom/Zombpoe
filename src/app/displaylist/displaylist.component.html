@@ -18,7 +18,11 @@
 
 <script> $().tooltip({ container: 'body' }), $().popover({ container: 'body' })</script>
 
-<!-- <form [formGroup]="userForm" (ngSubmit)="onStashesOnlySubmit()"> -->
+
+
+
+
+
 
 <form [formGroup]="userForm">
   <mat-form-field color="primary" >
@@ -48,12 +52,25 @@
   <mat-option value="SSF Blight">SSF Blight</mat-option>
   <mat-option value="SSF Blight HC">SSF Blight HC</mat-option>
   </mat-select>
+<br>
 </mat-form-field>
     <!-- <mat-form-field>
       <input formControlName="worthCutoff" matInput placeholder="worthCutoff" />
     </mat-form-field> -->
-  <button type="submit"  mat-mini-fab color="primary">Send</button>
+  <!-- <button type="submit"  mat-mini-fab color="primary">Send</button> -->
+  <button (click)="forceRefresh()" mat-flat-button color="primary">
+    Get Data
+  </button>
+ 
 </form>
+<div><br>
+<button (click)="clearLocalStorage()" mat-flat-button color="warn">
+  Clear Local Storage
+</button>
+<br>
+</div>
+<div>
+<br>
 <!-- <ng-containter *ngIf="progressdownload"> -->
 <p>
 Stash Download Progress: {{progressdownload}} %
@@ -61,20 +78,23 @@ Stash Download Progress: {{progressdownload}} %
 <mat-progress-bar mode="buffer" [value]="progressdownload" bufferValue=1 *ngIf="progressdownload">
 </mat-progress-bar>
 <br>
-<div>
 </div>
-<!-- 
-<button (click)="onloaddatabutton()" mat-flat-button color="primary">
-  reload Data
-</button> -->
 
-<!-- <button (click)="refresh_chart()" mat-flat-button color="primary">
-  refresh chart
-</button> -->
-
-<button (click)="forceRefresh()"  mat-flat-button color="primary">
-  Force Refresh
+<div>
+<button *ngIf="firstload" (click)="reloadWindowOnFirst()" mat-flat-button color="warn">
+  Click to Reload the App after first get. This button will dissapear after. will take a second to load data after
 </button>
+<br>
+</div>
+<div>
+  <br>
+<button (click)="refresh_chart()" mat-flat-button color="primary">
+  refresh chart
+</button>
+<br>
+</div>
+
+
  <!-- {{lineChartData}} -->
  <!-- <table class="table table-responsive table-condensed">
   <tr>
@@ -84,13 +104,21 @@ Stash Download Progress: {{progressdownload}} %
     <td *ngFor="let label of lineChartLabels; let j=index">{{d && d.data[j]}}</td>
   </tr>
 </table> -->
-<div class="chart-container" *ngIf="lineChartData">
-
+<div class="chart-container" *ngIf="lineChartData" style="maintainAspectRatio:false;">
   <canvas baseChart  [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions"
-    [colors]="lineChartColors" legend="Net Worth" [chartType]="lineChartType" [plugins]="lineChartPlugins">
+    [colors]="lineChartColors" legend="Net Worth" [chartType]="lineChartType" [plugins]="lineChartPlugins" >
   </canvas>
 </div>
-<div><br></div>
+<form >
+  <mat-form-field >
+<input matInput [colorPicker]="color" (colorPickerChange)="color=$event;onChangeColor($event)"
+  [style.background]="color" [value]="color" placeholder="Graph Color"
+  [cpPresetColors]="['rgba(255,255,255, 0.2)', 'rgba(0,0,0, 0.2)', 'rgba(40,137,233, 0.2)', 'rgba(233,32,233,0.2)', 'rgba(255,245,0,0.2)', 'rgba(255,99,132,0.2)']" />
+  </mat-form-field>
+</form>
+
+
+
   <!-- Progress Bar -->
 
 <!-- STASH ITEM TABLE -->
@@ -179,9 +207,7 @@ Stash Download Progress: {{progressdownload}} %
   <div>{{networtharray[0].data[networtharray[0].data.length-1]}} <img class="img-responsive smaller"
     src="https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyRerollRare.png" /> Net Worth</div>
   </ng-container>
-  <button (click)="clearLocalStorage()" mat-flat-button color="primary">
-    Clear Local Storage
-  </button>
+
 <br>
 
 <mat-form-field>
