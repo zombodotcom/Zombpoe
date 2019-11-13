@@ -18,6 +18,7 @@ import { Component } from "@angular/core";
 import { CookieService } from "ngx-cookie-service";
 import { map } from "rxjs/operators";
 import { AppRoutingModule } from "./app-routing.module";
+
 import {
   MatPaginatorModule,
   MatAutocompleteModule,
@@ -45,6 +46,7 @@ import {
   MatTooltipModule,
   MatFormFieldModule
 } from "@angular/material";
+import { ColorPickerModule } from "ngx-color-picker";
 import { ChartsModule } from "ng2-charts";
 import { ReactiveFormsModule } from "@angular/forms";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
@@ -88,6 +90,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     UsertableComponent
   ],
   imports: [
+    ColorPickerModule,
     BrowserModule,
     FormsModule,
     HttpClientModule,

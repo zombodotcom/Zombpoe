@@ -170,6 +170,7 @@ interface Colour {
   g: number;
   b: number;
 }
+import { Chart } from "chart.js";
 
 @Component({
   selector: "app-displaylist",
@@ -186,15 +187,18 @@ export class DisplaylistComponent implements OnInit {
   ];
 
   lineChartOptions = {
-    responsive: true
+    responsive: true,
+    maintainAspectRatio: false
   };
-
+  public color: string = "rgba(255,99,132,1)";
   lineChartColors: Color[] = [
     {
-      borderColor: "rgba(255,99,132,1)",
+      borderColor: this.color,
       backgroundColor: "rgba(255,99,132,0.2)",
-      hoverBackgroundColor: "rgba(255,99,132,0.4)",
-      hoverBorderColor: "rgba(255,99,132,1)"
+      hoverBackgroundColor: this.color,
+      hoverBorderColor: "rgba(255,99,132,1)",
+      pointBackgroundColor: "#000000",
+      pointBorderColor: "#FFFFFF"
     }
   ];
 
@@ -291,6 +295,21 @@ export class DisplaylistComponent implements OnInit {
     itemsearchstring: new FormControl("Enter Item", Validators.maxLength(100))
   });
 
+  onChangeColor(color: string) {
+    // console.log(color);
+    let colorchange: Color[] = [
+      {
+        borderColor: this.color,
+        backgroundColor: this.color,
+        hoverBackgroundColor: this.color,
+        hoverBorderColor: "rgba(255,99,132,1)",
+        pointBackgroundColor: "#000000",
+        pointBorderColor: "#FFFFFF"
+      }
+    ];
+    this.lineChartColors = colorchange;
+    this.refresh_chart();
+  }
   // leagues: string[] = [
   //   "Standard",
   //   "Hardcore",
@@ -546,24 +565,54 @@ export class DisplaylistComponent implements OnInit {
   refresh_chart() {
     // this.chart.ngOnChanges({});
 
-    // let storedNetworth = JSON.parse(localStorage.getItem("networtharray"));
-    // let storedLabels = JSON.parse(localStorage.getItem("networthlabels"));
+    let storedNetworth = JSON.parse(localStorage.getItem("networtharray"));
+    let storedLabels = JSON.parse(localStorage.getItem("networthlabels"));
     // console.log(storedNetworth, "networtharray");
     // console.log(storedLabels, "networthlabels");
     // this.networtharray = storedNetworth;
     // this.networthlabels = storedLabels;
-    if (this.chart) {
-      this.chart.chart.config.data.labels = this.networthlabels;
-      this.chart.chart.update();
+    // if (this.chart) {
+    //   this.chart.chart.config.data.labels = this.networthlabels;
+    //   this.chart.chart.update();
 
-      setTimeout(() => {
-        if (this.chart && this.chart.chart && this.chart.chart.config) {
-          this.chart.chart.config.data.labels = this.networthlabels;
-          this.chart.chart.update();
-        }
-      }, 100);
+    //   setTimeout(() => {
+    //     if (this.chart && this.chart.chart && this.chart.chart.config) {
+    //       this.chart.chart.config.data.labels = this.networthlabels;
+    //       this.chart.chart.update();
+    //     }
+    //   }, 100);
+    // }
+
+    if (this.chart !== undefined) {
+      this.chart.chart.destroy();
+      this.chart.chart = null;
+
+      this.chart.datasets = this.networtharray;
+      this.chart.labels = this.networthlabels;
+      this.chart.ngOnInit();
     }
   }
+
+  // docharts(){
+  //  this.parseCharts();
+  //       this.loadChart1();
+  //       this.loadChart2();
+  //   }
+
+  // parseCharts() {
+  //   //  if (this.barChartLabels != null) {
+  //   //    this.barChartLabels.length = 0;
+  //   //    for (let label of this.priceHistory.barChartLabels) {
+  //   //      this.barChartLabels.push(label);
+  //   //    }
+  //   //  } else {
+  //   //    this.barChartLabels = this.priceHistory.barChartLabels;
+  //   //  }
+  //     this.charts.forEach((child) => {
+  //         this.chart.push(child);
+  //     });
+  //     //console.log(this.chart[0]);
+  // }
   _setDataSource(indexNumber) {
     setTimeout(() => {
       switch (indexNumber) {
@@ -669,6 +718,7 @@ export class DisplaylistComponent implements OnInit {
     this.uniqueflaskDataResponseTableSource.paginator = this.paginatorflask; //flask
     this.essenceDataResponseTableSource.paginator = this.paginatoressence; //essence
     this.incubatorDataResponseTableSource.paginator = this.paginatorincubator; //essence
+    this.refresh_chart();
   }
 
   constructor(
@@ -1021,6 +1071,9 @@ export class DisplaylistComponent implements OnInit {
     } catch (err) {
       console.log("couldnt clear? error:", err);
     }
+    this.lineChartData = null;
+    this.lineChartLabels = null;
+    this.refresh_chart(); // wont work because we havent technically cleared
   }
   onloaddatabutton() {
     if (JSON.parse(localStorage.getItem("bigstasharray"))) {
@@ -1300,19 +1353,18 @@ export class DisplaylistComponent implements OnInit {
         if (this.networtharray == null) {
           this.networtharray = [{ data: [this.networth], label: "net Worth" }];
         } else {
-          this.networtharray[0].data.push({
-            data: [this.networth],
-            label: Date()
-          });
+          this.networtharray[0].data.push(this.networth);
+          // this.networtharray[0].label.push(new Date().toLocaleString());
           // this.networtharray[0].label.push(Date());
         }
         this.networthlabels = JSON.parse(
           localStorage.getItem("networthlabels")
         );
         if (this.networthlabels == null) {
-          this.networthlabels = [Date()];
+          this.networthlabels = [new Date().toLocaleString()];
         } else {
-          this.networthlabels.push(Date());
+          this.networthlabels.push(new Date().toLocaleString());
+          // this.networthlabels[0].push(this.networth+"test");
         }
 
         // this.lineChartLabels = [""];
@@ -1453,6 +1505,7 @@ export class DisplaylistComponent implements OnInit {
         // this.stashitemOBJ = Object;
         // this.stashitemOBJ = this.stashdatarequest;
         this.refresh(); // makes the display look for changes aka our new data
+        this.refresh_chart();
       }
     );
   }
