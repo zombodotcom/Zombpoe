@@ -351,7 +351,8 @@ ipcMain.on("ping-async", async (event, message) => {
   event.sender.send("ping-async-stash", [
     "Starting",
     accountName,
-    league
+    league,
+    message[2]
     // currencyCutoff
   ]);
   // const { net } = require("electron");
@@ -381,25 +382,31 @@ ipcMain.on("ping-async", async (event, message) => {
   // console.log(message);
   //TODO
   // get the number of tabs, concat the response data
-  let urls: string[] = [
-    "https://www.pathofexile.com/character-window/get-stash-items?league=" +
-      message[2] +
-      "&accountName=qqazraelz&tabs=1&tabIndex=1",
-    "https://www.pathofexile.com/character-window/get-stash-items?league=" +
-      message[2] +
-      "&accountName=qqazraelz&tabs=1&tabIndex=2"
-  ];
-
+  // let urls: string[] = [
+  //   "https://www.pathofexile.com/character-window/get-stash-items?league=" +
+  //     message[2] +
+  //     "&accountName=qqazraelz&tabs=1&tabIndex=1",
+  //   "https://www.pathofexile.com/character-window/get-stash-items?league=" +
+  //     message[2] +
+  //     "&accountName=qqazraelz&tabs=1&tabIndex=2"
+  // ];
+  let poeninjaleaguename = message[2];
+  if (poeninjaleaguename.includes("SSF ")) {
+    poeninjaleaguename = poeninjaleaguename.replace("SSF ", "");
+  }
+  if (poeninjaleaguename == "Blight HC") {
+    poeninjaleaguename = "Hardcore Blight";
+  }
   // https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=qqazraelz&tabs=0
   // {"numTabs":39}
   let baseURL =
     "https://poe.ninja/api/data/ItemOverview?league=" +
-    encodeURI(message[2]) +
+    encodeURI(poeninjaleaguename) +
     "&type=";
   let urlendings: string[] = [
     "Currency", // currency has currencyoveriew and Itemoveriew updated
     "https://poe.ninja/api/data/currencyoverview?league=" +
-      encodeURI(message[2]) +
+      encodeURI(poeninjaleaguename) +
       "&type=Fragment", //currency is different url
     "Oil",
     "Fossil",
@@ -436,7 +443,7 @@ ipcMain.on("ping-async", async (event, message) => {
   event.sender.send("ping-async-stash", [
     "getting poeninja data,",
     accountName,
-    encodeURI(message[2])
+    encodeURI(poeninjaleaguename)
     // currencyCutoff
   ]);
   await axios
