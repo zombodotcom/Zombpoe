@@ -178,6 +178,9 @@ import { Chart } from "chart.js";
   styleUrls: ["./displaylist.component.scss"]
 })
 export class DisplaylistComponent implements OnInit {
+  options3: { hi };
+  selectedOptions3;
+
   lineChartData: ChartDataSets[] = JSON.parse(
     localStorage.getItem("networtharray")
   );
@@ -230,6 +233,7 @@ export class DisplaylistComponent implements OnInit {
   giantpoeninjaarray;
   public networth = 0;
   hide = true;
+  stashnamearray = [];
   public POESESSID;
   public accountName;
   public characterName;
@@ -334,7 +338,12 @@ export class DisplaylistComponent implements OnInit {
       Validators.maxLength(32)
     ),
     characterName: new FormControl("Not Used Yet", Validators.maxLength(25)),
-    league: new FormControl("Blight")
+    league: new FormControl(
+      localStorage.getItem("league") != null
+        ? localStorage.getItem("league")
+        : "Blight",
+      Validators.maxLength(32)
+    )
     // league2: new FormControl("Blight")
     // worthCutoff: new FormControl("none", Validators.maxLength(20))
   });
@@ -1189,6 +1198,8 @@ export class DisplaylistComponent implements OnInit {
     );
     localStorage.setItem("POESESSID", this.userForm.get("POESESSID").value);
     localStorage.setItem("accountName", this.userForm.get("accountName").value);
+    localStorage.setItem("league", this.userForm.get("league").value);
+    // console.log(localStorage.getItem("league"), "league name");
     this._electronService.ipcRenderer.send("ping-async", [
       // localStorage.length > 0
       //   ? localstorageAccountData.POESESSID
@@ -1298,6 +1309,24 @@ export class DisplaylistComponent implements OnInit {
   //     this.progressdownload = !isNaN(Math.round((resp[0] / resp[1]) * 100))?Math.round((resp[0] / resp[1]) * 100):0;
   // }
 
+  getTabNames() {
+    console.log("hello");
+
+    this._electronService.ipcRenderer.send("get-stash-names", [
+      // localStorage.length > 0
+      //   ? localstorageAccountData.POESESSID
+      this.userForm.get("POESESSID").value,
+      // localStorage.length > 0
+      //   ? localstorageAccountData.accountName
+      this.userForm.get("accountName").value,
+      // localStorage.length > 0
+      //   ? localstorageAccountData.accountName
+      this.userForm.get("league").value
+      // this.userForm.get("worthCutoff").value
+      //   this.userForm.get("league").value
+    ]); // get us data
+  }
+
   ngOnInit() {
     // var storedLabels = JSON.parse(localStorage.getItem("networthlabels"));
     // for (let i = storedLabels; i >= 0; i--) {
@@ -1362,14 +1391,30 @@ export class DisplaylistComponent implements OnInit {
   reloadWindowOnFirst() {
     location.reload();
   }
+
+  getselectedtabs() {
+    console.log(this.tabnamesform.value);
+  }
   refresh() {
     this.changeDetectorRefs.detectChanges();
     // this.refresh_chart();
   }
-
+  tabnamesform = new FormControl();
+  tabslist: string[] = [];
   pingresponsesetter() {
     this._electronService.ipcRenderer.on("ping-async-stash", (event, resp) => {
       console.log(resp);
+    });
+    this._electronService.ipcRenderer.on("get-stash-names", (event, resp) => {
+      console.log(resp[0]);
+      let stashnames = [];
+      this.tabnamesform = new FormControl();
+      this.tabslist = [];
+      for (let x = 0; x < resp[0].tabs.length; x++) {
+        console.log(resp[0].tabs[x].n);
+        this.tabslist.push(resp[0].tabs[x]);
+      }
+      // this.selectedOptions3 = new FormControl(this.stashnamearray);
     });
 
     this._electronService.ipcRenderer.on(
@@ -1598,6 +1643,7 @@ export class DisplaylistComponent implements OnInit {
     );
   }
 }
+
 interface poeNinjaFullResponseInterface {
   currencyDetails?: CurrencyDetail[];
   lines: Line[];

@@ -525,11 +525,10 @@ ipcMain.on("ping-async", async (event, message) => {
         "error in poeninja data"
       ]);
     });
-  event.sender.send(
-    "ping-async-stash",
+  event.sender.send("ping-async-stash", [
     "backend poedata going to sleep for 2 seconds now",
     this.poeNinjaResponseArray
-  );
+  ]);
   await sleep(2000);
   // .then(
   //   axios.spread(function(resp2, reposResponse) {
@@ -798,6 +797,138 @@ ipcMain.on("ping-sync", (event, message) => {
   message = "pong";
 
   event.returnValue = message;
+});
+
+ipcMain.on("get-stash-names", async (event, message) => {
+  console.log("hello");
+  let sessionid = message[0];
+  let accountName = message[1];
+  let league = message[2].split(" ").join("+");
+  // let currencyCutoff = message[3];
+  event.sender.send("ping-async-stash", [
+    "Starting",
+    accountName,
+    league,
+    message[2]
+    // currencyCutoff
+  ]);
+
+  event.sender.send("ping-async-stash", "starting stash");
+  await axios
+    .get(
+      "https://www.pathofexile.com/character-window/get-stash-items?league=" +
+        league +
+        "&accountName=" +
+        accountName +
+        "&tabs=1&tabIndex=1",
+      {
+        headers: {
+          cookie: "POESESSID=" + sessionid //the token is a variable which holds the token
+        }
+      }
+    )
+    .then(async response => {
+      // // var finalObj = finalObj.concat(response); // should concat the data
+      console.log(response);
+      // // message = response.data as RootObject;
+      // let stashdatatemp = [];
+      // this.stashdata = response.data;
+      event.sender.send("get-stash-names", [response.data, "got stash data"]);
+      // event.sender.send("ping-async-stashprogressbar", [
+      //   0,
+      //   stashurlsFull.length
+      // ]);
+      // await sleep(10000);
+      // // get stash data
+      // let responseNumTabsTotal = response.data.numTabs;
+      // // event.returnValue = [
+      // //   ["Stash " + x],
+      // //   ["Left! total-index= " + (stashurlsFull.length - x)]
+      // // ];
+      // event.returnValue = ["hi"];
+      // // let numTabsResponse =
+      // for (let x = 0; x < Number(responseNumTabsTotal); x++) {
+      //   stashurlsFull.push(
+      //     "https://www.pathofexile.com/character-window/get-stash-items?league=" +
+      //     league +
+      //     "&accountName=" +
+      //     accountName +
+      //     "&tabs=0&tabIndex=" +
+      //     x
+      //   );
+      // }
+      // let stashtotaltoget = stashurlsFull.length;
+      // if (Number(responseNumTabsTotal) > 40) {
+      //   stashtotaltoget = 40;
+      //   responseNumTabsTotal = 40;
+      // }
+      // console.log(responseNumTabsTotal, stashtotaltoget);
+      // console.log(stashurlsFull);
+      // // get all stash data
+      // let promisesurls = [];
+      // for (let x = 0; x < stashurlsFull.length; x++) {
+      //   await axios
+      //     .get(stashurlsFull[x], {
+      //       headers: {
+      //         cookie: "POESESSID=" + sessionid //the token is a variable which holds the token
+      //       }
+      //     })
+      //     .then(response => {
+      //       //this will be executed only when all requests are complete
+      //       // console.log("Currency: ", responseArr[0].data);
+      //       this.fullstashdata = response; // currency
+      //       // console.log(response.data);
+      //       stashdatatemp.push(response);
+      //       console.log(
+      //         response.headers["x-rate-limit-account"],
+      //         "x-rate-limit-account"
+      //       );
+      //       console.log(
+      //         response.headers["x-rate-limit-account-state"],
+      //         "x-rate-limit-account-state"
+      //       );
+      //       console.log("Stash " + x);
+      //       console.log("Left! total-index= " + (stashurlsFull.length - x));
+      //       event.sender.send("ping-async-stash", [
+      //         "Stash " + x,
+      //         "Left! total-index= " + (stashurlsFull.length - x)
+      //       ]);
+      //       event.sender.send("ping-async-stash", response);
+      //       event.sender.send("ping-async-stashprogressbar", [
+      //         x,
+      //         stashurlsFull.length
+      //       ]);
+      //     })
+      //     .catch(e => {
+      //       console.log("Error: in stash responses", e.response.data);
+      //       event.sender.send("ping-async-stash", [
+      //         e.response.data,
+      //         "error in stash response"
+      //       ]);
+      //     });
+      //   // console.log(stashdatatemp);
+      //   await sleep(1350);
+      // }
+      // event.sender.send("ping-async-stashprogressbar", [
+      //   stashurlsFull.length,
+      //   stashurlsFull.length
+      // ]);
+      // event.sender.send(
+      //   "ping-async",
+      //   this.stashdata,
+      //   this.poeNinjaResponseArray,
+      //   stashdatatemp
+      // );
+    })
+    .catch(e => {
+      console.log("Error: ", e.response.data);
+      // console.log("pathofexile.com Probably Down....");
+      event.sender.send("get-stash-names", [
+        e.response.data,
+        "get stash names error?"
+      ]);
+      event.sender.send("get-stash-names", null);
+    });
 });
 
 // import { PythonShell } from "python-shell";

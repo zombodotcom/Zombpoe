@@ -16,7 +16,11 @@
   stashpricer
 </button> -->
 
+
 <script> $().tooltip({ container: 'body' }), $().popover({ container: 'body' })</script>
+
+
+
 
 
 
@@ -116,6 +120,32 @@ Stash Download Progress: {{progressdownload}} %
   [cpPresetColors]="['rgba(255,255,255, 0.2)', 'rgba(0,0,0, 0.2)', 'rgba(40,137,233, 0.2)', 'rgba(233,32,233,0.2)', 'rgba(255,245,0,0.2)', 'rgba(255,99,132,0.2)']" />
   </mat-form-field>
 </form>
+<div>
+  <button (click)="getTabNames()" mat-flat-button color="primary">
+    gettabnames
+  </button>
+</div>
+<ng-container *ngIf="stashnamearray">
+
+  <mat-form-field>
+    <mat-label>Tab Selection</mat-label>
+    <mat-select [formControl]="tabnamesform" multiple>
+      <mat-option *ngFor="let tabname of tabslist" [value]="tabname">{{tabname.n}} {{tabname.type}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  {{tabslist.length}} Tabs 
+  <ng-container *ngIf="tabnamesform.value">
+  <div *ngFor="let item of tabnamesform.value">
+      {{item.n}} {{item.type}}
+  </div>
+  </ng-container>
+
+</ng-container>
+<div>
+  <button (click)="getselectedtabs()" mat-flat-button color="primary">
+    selectedtabs
+  </button>
+</div>
 
 
 
