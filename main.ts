@@ -127,6 +127,10 @@ interface Colour {
 // ]);
 // Menu.setApplicationMenu(menu);
 
+// const { app, autoUpdater } = require("electron");
+// const server = "hazel-i9aodbuhq.now.sh";
+// const feed = `${server}/update/${process.platform}/${app.getVersion()}`;
+
 const ipcMain = require("electron").ipcMain;
 const { session } = require("electron");
 let responsedata;
@@ -420,7 +424,8 @@ ipcMain.on("ping-async", async (event, message) => {
     "UniqueArmour",
     "UniqueAccessory",
     "UniqueFlask",
-    "Incubator"
+    "Incubator",
+    "SkillGem"
   ];
 
   let poeNinjaResponseArray;
@@ -439,7 +444,9 @@ ipcMain.on("ping-async", async (event, message) => {
   let uniqueflaskDataResponse;
   let incubatorDataResponse;
   let essenceDataResponse;
+  let skillgemDataResponse;
   let stashdata;
+
   event.sender.send("ping-async-stash", [
     "getting poeninja data,",
     accountName,
@@ -462,7 +469,8 @@ ipcMain.on("ping-async", async (event, message) => {
       axios.get(baseURL + urlendings[11]), //uniquearmours
       axios.get(baseURL + urlendings[12]), //uniqueaccessory
       axios.get(baseURL + urlendings[13]), //UniqueFlask
-      axios.get(baseURL + urlendings[14]) //incubator
+      axios.get(baseURL + urlendings[14]), //incubator
+      axios.get(baseURL + urlendings[15]) //Skill Gems
     ])
     // .catch(e => {
     //   console.log("Error: ", e.response.data);
@@ -486,6 +494,7 @@ ipcMain.on("ping-async", async (event, message) => {
       this.uniqueaccessoriesDataResponse = responseArr[12].data; //access
       this.uniqueflaskDataResponse = responseArr[13].data; //flask
       this.incubatorDataResponse = responseArr[14].data; //incubator
+      this.skillgemDataResponse = responseArr[15].data; //skillgem
       // console.log("Fragments: ", responseArr[1].data);
       // console.log("Oils: ", responseArr[2].data);
       // console.log("Fossils: ", responseArr[3].data);
@@ -515,7 +524,8 @@ ipcMain.on("ping-async", async (event, message) => {
         responseArr[11].data,
         responseArr[12].data,
         responseArr[13].data,
-        responseArr[14].data
+        responseArr[14].data,
+        responseArr[15].data
       ]; //Changedd to .data
     })
     .catch(e => {
