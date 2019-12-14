@@ -6,6 +6,7 @@ import {
   ViewChild,
   ChangeDetectorRef
 } from "@angular/core";
+import { MatSnackBar } from "@angular/material";
 import { ChartDataSets, ChartOptions } from "chart.js";
 import { Color, Label } from "ng2-charts";
 import { BaseChartDirective } from "ng2-charts";
@@ -177,7 +178,11 @@ import { Chart } from "chart.js";
   templateUrl: "./displaylist.component.html",
   styleUrls: ["./displaylist.component.scss"]
 })
+
 export class DisplaylistComponent implements OnInit {
+  options3: { hi };
+  selectedOptions3;
+
   lineChartData: ChartDataSets[] = JSON.parse(
     localStorage.getItem("networtharray")
   );
@@ -188,7 +193,16 @@ export class DisplaylistComponent implements OnInit {
 
   lineChartOptions = {
     responsive: true,
-    maintainAspectRatio: false
+    maintainAspectRatio: false,
+    onClick: (evt, item) => {
+      let index = item[0]["_index"];
+      let datasetindex = item[0]["_datasetIndex"];
+      // let fruit = item[0]["_chart"].data.labels[index];
+      // let votes = item[0]["_chart"].data.datasets[0].data[index];
+      console.log(item, index, datasetindex);
+      // console.log(this.chart.chart);
+      // this.chart.chart.update();
+    }
   };
   public color: string = "rgba(233,32,233,0.2)";
   lineChartColors: Color[] = [
@@ -228,8 +242,9 @@ export class DisplaylistComponent implements OnInit {
   essenceDataResponse;
   incubatorDataResponse;
   giantpoeninjaarray;
-  public networth = 0;
+  public networth;
   hide = true;
+  stashnamearray = [];
   public POESESSID;
   public accountName;
   public characterName;
@@ -247,6 +262,8 @@ export class DisplaylistComponent implements OnInit {
   public stashdatarequest: RootObject[];
   public inter2: poeNinjaFullResponseInterface[];
   fullPoeNinjaResponse = new MatTableDataSource();
+  skillgemsDataResponse;
+
   fullPoeNinjaResponseTableSourceFossil = new MatTableDataSource(); //fossils
   fullPoeNinjaResponseTableSourceCurrency = new MatTableDataSource(); //currency
   fragmentsDataResponseTableSource = new MatTableDataSource(); //frag
@@ -265,6 +282,7 @@ export class DisplaylistComponent implements OnInit {
   incubatorDataResponseTableSource = new MatTableDataSource(); //essence
   fullstashDataResponseSource = new MatTableDataSource(); //stash
   currenttablesource = new MatTableDataSource(); // storage for filter test
+  skillgemsDataResponseTableSource = new MatTableDataSource(); //skillgems
   // public itemlist:any;
   sortedData: PoeNinjaItemData[];
   dataSource2;
@@ -280,10 +298,13 @@ export class DisplaylistComponent implements OnInit {
   tester3: CharacterData;
   profileForm: FormGroup;
   devstashurl;
+  showGraphOptionsStuff=true;
+  showGraph=true;
   publicstashurl;
   usrNameChanges: string;
   usrNameStatus: string;
   requestOptions;
+  githubversion="0.0.7";
   headerDict = {
     POESESSID: "null"
   };
@@ -294,6 +315,31 @@ export class DisplaylistComponent implements OnInit {
   itemsearchtest = new FormGroup({
     itemsearchstring: new FormControl("Enter Item", Validators.maxLength(100))
   });
+ openSnackBar(message: string, action: string) {
+      this.snackBar.open(message, action, {
+         duration: 10000,
+         panelClass: ['mat-toolbar', 'mat-primary']
+      });
+   } 
+  appversioncheck(){
+    var appVersion = require('electron').remote.app.getVersion();
+    console.log(appVersion)
+    
+    this.http
+      .get("https://api.github.com/repos/zombodotcom/zombpoe/releases/latest")
+      .subscribe(
+        data => {console.log('Latest Zombpoe Version', data['tag_name']); this.githubversion=data['tag_name']},
+        error => console.log('oops Error', error),
+      );
+      console.log(this.githubversion,appVersion)
+      if (this.githubversion==appVersion){
+        console.log("Up to date!")
+        this.openSnackBar('Up to Date',"Close")
+      }
+      else{
+        this.openSnackBar('Update Available Download at https://github.com/zombodotcom/Zombpoe/releases',"Close")
+      }
+  }
 
   onChangeColor(color: string) {
     // console.log(color);
@@ -334,12 +380,20 @@ export class DisplaylistComponent implements OnInit {
       Validators.maxLength(32)
     ),
     characterName: new FormControl("Not Used Yet", Validators.maxLength(25)),
-    league: new FormControl("Blight")
+    league: new FormControl(
+      localStorage.getItem("league") != null
+        ? localStorage.getItem("league")
+        : "Blight",
+      Validators.maxLength(32)
+    )
     // league2: new FormControl("Blight")
     // worthCutoff: new FormControl("none", Validators.maxLength(20))
   });
   accform = new FormControl(20, Validators.required);
   characterform = new FormControl();
+  // RefreshTime = new FormControl();
+  intervals = new FormControl("1");
+  intervalsList: string[] = ["1", "2", "3", "4", "5", "10"];
 
   // fetch = require("node-fetch");
 
@@ -388,6 +442,48 @@ export class DisplaylistComponent implements OnInit {
     // "sparkline",
     // "stackSize",
     // "variant"
+  ];
+  skillgemheaders: string[] = [
+    // "artFilename",
+    // "baseType",
+    "icon",
+    "name",
+    "chaosValue",
+    // "corrupted",
+    // "count",
+    // "detailsId",
+    "exaltedValue",
+
+    // "flavourText",
+    // "gemLevel",
+    // "gemQuality",
+    // "explicitModifiers",
+    "id",
+    // "id",
+    // "name",
+    // "icon",
+    // "mapTier",
+    "levelRequired",
+    // "baseType",
+    // "stackSize",
+    "variant",
+    // "prophecyText",
+    // "artFilename",
+    // "links",
+    // "itemClass",
+    // "sparkline:Sparkline;",
+    // "lowConfidenceSparkline:LowConfidenceSparkline;",
+    // "implicitModifiers",
+    // "explicitModifiers",
+    // "flavourText",
+    "corrupted",
+    "gemLevel",
+    "gemQuality"
+    // "itemType",
+    // "chaosValue",
+    // "exaltedValue",
+    // "count",
+    // "detailsId",
   ];
   itemheadersTest2: string[];
   derpcolums: string[] = ["items", "tabs", "quadLayout", "numTabs"];
@@ -438,6 +534,7 @@ export class DisplaylistComponent implements OnInit {
   @ViewChild("MatSortflask", { static: false }) sortflask: MatSort;
   @ViewChild("MatSortincubator", { static: false }) sortincubator: MatSort;
   @ViewChild("MatSortstash", { static: false }) sortstash: MatSort;
+  @ViewChild("MatSortskillgems", { static: false }) sortskillgems: MatSort;
   // Paginators
   @ViewChild("paginatorcurrency", { static: false })
   paginatorcurrency: MatPaginator;
@@ -460,6 +557,8 @@ export class DisplaylistComponent implements OnInit {
   @ViewChild("paginatorproph", { static: false }) paginatorproph: MatPaginator;
   @ViewChild("paginatorjewel", { static: false }) paginatorjewel: MatPaginator;
   @ViewChild("paginatorflask", { static: false }) paginatorflask: MatPaginator;
+  @ViewChild("paginatorskillgems", { static: false })
+  paginatorskillgems: MatPaginator;
 
   @ViewChild("paginatoressence", { static: false })
   paginatoressence: MatPaginator;
@@ -559,6 +658,11 @@ export class DisplaylistComponent implements OnInit {
       case 14:
         this.currenttablesource = this.incubatorDataResponseTableSource;
         this.incubatorDataResponseTableSource.sort = this.sortincubator;
+        // this.currenttablesource.sort = this.sort;
+        break;
+      case 15:
+        this.currenttablesource = this.incubatorDataResponseTableSource;
+        this.skillgemsDataResponseTableSource.sort = this.sortskillgems;
         // this.currenttablesource.sort = this.sort;
         break;
     }
@@ -700,6 +804,11 @@ export class DisplaylistComponent implements OnInit {
             ? (this.incubatorDataResponseTableSource.paginator = this.paginatorincubator)
             : null;
           break;
+        case 15:
+          !this.skillgemsDataResponseTableSource.paginator
+            ? (this.skillgemsDataResponseTableSource.paginator = this.paginatorskillgems)
+            : null;
+          break;
         default:
           break;
       }
@@ -724,10 +833,12 @@ export class DisplaylistComponent implements OnInit {
     this.uniqueflaskDataResponseTableSource.paginator = this.paginatorflask; //flask
     this.essenceDataResponseTableSource.paginator = this.paginatoressence; //essence
     this.incubatorDataResponseTableSource.paginator = this.paginatorincubator; //essence
+    this.skillgemsDataResponseTableSource.paginator = this.paginatorskillgems; //essence
     this.refresh_chart();
   }
 
   constructor(
+    public snackBar: MatSnackBar,
     private svc: PoeninjaapiService,
     private http: HttpClient,
     private cookieService: CookieService,
@@ -749,7 +860,17 @@ export class DisplaylistComponent implements OnInit {
       return item.worth;
     }
     // console.log(item, "item");
-
+    if (item.descrText) {
+      if (
+        item.descrText.includes(
+          "Place into an item socket of the right colour to gain this skill"
+        ) ||
+        item.descrText.includes("This is a Support Gem")
+      ) {
+        console.log(["Gem", item]);
+        return 0;
+      }
+    }
     let comparething;
     for (var i = 0; i < this.giantpoeninjaarray.length; i++) {
       // look for the entry with a matching `code` value
@@ -814,7 +935,87 @@ export class DisplaylistComponent implements OnInit {
       //   //   continue;
       //   // }
       // }
+      // if (this.giantpoeninjaarray[i].gemLevel) {
+
       if (comparething == item.typeLine || comparething == item.name) {
+        // if (item.properties[1]) {
+        //   if (item.properties[1].type == this.giantpoeninjaarray[i].gemLevel) {
+        //     console.log([
+        //       item.properties[1].type,
+        //       this.giantpoeninjaarray[i].gemLevel
+        //     ]);
+        //     return this.giantpoeninjaarray[i].chaosValue
+        //       ? this.giantpoeninjaarray[i].chaosValue
+        //       : this.giantpoeninjaarray[i].chaosEquivalent;
+        //   }
+        // }
+
+        // if (item.properties) {
+        //   let gemlevelstash;
+        //   let gemqualitystash;
+        //   let tempvalitemstuff;
+        //   for (let x = 0; x < item.properties.length; x++) {
+        //     if (item.properties[x].name == "Level") {
+        //       gemlevelstash = item.properties[x].values[0][0].toString();
+        //       // if (gemlevelstash.includes(" (Max)")) {
+        //       //   gemlevelstash = gemlevelstash.replace(" (Max)", "");
+        //       // }
+        //       if (
+        //         item.properties[x].type !=
+        //         this.giantpoeninjaarray[i].itemClass + 1
+        //       ) {
+        //         // tempvalitemstuff = [
+        //         //   item.properties[x].type,
+        //         //   this.giantpoeninjaarray[i].itemClass + 1
+        //         // ];
+        //         console.log([this.giantpoeninjaarray[i], item]);
+        //         console.log("invalied item class and type continuing");
+        //         continue;
+        //       }
+        //     }
+        //     if (item.properties[x].name == "Quality") {
+        //       // console.log(item.properties[x].type, "gem level?");
+        //       gemqualitystash = item.properties[x].values[0][0].toString();
+        //       // console.log(gemqualitystash)
+        //       gemqualitystash = gemqualitystash.replace("+", "");
+        //       gemqualitystash = gemqualitystash.replace("%", "");
+        //     }
+        //   }
+        //   if (gemlevelstash >= this.giantpoeninjaarray[i].gemLevel) {
+        //     console.log("greater level continue");
+        //     continue;
+        //   }
+        //   if (gemqualitystash >= this.giantpoeninjaarray[i].gemQuality) {
+        //     console.log("greater quality continue");
+        //     continue;
+        //   }
+        //   if (gemlevelstash < this.giantpoeninjaarray[i].gemLevel) {
+        //     console.log("gem level stash lower continue;");
+        //     continue;
+        //   }
+        //   if (gemqualitystash < this.giantpoeninjaarray[i].gemQuality) {
+        //     console.log("gem quality stash lower continue;");
+        //     continue;
+        //   }
+
+        //   console.log([
+        //     gemlevelstash,
+        //     gemqualitystash,
+        //     item,
+        //     this.giantpoeninjaarray[i],
+        //     tempvalitemstuff
+        //   ]);
+        //   if (
+        //     this.giantpoeninjaarray[i].gemLevel <= gemlevelstash &&
+        //     this.giantpoeninjaarray[i].gemQuality <= gemqualitystash
+        //   ) {
+        //     if (item.icon == this.giantpoeninjaarray[i].icon) {
+        //       console.log([this.giantpoeninjaarray[i], item]);
+        //     }
+        // }
+        // return 0;
+        // }
+
         // console.log(
         //   [this.giantpoeninjaarray[i], "arr"],
         //   [this.giantpoeninjaarray[i].name, "name"],
@@ -1068,7 +1269,11 @@ export class DisplaylistComponent implements OnInit {
     // this.fullstashDataResponseSource.filter = filterValue.trim().toLowerCase();
     // console.log(this.currenttablesource);
   }
-
+  ConvertToJSON(item: any) {
+    // return JSON.parse(JSON.stringify(item));
+    console.log(item);
+  }
+  Object = Object;
   clearLocalStorage() {
     console.log("clearing LocalStorage");
     try {
@@ -1082,13 +1287,13 @@ export class DisplaylistComponent implements OnInit {
     this.firstload = true;
     this.refresh_chart(); // wont work because we havent technically cleared
   }
-  onloaddatabutton() {
+  onloadSessionStorageData() {
+    let tempstashvar;
     if (JSON.parse(localStorage.getItem("bigstasharray"))) {
       this.firstload = false;
+      tempstashvar = JSON.parse(localStorage.getItem("bigstasharray"));
       this.fullstashDataResponseSource = new MatTableDataSource(
-        JSON.parse(localStorage.getItem("bigstasharray"))
-          ? JSON.parse(localStorage.getItem("bigstasharray"))
-          : null
+        tempstashvar ? tempstashvar : null
       );
       this.fullstashDataResponseSource.paginator = this.paginatorstash;
       this.fullstashDataResponseSource.sort = this.sortstash;
@@ -1104,6 +1309,8 @@ export class DisplaylistComponent implements OnInit {
       //     ? JSON.parse(localStorage.getItem("bigstasharray"))
       //     : null
       // );
+      console.log(resp2, "poeNinja Items");
+      console.log(tempstashvar, "your items");
       this.currencyDataResponse = resp2[0].data; // currency
       this.fragmentsDataResponse = resp2[1].data; //frag
       this.oilsDataResponse = resp2[2].data; //oils
@@ -1118,7 +1325,8 @@ export class DisplaylistComponent implements OnInit {
       this.uniquearmoursDataResponse = resp2[11].data; //armor
       this.uniqueaccessoriesDataResponse = resp2[12].data; //access
       this.uniqueflaskDataResponse = resp2[13].data; //flask
-      this.uniqueflaskDataResponse = resp2[14].data; //incubator
+      this.incubatorDataResponse = resp2[14].data; //incubator
+      this.skillgemsDataResponse = resp2[15].data; //skillgem
 
       this.fullPoeNinjaResponseTableSourceCurrency = new MatTableDataSource(
         resp2[0].lines
@@ -1161,6 +1369,9 @@ export class DisplaylistComponent implements OnInit {
       this.incubatorDataResponseTableSource = new MatTableDataSource(
         resp2[14].lines
       ); //flask
+      this.skillgemsDataResponseTableSource = new MatTableDataSource(
+        resp2[15].lines
+      ); //skillgems
 
       // console.log(resp2[3], "fossil Response");
       this.fullPoeNinjaResponse = resp2;
@@ -1189,6 +1400,8 @@ export class DisplaylistComponent implements OnInit {
     );
     localStorage.setItem("POESESSID", this.userForm.get("POESESSID").value);
     localStorage.setItem("accountName", this.userForm.get("accountName").value);
+    localStorage.setItem("league", this.userForm.get("league").value);
+    // console.log(localStorage.getItem("league"), "league name");
     this._electronService.ipcRenderer.send("ping-async", [
       // localStorage.length > 0
       //   ? localstorageAccountData.POESESSID
@@ -1285,6 +1498,24 @@ export class DisplaylistComponent implements OnInit {
     this.accountName = new FormControl(!this.accountName.value);
     this.characterform = new FormControl(!this.characterform.value);
   }
+  timerID;
+  getselectedtabsforsend() {
+    return this.tabnamesform.value;
+  }
+  stashinterval() {
+    let thisboi = this;
+    // function getselectedtabsforsend() {
+    //   return this.tabnamesform.value;
+    // }
+    console.log("starting", this.intervals.value, new Date().toLocaleString());
+    this.timerID = setInterval(function() {
+      console.log("every 60 seconds: " + new Date().toLocaleString());
+      console.log(thisboi.tabnamesform.value);
+    }, 60 * 1000 * thisboi.intervals.value);
+  }
+  stopinterval() {
+    clearInterval(this.timerID);
+  }
 
   updateName() {
     console.log(this.POESESSID.value);
@@ -1298,6 +1529,28 @@ export class DisplaylistComponent implements OnInit {
   //     this.progressdownload = !isNaN(Math.round((resp[0] / resp[1]) * 100))?Math.round((resp[0] / resp[1]) * 100):0;
   // }
 
+  getTabNames() {
+    console.log("hello");
+
+    this._electronService.ipcRenderer.send("get-stash-names", [
+      // localStorage.length > 0
+      //   ? localstorageAccountData.POESESSID
+      this.userForm.get("POESESSID").value,
+      // localStorage.length > 0
+      //   ? localstorageAccountData.accountName
+      this.userForm.get("accountName").value,
+      // localStorage.length > 0
+      //   ? localstorageAccountData.accountName
+      this.userForm.get("league").value
+      // this.userForm.get("worthCutoff").value
+      //   this.userForm.get("league").value
+    ]); // get us data
+  }
+
+  fn60sec() {
+    // runs every 60 sec and runs on init.
+    console.log("every 60 seconds: " + new Date().toLocaleString());
+  }
   ngOnInit() {
     // var storedLabels = JSON.parse(localStorage.getItem("networthlabels"));
     // for (let i = storedLabels; i >= 0; i--) {
@@ -1305,13 +1558,38 @@ export class DisplaylistComponent implements OnInit {
     // }
     // console.log(storedLabels);
     // this.fullJSON.parse(localStorage.getItem("bigstasharray"));
+    // this.autoupdatersetup();
+    // let counter1 = 0;
 
+    ////// every 60 seconds function.
+    // this.fn60sec();
+    // setInterval(this.fn60sec, 60 * 1000);
+
+    // clearInterval(timerID); // The setInterval it cleared and doesn't run anymore.
+    console.log(JSON.parse(localStorage.getItem("networtharray")));
     let storedNetworth = JSON.parse(localStorage.getItem("networtharray"));
     let storedLabels = JSON.parse(localStorage.getItem("networthlabels"));
     console.log(storedNetworth, "networtharray");
     console.log(storedLabels, "networthlabels");
     this.networtharray = storedNetworth;
     this.networthlabels = storedLabels;
+    //get the stashes
+    // if (storedLabels) {
+    //   this._electronService.ipcRenderer.send("get-stash-names", [
+    //     // localStorage.length > 0
+    //     //   ? localstorageAccountData.POESESSID
+    //     this.userForm.get("POESESSID").value,
+    //     // localStorage.length > 0
+    //     //   ? localstorageAccountData.accountName
+    //     this.userForm.get("accountName").value,
+    //     // localStorage.length > 0
+    //     //   ? localstorageAccountData.accountName
+    //     this.userForm.get("league").value
+    //     // this.userForm.get("worthCutoff").value
+    //     //   this.userForm.get("league").value
+    //   ]); // get us data
+    // }
+
     // console.log(this.chartArray);
     this.pingresponsesetter();
     // this.forceRefresh(); // run the button
@@ -1357,20 +1635,51 @@ export class DisplaylistComponent implements OnInit {
 
     console.log(this.userForm.get("league").value);
     // this.changeDetectorRefs.detectChanges();
-    this.onloaddatabutton(); // loads the old stash data
+    this.onloadSessionStorageData(); // loads the old stash data
   }
   reloadWindowOnFirst() {
     location.reload();
+  }
+
+  getselectedtabs() {
+    console.log(this.tabnamesform.value);
+    console.log(this.intervals.value);
   }
   refresh() {
     this.changeDetectorRefs.detectChanges();
     // this.refresh_chart();
   }
-
+  tabnamesform = new FormControl();
+  tabslist: string[] = [];
   pingresponsesetter() {
     this._electronService.ipcRenderer.on("ping-async-stash", (event, resp) => {
       console.log(resp);
     });
+    this._electronService.ipcRenderer.on("get-stash-names", (event, resp) => {
+      console.log(resp[0]);
+      let stashnames = [];
+      this.tabnamesform = new FormControl();
+      this.tabslist = [];
+      for (let x = 0; x < resp[0].tabs.length; x++) {
+        console.log(resp[0].tabs[x].n);
+        this.tabslist.push(resp[0].tabs[x]);
+      }
+      // this.selectedOptions3 = new FormControl(this.stashnamearray);
+    });
+    this._electronService.ipcRenderer.on(
+      "get-individual-tabs",
+      (event, resp) => {
+        console.log(resp[0]);
+        // let stashnames = [];
+        // this.tabnamesform = new FormControl();
+        // this.tabslist = [];
+        // for (let x = 0; x < resp[0].tabs.length; x++) {
+        //   console.log(resp[0].tabs[x].n);
+        //   this.tabslist.push(resp[0].tabs[x]);
+        // }
+        // this.selectedOptions3 = new FormControl(this.stashnamearray);
+      }
+    );
 
     this._electronService.ipcRenderer.on(
       "ping-async",
@@ -1423,6 +1732,7 @@ export class DisplaylistComponent implements OnInit {
           // if (this.userForm.get("worthCutoff").value == "none") {
           //   this.fullstashdataBigBoiArray[x].worth = worthpush
           // }
+          // if (this.fullstashdataBigBoiArray[x].)
           this.fullstashdataBigBoiArray[x].worth = worthpush;
           // if (this.userForm.get("worthCutoff").value > worthpush) {
           //   delete this.fullstashdataBigBoiArray[x]
@@ -1500,6 +1810,7 @@ export class DisplaylistComponent implements OnInit {
         //   "stashtablesource",
         //   JSON.stringify(this.fullstashDataResponseSource)
         // );
+
         this.stashdatarequest = resp;
         this.currencyDataResponse = resp2[0].data; // currency
         this.fragmentsDataResponse = resp2[1].data; //frag
@@ -1515,7 +1826,7 @@ export class DisplaylistComponent implements OnInit {
         this.uniquearmoursDataResponse = resp2[11].data; //armor
         this.uniqueaccessoriesDataResponse = resp2[12].data; //access
         this.uniqueflaskDataResponse = resp2[13].data; //flask
-        this.uniqueflaskDataResponse = resp2[14].data; //incubator
+        this.incubatorDataResponse = resp2[14].data; //incubator
 
         this.fullPoeNinjaResponseTableSourceCurrency = new MatTableDataSource(
           resp2[0].lines
@@ -1598,6 +1909,7 @@ export class DisplaylistComponent implements OnInit {
     );
   }
 }
+
 interface poeNinjaFullResponseInterface {
   currencyDetails?: CurrencyDetail[];
   lines: Line[];
