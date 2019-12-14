@@ -350,7 +350,8 @@ ipcMain.on("ping-async", async (event, message) => {
   console.log("hello");
   let sessionid = message[0];
   let accountName = message[1];
-  let league = message[2].split(" ").join("+");
+  // let league = message[2].split(" ").join("+");
+   let league = message[2];
   // let currencyCutoff = message[3];
   event.sender.send("ping-async-stash", [
     "Starting",
@@ -395,12 +396,17 @@ ipcMain.on("ping-async", async (event, message) => {
   //     "&accountName=qqazraelz&tabs=1&tabIndex=2"
   // ];
   let poeninjaleaguename = message[2];
+  if (poeninjaleaguename.includes("SSF Metamorph HC")){
+    poeninjaleaguename="Metamorph";
+  }
   if (poeninjaleaguename.includes("SSF ")) {
     poeninjaleaguename = poeninjaleaguename.replace("SSF ", "");
   }
-  if (poeninjaleaguename == "Blight HC") {
-    poeninjaleaguename = "Hardcore Blight";
+  if (poeninjaleaguename == "Hardcore Metamorph") {
+    poeninjaleaguename = "Metamorph";
   }
+ 
+  console.log(message[2],poeninjaleaguename)
   // https://www.pathofexile.com/character-window/get-stash-items?league=Blight&accountName=qqazraelz&tabs=0
   // {"numTabs":39}
   let baseURL =

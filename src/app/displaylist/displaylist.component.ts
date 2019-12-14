@@ -6,6 +6,7 @@ import {
   ViewChild,
   ChangeDetectorRef
 } from "@angular/core";
+import { MatSnackBar } from "@angular/material";
 import { ChartDataSets, ChartOptions } from "chart.js";
 import { Color, Label } from "ng2-charts";
 import { BaseChartDirective } from "ng2-charts";
@@ -177,6 +178,7 @@ import { Chart } from "chart.js";
   templateUrl: "./displaylist.component.html",
   styleUrls: ["./displaylist.component.scss"]
 })
+
 export class DisplaylistComponent implements OnInit {
   options3: { hi };
   selectedOptions3;
@@ -296,10 +298,13 @@ export class DisplaylistComponent implements OnInit {
   tester3: CharacterData;
   profileForm: FormGroup;
   devstashurl;
+  showGraphOptionsStuff=true;
+  showGraph=true;
   publicstashurl;
   usrNameChanges: string;
   usrNameStatus: string;
   requestOptions;
+  githubversion="0.0.7";
   headerDict = {
     POESESSID: "null"
   };
@@ -310,6 +315,31 @@ export class DisplaylistComponent implements OnInit {
   itemsearchtest = new FormGroup({
     itemsearchstring: new FormControl("Enter Item", Validators.maxLength(100))
   });
+ openSnackBar(message: string, action: string) {
+      this.snackBar.open(message, action, {
+         duration: 10000,
+         panelClass: ['mat-toolbar', 'mat-primary']
+      });
+   } 
+  appversioncheck(){
+    var appVersion = require('electron').remote.app.getVersion();
+    console.log(appVersion)
+    
+    this.http
+      .get("https://api.github.com/repos/zombodotcom/zombpoe/releases/latest")
+      .subscribe(
+        data => {console.log('Latest Zombpoe Version', data['tag_name']); this.githubversion=data['tag_name']},
+        error => console.log('oops Error', error),
+      );
+      console.log(this.githubversion,appVersion)
+      if (this.githubversion==appVersion){
+        console.log("Up to date!")
+        this.openSnackBar('Up to Date',"Close")
+      }
+      else{
+        this.openSnackBar('Update Available Download at https://github.com/zombodotcom/Zombpoe/releases',"Close")
+      }
+  }
 
   onChangeColor(color: string) {
     // console.log(color);
@@ -808,6 +838,7 @@ export class DisplaylistComponent implements OnInit {
   }
 
   constructor(
+    public snackBar: MatSnackBar,
     private svc: PoeninjaapiService,
     private http: HttpClient,
     private cookieService: CookieService,

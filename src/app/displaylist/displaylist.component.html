@@ -17,14 +17,6 @@
 <script> $().tooltip({ container: 'body' }), $().popover({ container: 'body' })</script>
 
 
-
-
-
-
-
-
-
-
 <form [formGroup]="userForm">
   <mat-form-field color="primary" >
   <input formControlName="POESESSID" matInput placeholder="Your POESESSID" [type]="hide ? 'password' : 'text'"/>
@@ -44,14 +36,14 @@
 <mat-form-field>
   <mat-label>League</mat-label>
   <mat-select disableRipple formControlName="league" >
-  <mat-option value="Blight">Blight</mat-option>
+  <mat-option value="Metamorph">Metamorph</mat-option>
+  <mat-option value="Hardcore Metamorph">Hardcore Metamorph</mat-option>
+  <mat-option value="SSF Metamorph">SSF Metamorph</mat-option>
+  <mat-option value="SSF Metamorph HC">SSF Metamorph HC</mat-option>
   <mat-option value="Standard">Standard</mat-option>
-  <mat-option value="Hardcore">Hardcore</mat-option>
+  <mat-option value="Hardcore">Hardcore Standard</mat-option>
   <mat-option value="SSF Standard">SSF Standard</mat-option>
   <mat-option value="SSF Hardcore">SSF Hardcore</mat-option>
-  <mat-option value="Hardcore Blight">Hardcore Blight</mat-option>
-  <mat-option value="SSF Blight">SSF Blight</mat-option>
-  <mat-option value="SSF Blight HC">SSF Blight HC</mat-option>
   </mat-select>
 <br>
 </mat-form-field>
@@ -67,10 +59,12 @@
   <!-- <button (click)="forceRefresh()" mat-flat-button color="primary">
     Get Speci
   </button> -->
- 
+  <button (click)="appversioncheck()" mat-flat-button color="primary">
+    App Update Check
+   </button>
 </form>
 
-
+<!-- <button mat-button mat-flat-button color="primary" (click)="openSnackBar('Update Available Download at https://github.com/zombodotcom/Zombpoe/releases')">Show snack-bar</button> -->
 <div><br>
 <button (click)="clearLocalStorage()" mat-flat-button color="warn">
   Clear Local Storage
